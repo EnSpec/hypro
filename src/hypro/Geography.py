@@ -158,10 +158,10 @@ def get_map_crs(dem, longitude, latitude):
             Map coordinate system.
     """
 
-    if os.path.isfile(dem):
-        map_crs = get_raster_crs(dem)
-    else:
+    if isinstance(dem, (int, float)) or not os.path.isfile(dem):
         map_crs = define_utm_crs(longitude, latitude)
+    else:
+        map_crs = get_raster_crs(dem)
 
     return map_crs
 
