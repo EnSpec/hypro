@@ -18,7 +18,6 @@
 
 import logging, os, numpy as np
 logger = logging.getLogger(__name__)
-solar_flux_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),'data','solar_flux.dat')
 
 def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
     """ Build water vapor models.
@@ -127,7 +126,7 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
         json.dump(wvc_model, fid, indent=4)
     logger.info('Write WVC models to %s.' %wvc_model_file)
 
-def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_mask_file):
+def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_mask_file, solar_flux_file=None):
     """ Estimate water vapor column.
     Arguments:
         wvc_file: str
@@ -142,6 +141,8 @@ def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_m
             Sun zenith angle.
         distance: float
             Earth-to-sun distance.
+        solar_flux_file: str
+            Solar flux filename.
     """
 
     if os.path.exists(wvc_file):
@@ -170,7 +171,7 @@ def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_m
 
     # Mask out dark pixels.
     good_mask_image = np.full((rdn_header['lines'], rdn_header['samples']), True)
-    solar_flux = resample_solar_flux(solar_flux_file, rdn_header['wavelength'], rdn_header['fwhm'])
+    solar_flux = resample_solar_flux(rdn_header['wavelength'], rdn_header['fwhm'], file=solar_flux_file)
     cos_sun_zenith = np.cos(np.deg2rad(sun_zenith))
     d2 = distance**2
     # If the reflectance at 850 nm is less than 0.01, then mask out these pixels.

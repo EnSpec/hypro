@@ -70,6 +70,22 @@ HyPro is licensed for public use under [GNU General Public License v3](https://w
     along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
+## Ancillary Datasets
+
+### Solar Irradiance
+
+HyPro is distributed with solar spectral irradiance data derived from [LBLRTM](https://github.com/AER-RC/LBLRTM), a radiative transfer model from [Verisk Atmospheric & Environmental Research](https://www.aer.com) (AER). This is a synthetic spectrum, simulated with a solar source function and database of atomic and molecular lines developed by Dr. Robert Kurucz<sup>[[5]](#Kurucz1992)</sup>. The data are derived from LBLRTM 5.21 and are distributed here with permission from AER. This same dataset is used internally by libRadtran.
+
+The spectrum represents top-of-atmosphere spectral irradiance at a Sun-Earth distance of 1 AU, sampled at 0.1-nm intervals and expressed in units of mW/m<sup>2</sup>/nm.
+
+Note that these are legacy data. Newer, more accurate versions of the [LBLRTM solar source function](https://github.com/AER-RC/solar-source-function) are available. The source code and derived products are subject to licensing terms dictated by AER. 
+
+
+### Sun-Earth distance
+
+Also provided are approximate Sun-Earth distances by day of year, expressed in AU. These are public-domain data provided by [USGS/NASA Landsat Missions](https://www.usgs.gov/media/files/earth-sun-distance-astronomical-units-days-year). The eccentricity of Earth's orbit produces variations in total irradiant flux on the order of ±3%. Note that the given distances are only approximate; ephemeris-based calculations may be used for more accurate results.
+
+
 ## References
 
 <a name="Meyer1994"><sup><b>[1]</b></sup></a> Meyer P (1994). A parametric approach for the geocoding of airborne visible/infrared imaging spectrometer (AVIRIS) data in rugged terrain. Remote Sens Environ 49(2): 118–30. _doi:[10.1016/0034-4257(94)90048-5](https://doi.org/10.1016/0034-4257(94)90048-5)_
@@ -79,3 +95,5 @@ HyPro is licensed for public use under [GNU General Public License v3](https://w
 <a name="Kaufman1992"><sup><b>[3]</b></sup></a> Kaufman YJ & Gao B-C (1992). Remote sensing of water vapor in the near IR from EOS/MODIS. IEEE Trans Geosci Remote Sens 30(5): 871–84. _doi:[10.1109/36.175321](https://doi.org/10.1109/36.175321)_
 
 <a name="Kaufman1997"><sup><b>[4]</b></sup></a> Kaufman YJ, Wald AE, Remer LA, Gao B-C, Li R-R & Flynn L (1997). The MODIS 2.1-/spl mu/m channel-correlation with visible reflectance for use in remote sensing of aerosol. IEEE Trans Geosci Remote Sens 35(5): 1286–98. _doi:[10.1109/36.628795](https://doi.org/10.1109/36.628795)_
+
+<a name="Kurucz1992"><sup><b>[5]</b></sup></a> Kurucz RL (1992). Synthetic infrared spectra. In Rabin DM, Jefferies JT & Lindsey C (Eds.), Infrared solar physics: proceedings of the 154th symposium of the International Astronomical Union (pp. 523–31). Norwell, MA, USA: Kluwer Academic Publishers. Symposium held in Tucson, AZ, USA, March 2–6, 1992. _doi:[10.1017/S0074180900124805](https://doi.org/10.1017/S0074180900124805)_

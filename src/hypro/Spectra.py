@@ -23,6 +23,8 @@
 
 import numpy as np
 import warnings
+import pkgutil
+from io import BytesIO
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 def estimate_fwhms_from_waves(waves):
@@ -147,20 +149,21 @@ def continuum_removal(spectra, waves):
 
     return cont_rmd_spectra
 
-def resample_solar_flux(solar_flux_file, sensor_waves, sensor_fwhms):
+def resample_solar_flux(sensor_waves, sensor_fwhms, file=None):
     """ Resample solar flux to sensor wavelengths.
     Arguments:
-        solar_flux_file: str
-            Solar flux filename.
         sensor_waves: array
             Sensor wavelengths.
         sensor_fwhms: array
             Sensor FWHMs.
+        file: str
+            Solar flux filename.
     Returns:
         solar_flux: array
             Resampled solar flux.
     """
 
+    solar_flux_file = file or BytesIO(pkgutil.get_data(__package__, 'data/solar/irradiance_kurucz1992.dat'))
     solar_flux = np.loadtxt(solar_flux_file)
     solar_flux = resample_spectra(solar_flux[:,1], solar_flux[:,0], sensor_waves, sensor_fwhms)/10.0 # 10.0: mW/(m2 nm) -> mW/(cm2 um)
 

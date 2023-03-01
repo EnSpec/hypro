@@ -12,7 +12,8 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-import argparse, glob, json, logging, os, re
+import argparse, glob, json, logging, os, re, pkgutil
+from io import BytesIO
 
 from Geography        import get_map_crs, get_sun_angles
 from IMUGPS           import prepare_imugps_Hyspex
@@ -239,8 +240,9 @@ def get_sun_earth_distance(when):
     """
 
     import numpy as np
-    cur_dir = os.path.dirname(os.path.realpath(__file__))
-    d = np.loadtxt(os.path.join(cur_dir, 'data/sun-earth-distance.dat'))
+
+    sun_earth_distance_file = BytesIO(pkgutil.get_data(__package__, 'data/solar/distance_usgs2019.dat'))
+    d = np.loadtxt(sun_earth_distance_file)
     doy = when.timetuple().tm_yday
     d = d[doy-1]
     

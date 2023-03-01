@@ -19,9 +19,7 @@
 import logging, os, numpy as np
 logger = logging.getLogger(__name__)
 
-solar_flux_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),'data','solar_flux.dat')
-
-def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distance, background_mask_file=None):
+def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distance, background_mask_file=None, solar_flux_file=None):
     """ Pre-classify the image.
     Notes:
         (1) The classification algorithm used here is from ATCOR.
@@ -36,6 +34,8 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
             Sun-Earth distance.
         background_mask_file: str
             Background mask filename.
+        solar_flux_file: str
+            Solar flux filename.
     """
 
     if os.path.exists(pre_class_image_file):
@@ -65,7 +65,7 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
         logger.error('Cannot read radiance data from %s format file.' %rdn_header['interleave'])
 
     # Read solar flux.
-    solar_flux = resample_solar_flux(solar_flux_file, rdn_header['wavelength'], rdn_header['fwhm'])
+    solar_flux = resample_solar_flux(rdn_header['wavelength'], rdn_header['fwhm'], file=solar_flux_file)
     cos_sun_zenith = np.cos(np.deg2rad(sun_zenith))
     d2 = distance**2
 
