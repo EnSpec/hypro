@@ -16,7 +16,8 @@
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
-import gdal, os, osr, numpy as np
+import os, numpy as np
+from osgeo import gdal, osr
 
 def get_utm_zone(lon):
     """ Calculate UTM zone.
