@@ -1,0 +1,4 @@
+# MANIFEST.in
+
+# Solar data files
+graft src/hypro/data/solar
