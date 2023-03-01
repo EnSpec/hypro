@@ -16,7 +16,14 @@
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
-import gdal, os, osr, numpy as np
+import os, osgeo, numpy as np
+from osgeo import gdal, osr
+
+def set_axis_mapping(crs):
+    """ Set CRS axis mapping to (x,y) order. """
+    if int(osgeo.__version__[0]) >= 3:
+        # By default, GDAL 3 respects axis ordering specified by the CRS
+        crs.SetAxisMappingStrategy(osr.OAMS_TRADITIONAL_GIS_ORDER)
 
 def get_utm_zone(lon):
     """ Calculate UTM zone.
@@ -62,6 +69,7 @@ def define_utm_crs(lon, lat):
     crs.SetWellKnownGeogCS("WGS84")
     zone = get_utm_zone(lon)
     crs.SetUTM(int(zone), int(is_northern(lat)))
+    set_axis_mapping(crs)
 
     return crs
 
@@ -74,6 +82,7 @@ def define_wgs84_crs():
 
     crs = osr.SpatialReference()
     crs.SetWellKnownGeogCS("WGS84")
+    set_axis_mapping(crs)
 
     return crs
 
@@ -93,6 +102,7 @@ def get_raster_crs(file):
 
     crs = osr.SpatialReference()
     crs.ImportFromWkt(prj)
+    set_axis_mapping(crs)
 
     return crs
 

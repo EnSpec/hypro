@@ -43,7 +43,7 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
         logger.info('Write boresight data to %s.' %boresight_file)
         return
 
-    import gdal, osr
+    from osgeo import gdal, osr
     from Geography import define_wgs84_crs
     from scipy     import optimize
 

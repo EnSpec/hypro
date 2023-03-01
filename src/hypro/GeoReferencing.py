@@ -16,7 +16,8 @@
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
-import gdal, logging, os, numpy as np
+import logging, os, numpy as np
+from osgeo import gdal
 logger = logging.getLogger(__name__)
 from numba import guvectorize, jit
 import warnings
