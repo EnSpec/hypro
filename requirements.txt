@@ -1,0 +1,6 @@
+# HyPro dependencies
+numpy >= 1.17
+numba >= 0.46
+scipy >= 1.4
+gdal ~= 2.4.4
+matplotlib >= 3.1
