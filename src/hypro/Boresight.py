@@ -101,7 +101,7 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
                           args=(flight_xyz, flight_imu, flight_sensor_model,
                                 dem_image,
                                 [dem_geotransform[0], dem_geotransform[3]],
-                                dem_geotransform[1],
+                                [dem_geotransform[1], dem_geotransform[5]],
                                 gcp_xyz,
                                 boresight_options))
     logger.info('Roll, pitch, heading and altitude offsets: %s, %s, %s, %s' %(p.x[0], p.x[1], p.x[2], p.x[3]))
@@ -121,7 +121,7 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
                fmt='%d    %.3f    %.3f    %.3f    %.10f    %.10f    %.10f    %.10f    %.10f    %.10f    %.10f    %.10f    %.10f    %.10f    %.5f')
 
     # Estimate geometric correction accuracy.
-    est_gcp_xyz = estimate_gcp_xyz(p.x, flight_xyz, flight_imu, flight_sensor_model, dem_image, [dem_geotransform[0], dem_geotransform[3]], dem_geotransform[1], boresight_options)
+    est_gcp_xyz = estimate_gcp_xyz(p.x, flight_xyz, flight_imu, flight_sensor_model, dem_image, [dem_geotransform[0], dem_geotransform[3]], [dem_geotransform[1], dem_geotransform[5]], boresight_options)
     boresight_data = np.zeros((gcp_data.shape[0], 10))
     boresight_data[:,0] = np.arange(gcp_data.shape[0])
     boresight_data[:,1] = gcp_data[:,2]
@@ -166,7 +166,7 @@ def cost_fun(boresight_offsets, flight_xyz, flight_imu, flight_sensor_model, dem
             DEM data.
         dem_ulxy: list of float
             Map coordinates of DEM upper-left corner.
-        dem_pixel_size: float
+        dem_pixel_size: list of float
             DEM pixel size.
         gcp_xyz: 2D array
             GPC map coordinates, shape=(n_gcps, 3).
@@ -197,7 +197,7 @@ def estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_mo
             DEM data.
         dem_ulxy: list of float
             Map coordinates of DEM upper-left corner.
-        dem_pixel_size: float
+        dem_pixel_size: list of float
             DEM pixel size.
         boresight_options: list of boolean
             Boresight offset options, true or false.
