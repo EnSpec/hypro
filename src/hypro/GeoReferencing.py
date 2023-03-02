@@ -591,7 +591,7 @@ def ray_tracing(XYZ0, XYZ1, V, DEM, DEM_X0Y0, DEM_Resolution):
             DEM image data.
         DEM_X0Y0: float list
             The upper-left corner map coordinates of the DEM.
-        DEM_Resolution: float
+        DEM_Resolution: float list
             DEM resolution.
     Returns:
         A 3-element vector, [MapX, MapY, MapZ]: the pixel's geo-location and elevation.

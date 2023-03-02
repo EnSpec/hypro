@@ -67,15 +67,6 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
     if_vnir =  abs(red_wave-660)<20 and abs(nir_wave-850)<20
     if_swir =  abs(swir1_wave-1650)<20 or abs(swir2_wave-2130)<20
 
-    if if_vnir and if_swir:
-        logger.info('Both VNIR and SWIR bands are used for estimating visibility.')
-    elif if_vnir:
-        logger.info('Only VNIR bands are used for estimating visibility.')
-    elif if_swir:
-        logger.info('Only SWIR bands are available, a constant visibility (23 km) is used.')
-    else:
-        logger.error('Cannot find appropriate bands for estimating visibility.')
-
     # Read atmospheric lookup table.
     atm_lut_metadata = read_binary_metadata(atm_lut_file+'.meta')
     atm_lut_metadata['shape'] = tuple([int(v) for v in atm_lut_metadata['shape']])
@@ -143,6 +134,8 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
     vis_image = np.zeros((rdn_header['lines'], rdn_header['samples']))
 
     if if_vnir and if_swir:
+        logger.info('Both VNIR and SWIR bands are used for estimating visibility.')
+
         # Decide which SWIR band to use.
         if abs(swir2_wave-2130)<20:
             swir_wave = swir2_wave
@@ -187,27 +180,6 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
         vis_image[~ddv_mask] = vis_image[ddv_mask].mean()
         vis_image[bg_mask] = -1000.0
 
-        # Write the visibility data.
-        fid = open(vis_file, 'wb')
-        fid.write(vis_image.astype('float32').tostring())
-        fid.close()
-        del vis_image
-
-        vis_header = empty_envi_header()
-        vis_header['description'] = 'Visibility [km]'
-        vis_header['samples'] = rdn_header['samples']
-        vis_header['lines'] = rdn_header['lines']
-        vis_header['bands'] = 1
-        vis_header['byte order'] = 0
-        vis_header['header offset'] = 0
-        vis_header['interleave'] = 'bsq'
-        vis_header['data ignore value'] = -1000.0
-        vis_header['data type'] = 4
-        vis_header['map info'] = rdn_header['map info']
-        vis_header['coordinate system string'] = rdn_header['coordinate system string']
-        write_envi_header(os.path.splitext(vis_file)[0]+'.hdr', vis_header)
-        logger.info('Write the visibility image to %s.' %vis_file)
-
         # Write the DDV data.
         fid = open(ddv_file, 'wb')
         fid.write(ddv_mask.tostring())
@@ -228,10 +200,30 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
         write_envi_header(os.path.splitext(ddv_file)[0]+'.hdr', ddv_header)
 
         logger.info('Write the DDV mask to %s.' %ddv_file)
-    elif if_vnir:
-        pass
-    elif if_swir:
-        pass
+    else:
+        logger.info('Cannot find appropriate bands for estimating visibility; a constant visibility (23 km) is used.')
+        vis_image = tmp_vis_image
+    
+    # Write the visibility data.
+    fid = open(vis_file, 'wb')
+    fid.write(vis_image.astype('float32').tostring())
+    fid.close()
+    del vis_image
+
+    vis_header = empty_envi_header()
+    vis_header['description'] = 'Visibility [km]'
+    vis_header['samples'] = rdn_header['samples']
+    vis_header['lines'] = rdn_header['lines']
+    vis_header['bands'] = 1
+    vis_header['byte order'] = 0
+    vis_header['header offset'] = 0
+    vis_header['interleave'] = 'bsq'
+    vis_header['data ignore value'] = -1000.0
+    vis_header['data type'] = 4
+    vis_header['map info'] = rdn_header['map info']
+    vis_header['coordinate system string'] = rdn_header['coordinate system string']
+    write_envi_header(os.path.splitext(vis_file)[0]+'.hdr', vis_header)
+    logger.info('Write the visibility image to %s.' %vis_file)
 
     # Clear data
     del ndvi, red_refl, nir_refl, rdn_header
