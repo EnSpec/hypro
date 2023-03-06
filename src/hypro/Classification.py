@@ -32,9 +32,9 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
     rdn_image_file : str
         Radiance image filename, either BIL or BSQ.
     sun_zenith : float
-        Sun zenith angle in degrees.
+        Sun zenith angle, units=[deg].
     distance : float
-        Sun-Earth distance.
+        Sun-Earth distance, units=[AU].
     background_mask_file : str
         Background mask filename.
     solar_flux_file : str

@@ -39,12 +39,12 @@ def estimate_fwhms_from_waves(waves):
     Parameters
     ----------
     waves : ndarray
-        Wavelengths, in nm.
+        Wavelengths, units=[nm].
     
     Returns
     -------
     fwhms : ndarray
-        Full widths at half maximum, in nm.
+        Full widths at half maximum, units=[nm].
     """
     
     gap = 0.5*np.diff(waves)

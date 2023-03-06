@@ -282,7 +282,7 @@ def get_sun_earth_distance(when):
     Returns
     -------
     d : float
-        Sun-Earth distance.
+        Sun-Earth distance, units=[AU].
     """
     
     import numpy as np

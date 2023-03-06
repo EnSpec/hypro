@@ -35,7 +35,7 @@ def get_utm_zone(lon):
     Parameters
     ----------
     lon : float
-        Longitude, in degrees. West: negative, East: positive.
+        Longitude, units=[deg]. West: negative, East: positive.
     
     Returns
     -------
@@ -54,7 +54,7 @@ def is_northern(lat):
     Parameters
     ----------
     lat : float
-        Latitude, in degrees. Northern: positive, Southern: negative.
+        Latitude, units=[deg]. Northern: positive, Southern: negative.
     
     Returns
     -------
@@ -74,9 +74,9 @@ def define_utm_crs(lon, lat):
     Parameters
     ----------
     lon : float
-        Longitude, in degrees. West: negative, East: positive.
+        Longitude, units=[deg]. West: negative, East: positive.
     lat : float
-        Latitude, in degrees. Northern: positive, Southern: negative.
+        Latitude, units=[deg]. Northern: positive, Southern: negative.
     
     Returns
     -------
@@ -149,7 +149,7 @@ def get_grid_convergence(lon, lat, map_crs):
     Returns
     -------
     grid_convergence : ndarray of float
-        Grid convergence in degrees.
+        Grid convergence, units=[deg].
     """
     
     lon, lat = np.array(lon), np.array(lat)
@@ -212,18 +212,18 @@ def get_sun_angles(longitude, latitude, utc_time):
     Parameters
     ----------
     longitude : float
-        Longitude, in degrees. West: negative, East: positive.
+        Longitude, units=[deg]. West: negative, East: positive.
     latitude : float
-        Latitude, in degrees. Northern: positive, Southern: negative.
+        Latitude, units=[deg]. Northern: positive, Southern: negative.
     utc_time : datetime object
         UTC time.
     
     Returns
     -------
     ZenithAngle : float
-        Sun zenith angle, in degrees.
+        Sun zenith angle, units=[deg].
     AzimuthAngle : float
-        Sun azimuth angle, in degrees.
+        Sun azimuth angle, units=[deg].
     
     Notes
     -----

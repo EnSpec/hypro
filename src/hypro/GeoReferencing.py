@@ -163,7 +163,7 @@ def calculate_sca(sca_image_file, imugps_file, igm_image_file, sun_angles):
     igm_image_file : str
         IGM image filename.
     sun_angles : list
-        Sun angles [sun zenith, sun azimuth], in degrees.
+        Sun angles [sun zenith, sun azimuth], units=[deg].
     """
     
     if os.path.exists(sca_image_file):

@@ -59,15 +59,15 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
     dem_image_file : str
         Processed DEM image filename.
     dem : str or float
-        Input DEM image filename, or user-specified elevation value [m].
+        Input DEM image filename, or user-specified elevation value, units=[m].
     imugps_file : str
         IMU & GPS data filename.
     fov : float
-        Sensor field of view [deg].
+        Sensor field of view, units=[deg].
     map_crs : osr.SpatialReference
         Map coordinate system.
     pixel_size : float
-        Image pixel size [deg].
+        Image pixel size, units=[deg].
     """
     
     if os.path.exists(dem_image_file):

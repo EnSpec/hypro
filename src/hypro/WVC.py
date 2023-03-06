@@ -34,7 +34,7 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
     rdn_header_file : str
         Radiance header filename.
     vis : float
-        Visibility in [km].
+        Visibility, units=[km].
     """
     
     if os.path.exists(wvc_model_file):
@@ -147,7 +147,7 @@ def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_m
     sun_zenith : float
         Sun zenith angle.
     distance : float
-        Earth-to-Sun distance.
+        Earth-to-Sun distance, units=[AU].
     background_mask_file : str
         Mask image filename.
     solar_flux_file : str
