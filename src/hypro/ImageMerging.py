@@ -103,7 +103,7 @@ def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensor
                                      tmp_header['samples']))
         tmp_ulx, tmp_uly = float(tmp_header['map info'][3]), float(tmp_header['map info'][4])
         tmp_pixel_size = float(tmp_header['map info'][5])
-        resampled_image = resample_ortho_sca(np.copy(tmp_image[0,:,:]), tmp_ulx, tmp_uly, tmp_pixel_size, x, y) 
+        resampled_image = resample_ortho_sca(np.copy(tmp_image[0,:,:]), tmp_ulx, tmp_uly, tmp_pixel_size, x, y)
         mask = mask&(resampled_image>0.0)
 
         # Clear data.
@@ -296,7 +296,7 @@ def merge_rdn(merged_image_file, mask_file, sensors):
         if ((v[1]>=1339.0)&(v[1]<=1438.0))|((v[1]>=1808.0)&(v[1]<=1978.0))|(v[1]>=2467.0):
             resampled_image = np.zeros(x.shape)
         else:
-            offset = header['header offset']+4*band*header['lines']*header['samples']# in bytes      
+            offset = header['header offset']+4*band*header['lines']*header['samples']# in bytes
             rdn_image = np.memmap(image_file,
                                   dtype='float32',
                                   mode='r',
