@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to estimate visibility. """
+""" Functions for atmospheric correction. """
 
 import logging
 import os

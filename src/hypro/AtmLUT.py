@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to do atmospheric corrections. """
+""" Functions for working with radiative transfer lookup tables. """
 
 import logging
 import os
