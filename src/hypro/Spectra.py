@@ -166,14 +166,14 @@ def continuum_removal(spectra, waves):
     Parameters
     ----------
     spectra : ndarray, 1D or 2D
-        Raw spectral data, dimension: [Bands] or [Bands, Columns].
+        Raw spectral data, array with shape ``(bands,)`` or ``(bands, columns)``.
     waves : list
         Spectral wavelengths.
     
     Returns
     -------
     cont_rmd_spectra : ndarray, 1D or 2D
-        Continuum-removed spectra, dimension: [Bands] or [Bands, Columns].
+        Continuum-removed spectra, array with shape ``(bands,)`` or ``(bands, columns)``.
     """
     
     waves = np.array(waves)

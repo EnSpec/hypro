@@ -163,11 +163,11 @@ def cost_fun(boresight_offsets, flight_xyz, flight_imu, flight_sensor_model, dem
     boresight_offsets : list of float
         Boresight offsets.
     flight_xyz : ndarray, 2D
-        Flight x, y, z data, shape=(n_gcps, 3)
+        Flight x, y, z data, array with shape ``(n_gcps, 3)``
     flight_imu : ndarray, 2D
-        Flight roll, pitch, heading data, shape=(n_gcps, 3)
+        Flight roll, pitch, heading data, array with shape ``(n_gcps, 3)``
     flight_sensor_model : ndarray, 2D
-        Flight sensor model data, shape=(n_gcps, 2)
+        Flight sensor model data, array with shape ``(n_gcps, 2)``
     dem_image : ndarray, 2D
         DEM data.
     dem_ulxy : list of float
@@ -175,7 +175,7 @@ def cost_fun(boresight_offsets, flight_xyz, flight_imu, flight_sensor_model, dem
     dem_pixel_size : list of float
         DEM pixel size.
     gcp_xyz : ndarray, 2D
-        GPC map coordinates, shape=(n_gcps, 3).
+        GPC map coordinates, array with shape ``(n_gcps, 3)``.
     boresight_options : list of bool
         Boresight offset options, true or false.
     """
@@ -197,11 +197,11 @@ def estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_mo
     boresight_offsets : list of float
         Boresight offsets.
     flight_xyz : ndarray, 2D
-        Flight x, y, z data, shape=(n_gcps, 3)
+        Flight x, y, z data, array with shape ``(n_gcps, 3)``
     flight_imu : ndarray, 2D
-        Flight roll, pitch, heading data, shape=(n_gcps, 3)
+        Flight roll, pitch, heading data, array with shape ``(n_gcps, 3)``
     flight_sensor_model : ndarray, 2D
-        Flight sensor model data, shape=(n_gcps, 2)
+        Flight sensor model data, array with shape ``(n_gcps, 2)``
     dem_image : ndarray, 2D
         DEM data.
     dem_ulxy : list of float
@@ -214,7 +214,7 @@ def estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_mo
     Returns
     -------
     gcp_xyz : ndarray, 2D
-        Estimated GCP x, y and z.
+        Estimated GCP x, y and z; array with shape ``(n_gcps, 3)``.
     """
     
     from hypro.GeoReferencing import ray_tracing

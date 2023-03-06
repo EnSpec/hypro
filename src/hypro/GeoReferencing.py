@@ -446,14 +446,14 @@ def get_scan_vectors(imu, sensor_model):
     Parameters
     ----------
     imu : ndarray, 2D
-        Flight IMU data, dimension: [n_lines, 3].
+        Flight IMU data, array with shape ``(n_lines, 3)``.
         
         - Column 0: Roll
         - Column 1: Pitch
         - Column 2: Heading
     
     sensor_model : ndarray, 2D
-        Sensor model data, dimension: [n_detectors, 2].
+        Sensor model data, array with shape ``(n_detectors, 2)``.
         
         - Column 0: across-track angle component.
         - Column 1: along-track angle component.
@@ -461,7 +461,7 @@ def get_scan_vectors(imu, sensor_model):
     Returns
     -------
     L0 : ndarray, 3D
-        Sensor scan vectors, dimension: [3, n_detectors, n_lines].
+        Sensor scan vectors, array with shape ``(3, n_detectors, n_lines)``.
     
     Notes
     -----
@@ -546,16 +546,16 @@ def get_xyz0_xyz1(xyz, L0, h_min, h_max):
     Parameters
     ----------
     xyz : ndarray, 2D
-        Flight map x, y, z map coordinates, dimension: [N_lines, 3].
+        Flight map x, y, z map coordinates, array with shape ``(N_lines, 3)``.
     L0 : ndarray, 3D
-        Scan vectors, dimension: [3, N_Detectors, N_Lines].
+        Scan vectors, array with shape ``(3, N_Detectors, N_Lines)``.
     h_min, h_max : float
         Vertical bounds for ray tracing.
     
     Returns
     -------
     xyz0, xyz1 : ndarray, 3D
-        Starting and ending points, dimension: [3, N_Detectors, N_Lines].
+        Starting and ending points, each with shape ``(3, N_Detectors, N_Lines)``.
     
     References
     ----------
@@ -591,21 +591,23 @@ def ray_tracer_ufunc(xyz0, xyz1, L0, dem, dem_gt, output):
     
     Parameters
     ----------
-    xyz0 : ndarray, 3D, shape=(3, scanlines, detectors)
-        Ray tracing starting positions for each map grid cell.
-    xyz1 : ndarray, 3D, shape=(3, scanlines, detectors)
-        Ray tracing ending positions for each map grid cell.
-    L0 : ndarray, 3D, shape=(3, scanlines, detectors)
-        Scan vectors.
-    dem : ndarray, 2D, shape=(scanlines, detectors)
-        Digital elevation model.
+    xyz0 : ndarray, 3D
+        Ray tracing starting positions for each map grid cell, array with shape
+        ``(3, scanlines, detectors)``.
+    xyz1 : ndarray, 3D
+        Ray tracing ending positions for each map grid cell, array with shape
+        ``(3, scanlines, detectors)``.
+    L0 : ndarray, 3D
+        Scan vectors, array with shape ``(3, scanlines, detectors)``.
+    dem : ndarray, 2D
+        Digital elevation model, array with shape ``(scanlines, detectors)``.
     dem_gt : tuple, 6 elements
         Geotransform array containing DEM geographic parameters in GDAL format,
         i.e. as ``(ulx, x_res, 0, uly, 0, y_res)``
-    output : optional, array, 3D, shape=(3, detectors, scanlines)
-        Array to which outputs are written. If not passed, a new array is created
-        and returned. Otherwise, the array is modified in place and the ``ufunc``
-        returns ``None``.
+    output : array, 3D, optional
+        Array to which outputs are written, with shape ``(3, detectors, scanlines)``.
+        If not passed, a new array is created and returned. Otherwise, the array is
+        modified in place and the ``ufunc`` returns ``None``.
     
     Returns
     -------

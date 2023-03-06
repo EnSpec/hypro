@@ -242,7 +242,7 @@ def interp_atm_lut(atm_lut_RHO, atm_lut_WVC, atm_lut_VZA, atm_lut_RAA, atm_lut, 
     atm_lut_RHO, atm_lut_WVC, atm_lut_VZA, atm_lut_RAA : list of float
         Atmospheric lookup table grids.
     atm_lut : ndarray
-        Atmospheric lookup table, shape=(RHO, WVC, VIS, VZA, RAA).
+        Atmospheric lookup table, array with shape ``(RHO, WVC, VIS, VZA, RAA)``.
     rho, wvc, vza, raa : float
         Atmospheric parameters.
     
