@@ -12,10 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-"""
-Functions to create a sensor model.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+""" Functions to create a sensor model. """
 
 import logging
 import os

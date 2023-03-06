@@ -12,9 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to do georeferencing.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+""" Functions to do georeferencing. """
 
 import logging
 import os

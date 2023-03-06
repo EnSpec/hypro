@@ -12,9 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to merge images from different sensors.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+""" Functions to merge images from different sensors. """
 
 import logging
 import os

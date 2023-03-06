@@ -12,9 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to estimate water vapor column.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+""" Functions to estimate water vapor column. """
 
 import logging
 import os

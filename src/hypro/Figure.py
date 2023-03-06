@@ -12,9 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to make figures.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+""" Functions to make figures. """
 
 import logging
 import os

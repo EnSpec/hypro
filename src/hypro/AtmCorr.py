@@ -12,9 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to estimate visibility.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+""" Functions to estimate visibility. """
 
 import logging
 import os

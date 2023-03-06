@@ -12,9 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to do georectification.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+""" Functions to do georectification. """
 
 import logging
 import os

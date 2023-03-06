@@ -12,9 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to do atmospheric corrections.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+""" Functions to do atmospheric corrections. """
 
 import logging
 import os

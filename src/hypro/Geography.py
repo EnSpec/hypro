@@ -12,9 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to process map coordinate systems.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+""" Functions to process map coordinate systems. """
 
 import os
 

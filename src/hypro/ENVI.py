@@ -13,10 +13,7 @@
 # See `./LICENSE.txt` for complete terms
 
 """ Functions to process ENVI format data.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
 
-"""
 Notes:
     (1) The code is adapted from HyTools:
         https://github.com/EnSpec/HyTools-sandbox/blob/master/hytools/file_io/envi_read.py

@@ -12,9 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to do boresight calibration.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+""" Functions to do boresight calibration. """
 
 import logging
 import os

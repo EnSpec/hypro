@@ -12,9 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to detect smile effects.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+""" Functions to detect smile effects. """
 
 import logging
 import os

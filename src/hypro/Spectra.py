@@ -13,10 +13,8 @@
 # See `./LICENSE.txt` for complete terms
 
 """ Functions to do spectral resampling and smoothing.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
 
-"""Notes:
+Notes:
     (1) The code here is adapted from HyTools:
         https://github.com/EnSpec/HyTools-sandbox/blob/master/hytools/preprocess/resampling.py
 """
