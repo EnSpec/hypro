@@ -435,16 +435,16 @@ def get_scan_vectors(imu, sensor_model):
         imu: 2D array
             Flight IMU data, dimension: [n_lines, 3].
             Notes:
-                Heading, roll and pitch are defined according to navigational standards.
-                Column 0: Heading
-                    Range: -180~180 or 0~360
-                        North: 0; East: 90; West: -90 or 270
-                Column 1: Roll
+                Roll, pitch and heading are defined according to navigational standards.
+                Column 0: Roll
                     Range: -90~90
                         Right wing up: positive
-                Column 2: Pitch
+                Column 1: Pitch
                     Range: -90~90
                         Aircraft nose up: positive
+                Column 2: Heading
+                    Range: -180~180 or 0~360
+                        North: 0; East: 90; West: -90 or 270
         sensor_model: 2D array
             Sensor model data, dimension: [n_detectors, 2].
                 Notes:

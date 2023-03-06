@@ -65,7 +65,7 @@ def gaussian(x, mu, fwhm):
 
 
 def resample_spectra(spectra, src_waves, dst_waves, dst_fwhms, src_fwhms=None):
-    """ Return a set of coefficients for spectrum resampling.
+    """ Resample spectral data to new band central wavelengths & bandwidths.
     Notes:
         (1) Given a set of source wavelengths, destination wavelengths and FWHMs, this
             function calculates the relative contribution or each input wavelength to
@@ -83,8 +83,8 @@ def resample_spectra(spectra, src_waves, dst_waves, dst_fwhms, src_fwhms=None):
         src_fwhms: array
             List of source full widths at half maximum.
     Returns:
-        m x n matrix of coefficients, where m is the number of source wavelengths
-        and n is the number of destination wavelengths.
+        resampled_spectra: array
+            Resampled spectral data.
     """
     
     if src_fwhms is None:
@@ -122,7 +122,7 @@ def resample_spectra(spectra, src_waves, dst_waves, dst_fwhms, src_fwhms=None):
 
 
 def get_closest_wave(waves, center_wave):
-    """ Get the band index whose wavelength is closest to `center_wav`.
+    """ Get the band index whose wavelength is closest to `center_wave`.
     Arguments:
         waves: array
             Wavelength array.
