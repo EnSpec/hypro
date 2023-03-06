@@ -25,7 +25,7 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
         wvc_model_file: str
             Water vapor column model filename.
         atm_lut_file: str
-            Atmosphere lookup table file.
+            Atmospheric lookup table file.
         rdn_header_file: str
             Radiance header filename.
         vis: float
@@ -41,12 +41,12 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
     from Spectra import get_closest_wave, resample_spectra
     import json
 
-    # Get sensor wavelengths and fwhms.
+    # Get sensor wavelengths and FWHMs.
     header = read_envi_header(rdn_header_file)
     sensor_waves = np.array(header['wavelength'])
     sensor_fwhms = np.array(header['fwhm'])
 
-    # Read atmosphere look-up-table metadata.
+    # Read atmospheric lookup table metadata.
     metadata = read_binary_metadata(atm_lut_file+'.meta')
     metadata['shape'] = tuple([int(v) for v in metadata['shape']])
     atm_lut_WVC = np.array([float(v) for v in metadata['WVC']])
@@ -54,23 +54,23 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
     atm_lut_VZA = np.array([float(v) for v in metadata['VZA']])
     atm_lut_RAA = np.array([float(v) for v in metadata['RAA']])
     atm_lut_WAVE = np.array([float(v) for v in metadata['WAVE']])
-    # vza index
+    # VZA index
     vza_index = np.where(atm_lut_VZA==min(atm_lut_VZA))[0][-1]
-    # raa index
+    # RAA index
     raa_index = np.where(atm_lut_RAA==min(atm_lut_RAA))[0][-1]
 
-    # Load atmosphere look-up-table.
+    # Load atmospheric lookup table.
     atm_lut = np.memmap(atm_lut_file,
                         dtype='float32',
                         mode='r',
                         shape=metadata['shape']) # dimension=[RHO, WVC, VIS, VZA, RAA, WAVE]
 
     # Subtract path radiance.
-    atm_lut_rdn = atm_lut[1,:,vza_index,raa_index,:] - atm_lut[0,:,vza_index,raa_index,:] # dimesion=[WVC, VIS, WAVE]
+    atm_lut_rdn = atm_lut[1,:,vza_index,raa_index,:] - atm_lut[0,:,vza_index,raa_index,:] # dimension=[WVC, VIS, WAVE]
     atm_lut.flush()
     del atm_lut
     
-    # vis intepolation range
+    # VIS interpolation range
     vis_dict = get_interp_range(atm_lut_VIS, vis)
 
     # Do interpolation.
@@ -105,7 +105,7 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
             right_weight = (middle_wave-left_wave)/(right_wave-left_wave)
             model['weight'] = [left_weight, right_weight]
 
-            # ratios and wvcs
+            # ratios and WVCs
             resampled_rdn = resample_spectra(interp_rdn, atm_lut_WAVE,
                                              sensor_waves[model['band']],
                                              sensor_fwhms[model['band']])
@@ -140,7 +140,7 @@ def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_m
         sun_zenith: float
             Sun zenith angle.
         distance: float
-            Earth-to-sun distance.
+            Earth-to-Sun distance.
         solar_flux_file: str
             Solar flux filename.
     """

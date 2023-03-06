@@ -20,14 +20,14 @@ import logging, os, numpy as np
 logger = logging.getLogger(__name__)
 
 def make_radio_cali_file_Hyspex(radio_cali_file, dn_image_file, setting_file):
-    """ Make a Hyspex radiometric calibration file.
+    """ Make a HySpex radiometric calibration file.
     Arguments:
         radio_cali_file: str
-            Hyspex radiometric calibration coefficiets filename.
+            HySpex radiometric calibration coefficients filename.
         dn_image_file: str
-            Hyspex digital number (DN) image filename.
+            HySpex digital number (DN) image filename.
         setting_file: str
-            Hyspex radiometric calibration setting filename.
+            HySpex radiometric calibration setting filename.
     """
 
     if os.path.exists(radio_cali_file):
@@ -38,7 +38,7 @@ def make_radio_cali_file_Hyspex(radio_cali_file, dn_image_file, setting_file):
     from Spectra import estimate_fwhms_from_waves
     from scipy    import constants
 
-    # Read meatadata from the raw Hyspex image.
+    # Read metadata from the raw HySpex image.
     header = dict()
     try:
         fid = open(dn_image_file, 'rb')
@@ -155,7 +155,7 @@ def make_radio_cali_file_Hyspex(radio_cali_file, dn_image_file, setting_file):
 
     fid.close()
 
-    # Convert int8array to string.
+    # Convert int8 array to string.
     def from_int8array_to_string(int8_array):
         string = ''
         for int8_value in int8_array:
@@ -181,7 +181,7 @@ def make_radio_cali_file_Hyspex(radio_cali_file, dn_image_file, setting_file):
     header['satValue'] = np.power(2, 16.0-header['bitshift']) - 1
     header['fwhms'] = estimate_fwhms_from_waves(header['spectralVector'])
 
-    # Calculate gain and offset coefficents.
+    # Calculate gain and offset coefficients.
     fid = open(radio_cali_file, 'wb')
 
     # gain
@@ -210,8 +210,7 @@ def make_radio_cali_file_Hyspex(radio_cali_file, dn_image_file, setting_file):
 
     # Write header.
     radio_cali_header = empty_envi_header()
-    radio_cali_header = empty_envi_header()
-    radio_cali_header['description'] = 'Hyspex radiometric calibration coefficients.'
+    radio_cali_header['description'] = 'HySpex radiometric calibration coefficients.'
     radio_cali_header['file type'] = 'ENVI Standard'
     radio_cali_header['bands'] = bands
     radio_cali_header['lines'] = header['spectralSize']
@@ -228,14 +227,14 @@ def make_radio_cali_file_Hyspex(radio_cali_file, dn_image_file, setting_file):
     logger.info('Write the radiometric calibration coefficients to %s.' %radio_cali_file)
 
 def dn2rdn_Hyspex(rdn_image_file, dn_image_file, radio_cali_file, acquisition_time):
-    """ Do Hyspex radiometric calibration.
+    """ Do HySpex radiometric calibration.
     Arguments:
         rdn_image_file: str
             Radiance image filename.
         dn_image_file: str
-            Hyspex DN image filename.
+            HySpex DN image filename.
         radio_cali_file: str
-            Hyspex radiometric calibration coefficients filename.
+            HySpex radiometric calibration coefficients filename.
         acquisition_time: datetime object
             Acquisition time.
     """
@@ -276,7 +275,7 @@ def dn2rdn_Hyspex(rdn_image_file, dn_image_file, radio_cali_file, acquisition_ti
     for from_line in range(0, dn_header['lines'], 500):
         info += '%d, ' %(from_line+1)
 
-        # Determine chunck size.
+        # Determine chunk size.
         to_line = min(from_line+500, dn_header['lines'])
 
         # Get offset coefficients.
@@ -309,7 +308,7 @@ def dn2rdn_Hyspex(rdn_image_file, dn_image_file, radio_cali_file, acquisition_ti
     
     # Write header.
     rdn_header = empty_envi_header()
-    rdn_header['description'] = 'Hyspex radiance in mW/(cm2*um*sr)'
+    rdn_header['description'] = 'HySpex radiance in mW/(cm2*um*sr)'
     rdn_header['file type'] = 'ENVI Standard'
     rdn_header['samples'] = dn_header['samples']
     rdn_header['lines'] = dn_header['lines']
@@ -369,7 +368,7 @@ def resample_rdn(resampled_rdn_image_file, raw_rdn_image_file, smile_effect_file
     fid = open(resampled_rdn_image_file, 'wb')
     for from_line in range(0, raw_rdn_header['lines'], 500):
         info += '%d, ' %(from_line+1)
-        # Determine chunck size.
+        # Determine chunk size.
         to_line = min(from_line+500, raw_rdn_header['lines'])
 
         # Initialize.
@@ -404,13 +403,13 @@ def resample_rdn(resampled_rdn_image_file, raw_rdn_image_file, smile_effect_file
     logger.info('Write the spectrally resampled radiance image to %s.' %resampled_rdn_image_file)
 
 def get_hyspex_setting(setting_file):
-    """ Read Hyspex setting data.
+    """ Read HySpex setting data.
     Arguments:
         setting_file: str
-            Hyspex setting filename.
+            HySpex setting filename.
     Returns:
         setting: dict
-            Hyspex setting.
+            HySpex setting.
     """
 
     setting_value_type = {"serialnumber": "int",

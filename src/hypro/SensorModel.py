@@ -26,7 +26,7 @@ def make_sensor_model(sensor_model_file, fov, ifov, samples, if_rotated):
         fov: float
             Sensor fov [deg].
         ifov: float
-            Sensor instaneous fov [mrad].
+            Sensor instantaneous fov [mrad].
         samples: int
             Image columns.
         if_rotated: bool
@@ -60,7 +60,7 @@ def determine_if_rotated(imu_gps_file):
     """ Determine if the sensor is 180 degree rotated.
     Arguments:
         imu_gps_file: str
-            IMUGPS file
+            IMU & GPS file
     Returns:
         True or False: bool
             Whether the sensor is 180 degree rotated.

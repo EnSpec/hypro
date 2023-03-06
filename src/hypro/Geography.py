@@ -112,8 +112,8 @@ def get_grid_convergence(lon, lat, map_crs):
         lon: list of floats
             Longitude. West: negative; East: positive.
         lat: list of floats
-            Latitde. North: positive; South: negative.
-    Reuturns:
+            Latitude. North: positive; South: negative.
+    Returns:
         grid_convergence: array of floats
             Grid convergence in degrees.
     """
@@ -146,7 +146,7 @@ def get_map_crs(dem, longitude, latitude):
     """ Get map coordinate system.
     Notes:
         If `dem` is a file, the map coordinate system should be
-        the same as that of the dem file; otherwise define a UTM coordinate system
+        the same as that of the DEM file; otherwise define a UTM coordinate system
         based on the longitude and latitude.
     Arguments:
         dem: str or float

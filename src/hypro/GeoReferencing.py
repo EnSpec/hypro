@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to do geo-referencing.
+""" Functions to do georeferencing.
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
@@ -29,7 +29,7 @@ def calculate_igm(igm_image_file, imugps_file, sensor_model_file, dem_image_file
         igm_image_file: str
             The IGM image filename.
         imugps_file: str
-            The IMUGPS filename.
+            The IMU & GPS filename.
         sensor_model_file: str
             The sensor model filename.
         dem_image_file: str
@@ -80,13 +80,13 @@ def calculate_igm(igm_image_file, imugps_file, sensor_model_file, dem_image_file
     del index
     xyz0, xyz1 = get_xyz0_xyz1(imugps[:,1:4], L0, dem_min, dem_max)
     
-    # Ray-tracing.
+    # Ray tracing.
     lines = imugps.shape[0]
     samples = L0.shape[1]
-    logger.info('Beginning ray-tracing ({} scanlines)...'.format(lines))
+    logger.info('Beginning ray tracing ({} scanlines)...'.format(lines))
     igm_image = ray_tracer_ufunc(xyz0, xyz1, L0, dem_image, dem_geotransform)
     del dem_image, xyz0, xyz1, L0, imugps
-    logger.info('Ray-tracing complete.')
+    logger.info('Ray tracing complete.')
 
     # Interpolate IGM.
     nan_lines = []
@@ -229,7 +229,7 @@ def calculate_sca(sca_image_file, imugps_file, igm_image_file, sun_angles):
 def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
     """ Create a geographic lookup table (GLT) image.
     Notes:
-        (1) This code is adapted from Adam Chlus's (chlus@wisc.edu) script.
+        (1) This code is adapted from Adam Chlus' (chlus@wisc.edu) script.
         (2) The GLT image consists of two bands:
                 Band 0: Sample Lookup:
                     Pixel values indicate the column number of the pixel
@@ -243,7 +243,7 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
             docs/GeoreferenceFromInputGeometry.html.
     Arguments:
         glt_image_file: str
-            Geographic look-up table filename.
+            Geographic lookup table filename.
         igm_image_file: str
             Input geometry filename.
         pixel_size: float
@@ -426,7 +426,7 @@ def get_scan_vectors(imu, sensor_model):
         imu: 2D array
             Flight IMU data, dimension: [n_lines, 3].
             Notes:
-                Heading, Roll and Pitch are defined according to navigational standards.
+                Heading, roll and pitch are defined according to navigational standards.
                 Column 0: Heading
                     Range: -180~180 or 0~360
                         North: 0; East: 90; West: -90 or 270
@@ -499,7 +499,7 @@ def get_scan_vectors(imu, sensor_model):
 def get_xyz0_xyz1(xyz, L0, h_min, h_max):
     """ Get the starting and ending locations of ray tracing.
     References:
-        (1) Schlapfer D. (2016). PARGE User Manual, Version 3.3.
+        (1) Schläpfer D. (2016). PARGE User Manual, Version 3.3.
     Arguments:
         xyz: 2D array
             Flight map x, y, z map coordinates, dimension: [N_lines, 3].
@@ -534,12 +534,12 @@ def get_xyz0_xyz1(xyz, L0, h_min, h_max):
 @guvectorize(['void(f8[:,:,:], f8[:,:,:], f8[:,:,:], f8[:,:], f8[:], f8[:,:,:])'],
              '(b,n,m), (b,n,m), (b,n,m), (u,v), (c) -> (b,m,n)', cache=True)
 def ray_tracer_ufunc(xyz0, xyz1, L0, dem, dem_gt, output):
-    """ Vectorized ray-tracing operator (numpy-style universal function).
+    """ Vectorized ray tracing operator (numpy-style universal function).
     Arguments:
         xyz0: 3D array, shape=(3, scanlines, detectors)
-            Ray-tracing starting positions for each map grid cell.
+            Ray tracing starting positions for each map grid cell.
         xyz1: 3D array, shape=(3, scanlines, detectors)
-            Ray-tracing ending positions for each map grid cell.
+            Ray tracing ending positions for each map grid cell.
         L0: 3D array, shape=(3, scanlines, detectors)
             Scan vectors.
         dem: 2D array, shape=(scanlines, detectors)
@@ -555,9 +555,9 @@ def ray_tracer_ufunc(xyz0, xyz1, L0, dem, dem_gt, output):
         3D array if `output` is not specified, otherwise `None`.
     Notes:
         (1) Argument data types are constrained by numba signatures
-             supplied to `guvectorize.` If supplied types cannot be
+             supplied to `guvectorize`. If supplied types cannot be
              coerced to required types by safe casting rules, the
-             function will return an error.
+             function will raise an error.
     """
     
     # Geotransform: (ulx, x_res, 0, uly, 0, y_res)
@@ -571,7 +571,7 @@ def ray_tracer_ufunc(xyz0, xyz1, L0, dem, dem_gt, output):
 
 @jit
 def ray_tracing(XYZ0, XYZ1, V, DEM, DEM_X0Y0, DEM_Resolution):
-    """ Implement ray-tracing to get the pixel's geo-location and elevation.
+    """ Implement ray tracing to get the pixel's geolocation and elevation.
     References:
         (1) Meyer P. (1994). A parametric approach for the geocoding of airborne
             visible/infrared imaging spectrometer (AVIRIS) data in rugged terrain.
@@ -582,9 +582,9 @@ def ray_tracing(XYZ0, XYZ1, V, DEM, DEM_X0Y0, DEM_Resolution):
             advanced-rendering/introduction-acceleration-structure/grid.
     Arguments:
         XYZ0: float list, 3 elements
-            Ray-tracing starting point, [MapX0, MapY0, MapZ0].
+            Ray tracing starting point, [MapX0, MapY0, MapZ0].
         XYZ1: float list, 3 elements
-            Ray-tracing ending point, [MapX1, MapY1, MapZ1].
+            Ray tracing ending point, [MapX1, MapY1, MapZ1].
         V: float list, 3 elements
             Scan vector.
         DEM: 2D array, float
@@ -594,7 +594,7 @@ def ray_tracing(XYZ0, XYZ1, V, DEM, DEM_X0Y0, DEM_Resolution):
         DEM_Resolution: float list
             DEM resolution.
     Returns:
-        A 3-element vector, [MapX, MapY, MapZ]: the pixel's geo-location and elevation.
+        A 3-element vector, [MapX, MapY, MapZ]: the pixel's geolocation and elevation.
     """
 
     if np.abs(XYZ0[0]-XYZ1[0])<1e-2 and np.abs(XYZ0[1]-XYZ1[1])<1e-2:

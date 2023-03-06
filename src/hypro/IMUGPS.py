@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to process Hyspex imu and gps data.
+""" Functions to process HySpex IMU and GPS data.
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
@@ -21,12 +21,12 @@ from osgeo import osr
 logger = logging.getLogger(__name__)
 
 def prepare_imugps_Hyspex(processed_imugps_file, raw_imugps_file, boresight_offsets, map_crs, boresight_options):
-    """ Prepare Hyspex IMU and GPS data.
+    """ Prepare HySpex IMU and GPS data.
     Arguments:
         processed_imugps_file: str
-            Processed IMUGPS filename.
+            Processed IMU & GPS filename.
         raw_imugps_file: str
-            Raw IMUGPS filename.
+            Raw IMU & GPS filename.
         boresight_offsets: list of float
             Boresight offsets, [roll_offset, pitch_offset, heading_offset, altitude_offset].
         boresight_options: list of boolean

@@ -17,7 +17,7 @@
 """
 
 """Notes:
-    (1) The code here is adapted from the Hytools:
+    (1) The code here is adapted from HyTools:
         https://github.com/EnSpec/HyTools-sandbox/blob/master/hytools/preprocess/resampling.py
 """
 
@@ -28,13 +28,13 @@ from io import BytesIO
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 def estimate_fwhms_from_waves(waves):
-    """ Estimate fwhm from wavelengths.
+    """ Estimate FWHM from wavelengths.
     Arguments:
         waves: array
             Wavelengths, in nm.
     Returns:
         fwhms: array
-            Full width at half maximum, in nm.
+            Full widths at half maximum, in nm.
     """
 
     gap = 0.5*np.diff(waves)
@@ -44,16 +44,16 @@ def estimate_fwhms_from_waves(waves):
     return fwhms
 
 def gaussian(x, mu, fwhm):
-    """ Return a gaussian distribution.
+    """ Return a Gaussian distribution.
     Arguments:
         x: array
-            Wavelengths along which to generate gaussian.
+            Wavelengths along which to generate Gaussian.
         mu: float
-            Centre wavelength.
+            Center wavelength.
         fwhm: float
-            Full width half maximum.
+            Full width at half maximum.
     Returns:
-        Numpy array of gaussian along input range.
+        Numpy array of Gaussian along input range.
     """
 
     sigma = fwhm/(2*np.sqrt(2*np.log(2)))+1e-10
@@ -61,12 +61,12 @@ def gaussian(x, mu, fwhm):
     return np.exp(-1*((x-mu)**2/(2*sigma**2)))/(sigma*np.sqrt(2*np.pi))
 
 def resample_spectra(spectra, src_waves, dst_waves, dst_fwhms, src_fwhms=None):
-    """ Return a set of coeffiencients for spectrum resampling.
+    """ Return a set of coefficients for spectrum resampling.
     Notes:
         (1) Given a set of source wavelengths, destination wavelengths and FWHMs, this
-            function caculates the relative contribution or each input wavelength to
+            function calculates the relative contribution or each input wavelength to
             the output wavelength. It assumes that output response functions follow
-            a gaussian distribution.
+            a Gaussian distribution.
     Arguments:
         spectra: array
             Spectra to be resampled.
@@ -75,11 +75,11 @@ def resample_spectra(spectra, src_waves, dst_waves, dst_fwhms, src_fwhms=None):
         dst_waves: array
             List of destination wavelength centers.
         dst_fwhms: array
-            List of destination full width half maxes.
+            List of destination full widths at half maximum.
         src_fwhms: array
-            List of source full width half maxes.
+            List of source full widths at half maximum.
     Returns:
-        m x n matrix of coeffiecients, where m is the number of source wavelengths
+        m x n matrix of coefficients, where m is the number of source wavelengths
         and n is the number of destination wavelengths.
     """
 
@@ -140,7 +140,7 @@ def continuum_removal(spectra, waves):
             Spectral wavelengths.
     Returns:
         cont_rm_spectra: 1D or 2D array
-            Continuum removed spectra, dimension: [Bands] or [Bands, Columns].
+            Continuum-removed spectra, dimension: [Bands] or [Bands, Columns].
     """
 
     waves = np.array(waves)

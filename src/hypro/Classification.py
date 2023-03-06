@@ -283,11 +283,9 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
         if rdn_header['interleave'] == 'bil':
             cirrus_refl = rdn_image[:,cirrus_band,:]*np.pi*d2/(solar_flux[cirrus_band]*cos_sun_zenith)
             swir1_refl = rdn_image[:,swir1_band,:]*np.pi*d2/(solar_flux[swir1_band]*cos_sun_zenith)
-            swir2_refl = rdn_image[:,swir2_band,:]*np.pi*d2/(solar_flux[swir2_band]*cos_sun_zenith)
         else:
             cirrus_refl = rdn_image[cirrus_band,:,:]*np.pi*d2/(solar_flux[cirrus_band]*cos_sun_zenith)
             swir1_refl = rdn_image[swir1_band,:,:]*np.pi*d2/(solar_flux[swir1_band]*cos_sun_zenith)
-            swir2_refl = rdn_image[swir2_band,:,:]*np.pi*d2/(solar_flux[swir2_band]*cos_sun_zenith)
         rdn_image.flush()
         del rdn_image
         

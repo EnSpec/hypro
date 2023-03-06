@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to do geo-rectification.
+""" Functions to do georectification.
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
@@ -20,18 +20,18 @@ import logging, os, numpy as np
 logger = logging.getLogger(__name__)
 
 def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
-    """ Do orthorectifications on SCA.
+    """ Do orthorectification on SCA.
     Arguments:
         ortho_sca_image_file: str
             Orthorectified SCA image filename.
         sca_image_file: str
             SCA image filename.
         glt_image_file: str
-            Geographic look-up table image filename.
+            Geographic lookup table image filename.
     """
 
     if os.path.exists(ortho_sca_image_file):
-        logger.info('Write the geo-rectified SCA image to %s.' %ortho_sca_image_file)
+        logger.info('Write the georectified SCA image to %s.' %ortho_sca_image_file)
         return
 
     from ENVI import empty_envi_header, read_envi_header, write_envi_header
@@ -56,7 +56,7 @@ def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
     fid = open(ortho_sca_image_file, 'wb')
     for band in range(sca_header['bands']):
         ortho_sca_image[:,:] = -1000.0
-        offset = sca_header['header offset']++4*band*sca_header['lines']*sca_header['samples']
+        offset = sca_header['header offset']+4*band*sca_header['lines']*sca_header['samples']
         sca_image = np.memmap(sca_image_file,
                               dtype='float32',
                               mode='r',
@@ -73,7 +73,7 @@ def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
     
     # Write header
     ortho_sca_header = empty_envi_header()
-    ortho_sca_header['description'] = 'Geo-rectified SCA, in [deg]'
+    ortho_sca_header['description'] = 'Georectified SCA, in [deg]'
     ortho_sca_header['file type'] = 'ENVI Standard'
     ortho_sca_header['samples'] = glt_header['samples']
     ortho_sca_header['lines'] = glt_header['lines']
@@ -91,21 +91,21 @@ def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
     write_envi_header(ortho_sca_image_file+'.hdr', ortho_sca_header)
     del glt_header, sca_header, ortho_sca_header
 
-    logger.info('Write the geo-rectified SCA image to %s.' %ortho_sca_image_file)
+    logger.info('Write the georectified SCA image to %s.' %ortho_sca_image_file)
 
 def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
-    """ Do orthorectifications on DEM.
+    """ Do orthorectification on DEM.
     Arguments:
         ortho_dem_image_file: str
             Orthorectified DEM image filename.
         igm_image_file: str
             IGM image filename.
         glt_image_file: str
-            Geographic look-up table image filename.
+            Geographic lookup table image filename.
     """
 
     if os.path.exists(ortho_dem_image_file):
-        logger.info('Write the geo-rectified DEM image to %s.' %ortho_dem_image_file)
+        logger.info('Write the georectified DEM image to %s.' %ortho_dem_image_file)
         return
 
     from ENVI import empty_envi_header, read_envi_header, write_envi_header
@@ -146,7 +146,7 @@ def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
     
     # Write header.
     ortho_dem_header = empty_envi_header()
-    ortho_dem_header['description'] = 'Geo-rectified DEM, in [m]'
+    ortho_dem_header['description'] = 'Georectified DEM, in [m]'
     ortho_dem_header['file type'] = 'ENVI Standard'
     ortho_dem_header['samples'] = glt_header['samples']
     ortho_dem_header['lines'] = glt_header['lines']
@@ -161,21 +161,21 @@ def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
     write_envi_header(ortho_dem_image_file+'.hdr', ortho_dem_header)
     del glt_header, ortho_dem_header
 
-    logger.info('Write the geo-rectified DEM image to %s.' %ortho_dem_image_file)
+    logger.info('Write the georectified DEM image to %s.' %ortho_dem_image_file)
 
 def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
-    """ Do orthorectifications on radiance.
+    """ Do orthorectification on radiance.
     Arguments:
         ortho_rdn_image_file: str
             Orthorectified radiance filename.
         rdn_image_file: str
             Radiance image filename.
         glt_image_file: str
-            Geographic look-up table image filename.
+            Geographic lookup table image filename.
     """
 
     if os.path.exists(ortho_rdn_image_file):
-        logger.info('Write the geo-rectified radiance image to %s.' %ortho_rdn_image_file)
+        logger.info('Write the georectified radiance image to %s.' %ortho_rdn_image_file)
         return
 
     from ENVI import empty_envi_header, read_envi_header, write_envi_header
@@ -222,7 +222,7 @@ def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
     
     # Write header.
     ortho_rdn_header = empty_envi_header()
-    ortho_rdn_header['description'] = 'Geo-rectified radiance, in [mW/(cm2*um*sr)]'
+    ortho_rdn_header['description'] = 'Georectified radiance, in [mW/(cm2*um*sr)]'
     ortho_rdn_header['file type'] = 'ENVI Standard'
     ortho_rdn_header['samples'] = glt_header['samples']
     ortho_rdn_header['lines'] = glt_header['lines']
@@ -241,4 +241,4 @@ def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
     write_envi_header(ortho_rdn_image_file+'.hdr', ortho_rdn_header)
     del glt_header, rdn_header, ortho_rdn_header
 
-    logger.info('Write the geo-rectified radiance image to %s.' %ortho_rdn_image_file)
+    logger.info('Write the georectified radiance image to %s.' %ortho_rdn_image_file)

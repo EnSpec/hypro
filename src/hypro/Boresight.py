@@ -29,7 +29,7 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
         igm_image_file: str
             The IGM image filename.
         imugps_file: str
-            The IMUGPS filename.
+            The IMU & GPS filename.
         sensor_model_file: str
             The sensor model filename.
         dem_image_file: str
@@ -63,7 +63,7 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
     # Read GCP data.
     gcp_data = np.loadtxt(gcp_file, comments=';') # Longitude, Latitude, Image Column, Image Row
 
-    # Convert gcp longitudes and latitudes to map x and y.
+    # Convert GCP longitudes and latitudes to map x and y.
     wgs84_crs = define_wgs84_crs()
     map_crs = osr.SpatialReference()
     map_crs.ImportFromWkt(dem_prj)
@@ -71,7 +71,7 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
     gcp_xyz = np.array(transform.TransformPoints(gcp_data[:,:2]))
     del wgs84_crs, transform
 
-    # Interpolate flight imu and xyz.
+    # Interpolate flight IMU and (x, y, z).
     lines = np.arange(imugps.shape[0])
     flight_xyz = np.zeros((gcp_data.shape[0], 3))
     flight_xyz[:,0] = np.interp(gcp_data[:,3]-1, lines, imugps[:,1])
@@ -161,7 +161,7 @@ def cost_fun(boresight_offsets, flight_xyz, flight_imu, flight_sensor_model, dem
         flight_imu: 2D
             Flight roll, pitch, heading data, shape=(n_gcps, 3)
         flight_sensor_model: 2D
-            Flight Sensor model data, shape=(n_gcps, 2)
+            Flight sensor model data, shape=(n_gcps, 2)
         dem_image: 2D array
             DEM data.
         dem_ulxy: list of float
@@ -183,7 +183,7 @@ def cost_fun(boresight_offsets, flight_xyz, flight_imu, flight_sensor_model, dem
     return cost
 
 def estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_model, dem_image, dem_ulxy, dem_pixel_size, boresight_options):
-    """ Cestimate GCP map coordinates.
+    """ Estimate GCP map coordinates.
     Arguments:
         boresight_offsets: list of float
             Boresight offsets.
@@ -192,7 +192,7 @@ def estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_mo
         flight_imu: 2D
             Flight roll, pitch, heading data, shape=(n_gcps, 3)
         flight_sensor_model: 2D
-            Flight Sensor model data, shape=(n_gcps, 2)
+            Flight sensor model data, shape=(n_gcps, 2)
         dem_image: 2D array
             DEM data.
         dem_ulxy: list of float
@@ -203,7 +203,7 @@ def estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_mo
             Boresight offset options, true or false.
     Returns:
         gcp_xyz: 2D array
-            Estimated GCP's x, y and z.
+            Estimated GCP x, y and z.
     """
 
     from GeoReferencing import ray_tracing
@@ -270,7 +270,7 @@ def estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_mo
     xyz1[:,2] = h_min
     del h_min, h_max
 
-    # Ray-tracing.
+    # Ray tracing.
     gcp_xyz = np.zeros((n_gcps,3))
     for i in range(n_gcps):
         gcp_xyz[i,0], gcp_xyz[i,1], gcp_xyz[i,2] = ray_tracing(xyz0[i,:], xyz1[i,:], L0[:,i], dem_image, dem_ulxy, dem_pixel_size)
