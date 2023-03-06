@@ -405,9 +405,9 @@ def interpolate_values(A, map):
     """ Replace array elements with interpolated values. Input array is modified in-place.
     Arguments:
         A: 1D array
-		    Input array to be modified.
-		map: 1D array
-		    Boolean map indicating which elements should be replaced
+            Input array to be modified.
+        map: 1D array
+            Boolean map indicating which elements should be replaced
     """
     
     def indices(x): return x.nonzero()[0]
