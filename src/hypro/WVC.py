@@ -137,7 +137,7 @@ def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_m
         rdn_file: str
             Radiance image filename.
         sensors: dict
-             Sensors.
+            Sensors.
         mask_file: str
             Mask image filename.
         sun_zenith: float
