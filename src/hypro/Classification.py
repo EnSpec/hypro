@@ -16,7 +16,10 @@
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
-import logging, os, numpy as np
+import logging
+import os
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -44,8 +47,8 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
         logger.info('Write the pre-classification map to %s.' % (pre_class_image_file))
         return
     
-    from ENVI import empty_envi_header, read_envi_header, write_envi_header
-    from Spectra import get_closest_wave, resample_solar_flux
+    from hypro.ENVI import empty_envi_header, read_envi_header, write_envi_header
+    from hypro.Spectra import get_closest_wave, resample_solar_flux
     
     # Read radiance image data.
     rdn_header = read_envi_header(os.path.splitext(rdn_image_file)[0]+'.hdr')

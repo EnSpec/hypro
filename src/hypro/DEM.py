@@ -16,7 +16,11 @@
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
-import logging, os, numpy as np
+import logging
+import os
+
+import numpy as np
+
 from osgeo import gdal
 
 logger = logging.getLogger(__name__)
@@ -64,7 +68,7 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
         logger.info('Write the DEM to %s.' % dem_image_file)
         return
     
-    from ENVI import empty_envi_header, write_envi_header
+    from hypro.ENVI import empty_envi_header, write_envi_header
     
     # Estimate the spatial range of the flight area.
     """ Notes:

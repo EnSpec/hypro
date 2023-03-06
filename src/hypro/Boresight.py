@@ -16,7 +16,10 @@
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
-import logging, os, numpy as np
+import logging
+import os
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -45,8 +48,9 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
         return
     
     from osgeo import gdal, osr
-    from Geography import define_wgs84_crs
     from scipy import optimize
+    
+    from hypro.Geography import define_wgs84_crs
     
     # Read IMU and GPS data.
     imugps = np.loadtxt(imugps_file)  # ID, X, Y, Z, R, P, H, Timestamp, Longitude, Latitude, Grid_Convergence, Roll...
@@ -209,7 +213,7 @@ def estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_mo
             Estimated GCP x, y and z.
     """
     
-    from GeoReferencing import ray_tracing
+    from hypro.GeoReferencing import ray_tracing
     
     # Initialize.
     n_gcps = flight_xyz.shape[0]

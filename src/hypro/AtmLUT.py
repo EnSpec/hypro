@@ -16,7 +16,10 @@
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
-import logging, os, numpy as np
+import logging
+import os
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -39,8 +42,9 @@ def build_atm_lut(flight_dict):
             Flight configurations.
     """
     
-    from DEM import get_avg_elev
     import glob
+    
+    from hypro.DEM import get_avg_elev
     
     if os.path.exists(flight_dict['raw_atm_lut_file']):
         logger.info('Write the raw ALT to %s.' % flight_dict['raw_atm_lut_file'])
@@ -177,8 +181,8 @@ def resample_atm_lut(resampled_atm_lut_file, raw_atm_lut_file, rdn_header_file):
         logger.info('Write the resampled ALT to %s.' % resampled_atm_lut_file)
         return
     
-    from ENVI import read_envi_header
-    from Spectra import resample_spectra
+    from hypro.ENVI import read_envi_header
+    from hypro.Spectra import resample_spectra
     
     # Read atmospheric lookup table grids.
     atm_lut_metadata = read_binary_metadata(raw_atm_lut_file+'.meta')

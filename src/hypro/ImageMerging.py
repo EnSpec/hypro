@@ -16,7 +16,10 @@
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
-import logging, os, numpy as np
+import logging
+import os
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +43,7 @@ def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensor
         logger.info('Write the merged SCA image to %s.' % merged_sca_file)
         return
     
-    from ENVI import empty_envi_header, read_envi_header, write_envi_header
+    from hypro.ENVI import empty_envi_header, read_envi_header, write_envi_header
     
     """
         Get spatial extent and pixel size.
@@ -252,7 +255,7 @@ def merge_rdn(merged_image_file, mask_file, sensors):
         logger.info('Write the merged radiance image to %s.' % merged_image_file)
         return
     
-    from ENVI import empty_envi_header, read_envi_header, write_envi_header
+    from hypro.ENVI import empty_envi_header, read_envi_header, write_envi_header
     
     # Read mask.
     mask_header = read_envi_header(os.path.splitext(mask_file)[0]+'.hdr')

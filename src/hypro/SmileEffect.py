@@ -16,7 +16,10 @@
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
-import logging, os, numpy as np
+import logging
+import os
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -54,10 +57,12 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
         logger.info('Write smile effect to %s.' % sensor_dict['smile_effect_file'])
         return
     
-    from ENVI import empty_envi_header, read_envi_header, write_envi_header
-    from Spectra import get_closest_wave
-    from scipy import optimize, interpolate
     import json
+    
+    from scipy import optimize, interpolate
+    
+    from hypro.ENVI import empty_envi_header, read_envi_header, write_envi_header
+    from hypro.Spectra import get_closest_wave
     
     # Read averaged radiance.
     header = read_envi_header(sensor_dict['avg_rdn_file']+'.hdr')
@@ -250,7 +255,7 @@ def interp_atm_lut(atm_lut_file, WVC, VIS, VZA, RAA):
             Interpolated path radiance (albedo=0.0, 0.5, 1.0).
     """
     
-    from AtmLUT import read_binary_metadata, get_interp_range, combos
+    from hypro.AtmLUT import read_binary_metadata, get_interp_range, combos
     
     # Read atmospheric lookup table grids.
     atm_lut_metadata = read_binary_metadata(atm_lut_file+'.meta')
@@ -313,7 +318,7 @@ def average_rdn(avg_rdn_file, rdn_image_file, sca_image_file, pre_class_image_fi
         logger.info('Write the averaged radiance data to %s.' % avg_rdn_file)
         return
     
-    from ENVI import empty_envi_header, read_envi_header, write_envi_header
+    from hypro.ENVI import empty_envi_header, read_envi_header, write_envi_header
     
     # Read radiance image data.
     rdn_header = read_envi_header(os.path.splitext(rdn_image_file)[0]+'.hdr')
@@ -439,7 +444,7 @@ def cost_fun(shifts, sensor_wave, sensor_fwhm, sensor_rdn, lut_wave, lut_rdn):
             Squared error.
     """
     
-    from Spectra import continuum_removal, resample_spectra
+    from hypro.Spectra import continuum_removal, resample_spectra
     
     # Apply shifts.
     sensor_wave = sensor_wave+shifts[0]

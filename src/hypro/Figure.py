@@ -16,7 +16,12 @@
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
-import logging, os, matplotlib.pyplot as plt, numpy as np
+import logging
+import os
+
+import matplotlib.pyplot as plt
+import numpy as np
+
 from osgeo import gdal
 
 mpl_logger = logging.getLogger('matplotlib')
@@ -37,7 +42,7 @@ def plot_angle_geometry(angle_geometry_figure_file, sca_image_file):
         logger.info('Save the angle geometry figure to %s.' % angle_geometry_figure_file)
         return
     
-    from ENVI import read_envi_header
+    from hypro.ENVI import read_envi_header
     
     # Read SCA image data.
     sca_header = read_envi_header(os.path.splitext(sca_image_file)[0]+'.hdr')
@@ -84,7 +89,7 @@ def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imug
         logger.info('Save the image area figure to %s.' % image_area_figure_file)
         return
     
-    from ENVI import read_envi_header
+    from hypro.ENVI import read_envi_header
     
     # Read DEM.
     ds = gdal.Open(dem_image_file, gdal.GA_ReadOnly)
@@ -168,8 +173,8 @@ def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
         logger.info('Save the quicklook figure to %s.' % quicklook_figure_file)
         return
     
-    from ENVI import read_envi_header
-    from Spectra import get_closest_wave
+    from hypro.ENVI import read_envi_header
+    from hypro.Spectra import get_closest_wave
     
     # Read radiance image data.
     rdn_header = read_envi_header(os.path.splitext(rdn_image_file)[0]+'.hdr')
@@ -247,7 +252,7 @@ def plot_avg_rdn(avg_rdn_figure_file, avg_rdn_file):
         logger.info('Save the average radiance spectra figure to %s.' % avg_rdn_figure_file)
         return
     
-    from ENVI import read_envi_header
+    from hypro.ENVI import read_envi_header
     
     header = read_envi_header(os.path.splitext(avg_rdn_file)[0]+'.hdr')
     avg_rdn = np.memmap(avg_rdn_file,
@@ -323,7 +328,7 @@ def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_
         logger.info('Save the smile effect at atmospheric absorption features figure to %s.' % smile_effect_at_atm_features_figure_file)
         return
     
-    from ENVI import read_envi_header
+    from hypro.ENVI import read_envi_header
     
     header = read_envi_header(os.path.splitext(smile_effect_at_atm_features_file)[0]+'.hdr')
     center_waves = [float(v) for v in header['spectral center wavelengths'].split(',')]
@@ -421,7 +426,7 @@ def plot_wvc_histogram(wvc_histogram_figure_file, water_vapor_column_image_file)
         logger.info('Save water vapor column histogram figure to %s.' % wvc_histogram_figure_file)
         return
     
-    from ENVI import read_envi_header
+    from hypro.ENVI import read_envi_header
     
     # Read water vapor column image
     wvc_header = read_envi_header(os.path.splitext(water_vapor_column_image_file)[0]+'.hdr')

@@ -16,7 +16,10 @@
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
-import logging, os, numpy as np
+import logging
+import os
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -38,10 +41,11 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
         logger.info('Write WVC models to %s.' % wvc_model_file)
         return
     
-    from AtmLUT import read_binary_metadata, get_interp_range
-    from ENVI import read_envi_header
-    from Spectra import get_closest_wave, resample_spectra
     import json
+    
+    from hypro.AtmLUT import read_binary_metadata, get_interp_range
+    from hypro.ENVI import read_envi_header
+    from hypro.Spectra import get_closest_wave, resample_spectra
     
     # Get sensor wavelengths and FWHMs.
     header = read_envi_header(rdn_header_file)
@@ -152,9 +156,10 @@ def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_m
         logger.info('Save the WVC image to %s.' % (wvc_file))
         return
     
-    from ENVI import read_envi_header, empty_envi_header, write_envi_header
-    from Spectra import get_closest_wave, resample_solar_flux
     import json
+    
+    from hypro.ENVI import read_envi_header, empty_envi_header, write_envi_header
+    from hypro.Spectra import get_closest_wave, resample_solar_flux
     
     # Read radiance image.
     rdn_header = read_envi_header(rdn_file+'.hdr')
