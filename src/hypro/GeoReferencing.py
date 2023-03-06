@@ -567,7 +567,7 @@ def get_xyz0_xyz1(xyz, L0, h_min, h_max):
 @guvectorize(['void(f8[:,:,:], f8[:,:,:], f8[:,:,:], f8[:,:], f8[:], f8[:,:,:])'],
              '(b,n,m), (b,n,m), (b,n,m), (u,v), (c) -> (b,m,n)', cache=True)
 def ray_tracer_ufunc(xyz0, xyz1, L0, dem, dem_gt, output):
-    """Vectorized ray tracing operator (numpy-style universal function).
+    """Vectorized ray tracing operator (``numpy``-style universal function).
     
     Parameters
     ----------
@@ -581,15 +581,15 @@ def ray_tracer_ufunc(xyz0, xyz1, L0, dem, dem_gt, output):
         Digital elevation model.
     dem_gt : tuple, 6 elements
         Geotransform array containing DEM geographic parameters
-        in GDAL format, i.e. as (ulx, x_res, 0, uly, 0, y_res)
+        in GDAL format, i.e. as ``(ulx, x_res, 0, uly, 0, y_res)``
     output : optional, 3D array, shape=(3, detectors, scanlines)
         Array to which outputs are written. If not passed, a new
         array is created and returned. Otherwise, the array is
-        modified in place and the ufunc returns `None`.
+        modified in place and the ``ufunc`` returns ``None``.
     
     Returns
     -------
-        3D array if `output` is not specified, otherwise `None`.
+        3D array if ``output`` is not specified, otherwise ``None``.
     
     Notes
     -----

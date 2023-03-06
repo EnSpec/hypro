@@ -193,7 +193,7 @@ def get_map_crs(dem, longitude, latitude):
     
     Notes
     -----
-    If `dem` is a file, the map coordinate system should be
+    If ``dem`` is a file, the map coordinate system should be
     the same as that of the DEM file; otherwise define a UTM coordinate system
     based on the longitude and latitude.
     """

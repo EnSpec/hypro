@@ -137,7 +137,7 @@ def resample_spectra(spectra, src_waves, dst_waves, dst_fwhms, src_fwhms=None):
 
 
 def get_closest_wave(waves, center_wave):
-    """Get the band index whose wavelength is closest to `center_wave`.
+    """Get the band index whose wavelength is closest to ``center_wave``.
     
     Parameters
     ----------
