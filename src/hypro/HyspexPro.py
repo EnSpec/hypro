@@ -200,7 +200,7 @@ def get_center_lon_lat(raw_imugps_file):
     import numpy as np
     
     imugps = np.loadtxt(raw_imugps_file)
-    lon, lat = imugps[:,1].mean(), imugps[:,2].mean()
+    lon, lat = imugps[:, 1].mean(), imugps[:, 2].mean()
     del imugps
     
     return [lon, lat]
@@ -227,7 +227,7 @@ def get_acquisition_time(dn_header_file, raw_imugps_file):
     
     header = read_envi_header(dn_header_file)
     week_start = datetime.strptime(f"{header['acquisition date']} 00:00:00", "%Y-%m-%d %H:%M:%S")
-    week_seconds = np.loadtxt(raw_imugps_file)[:,7].mean()
+    week_seconds = np.loadtxt(raw_imugps_file)[:, 7].mean()
     epoch = datetime(1980, 1, 6, 0, 0)
     gps_week = (week_start - epoch).days//7
     time_elapsed = timedelta(days=gps_week*7, seconds=week_seconds)

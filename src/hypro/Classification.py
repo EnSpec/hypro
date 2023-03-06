@@ -77,7 +77,7 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
                                 mode='w+',
                                 shape=(rdn_header['lines'],
                                        rdn_header['samples']))
-    pre_class_image[:,:] = 0
+    pre_class_image[:, :] = 0
     
     # Define VNIR sensor wavelengths.
     blue_wave, blue_band = get_closest_wave(rdn_header['wavelength'], 470)
@@ -99,23 +99,23 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
     if if_whole:
         # Calculate the reflectance at different bands.
         if rdn_header['interleave'].lower() == 'bil':
-            blue_refl = rdn_image[:,blue_band,:]*np.pi*d2/(solar_flux[blue_band]*cos_sun_zenith)
-            green_refl = rdn_image[:,green_band,:]*np.pi*d2/(solar_flux[green_band]*cos_sun_zenith)
-            red_refl = rdn_image[:,red_band,:]*np.pi*d2/(solar_flux[red_band]*cos_sun_zenith)
-            nir_refl = rdn_image[:,nir_band,:]*np.pi*d2/(solar_flux[nir_band]*cos_sun_zenith)
+            blue_refl = rdn_image[:, blue_band, :]*np.pi*d2/(solar_flux[blue_band]*cos_sun_zenith)
+            green_refl = rdn_image[:, green_band, :]*np.pi*d2/(solar_flux[green_band]*cos_sun_zenith)
+            red_refl = rdn_image[:, red_band, :]*np.pi*d2/(solar_flux[red_band]*cos_sun_zenith)
+            nir_refl = rdn_image[:, nir_band, :]*np.pi*d2/(solar_flux[nir_band]*cos_sun_zenith)
             
-            cirrus_refl = rdn_image[:,cirrus_band,:]*np.pi*d2/(solar_flux[cirrus_band]*cos_sun_zenith)
-            swir1_refl = rdn_image[:,swir1_band,:]*np.pi*d2/(solar_flux[swir1_band]*cos_sun_zenith)
-            swir2_refl = rdn_image[:,swir2_band,:]*np.pi*d2/(solar_flux[swir2_band]*cos_sun_zenith)
+            cirrus_refl = rdn_image[:, cirrus_band, :]*np.pi*d2/(solar_flux[cirrus_band]*cos_sun_zenith)
+            swir1_refl = rdn_image[:, swir1_band, :]*np.pi*d2/(solar_flux[swir1_band]*cos_sun_zenith)
+            swir2_refl = rdn_image[:, swir2_band, :]*np.pi*d2/(solar_flux[swir2_band]*cos_sun_zenith)
         else:
-            blue_refl = rdn_image[blue_band,:,:]*np.pi*d2/(solar_flux[blue_band]*cos_sun_zenith)
-            green_refl = rdn_image[green_band,:,:]*np.pi*d2/(solar_flux[green_band]*cos_sun_zenith)
-            red_refl = rdn_image[red_band,:,:]*np.pi*d2/(solar_flux[red_band]*cos_sun_zenith)
-            nir_refl = rdn_image[nir_band,:,:]*np.pi*d2/(solar_flux[nir_band]*cos_sun_zenith)
+            blue_refl = rdn_image[blue_band, :, :]*np.pi*d2/(solar_flux[blue_band]*cos_sun_zenith)
+            green_refl = rdn_image[green_band, :, :]*np.pi*d2/(solar_flux[green_band]*cos_sun_zenith)
+            red_refl = rdn_image[red_band, :, :]*np.pi*d2/(solar_flux[red_band]*cos_sun_zenith)
+            nir_refl = rdn_image[nir_band, :, :]*np.pi*d2/(solar_flux[nir_band]*cos_sun_zenith)
             
-            cirrus_refl = rdn_image[cirrus_band,:,:]*np.pi*d2/(solar_flux[cirrus_band]*cos_sun_zenith)
-            swir1_refl = rdn_image[swir1_band,:,:]*np.pi*d2/(solar_flux[swir1_band]*cos_sun_zenith)
-            swir2_refl = rdn_image[swir2_band,:,:]*np.pi*d2/(solar_flux[swir2_band]*cos_sun_zenith)
+            cirrus_refl = rdn_image[cirrus_band, :, :]*np.pi*d2/(solar_flux[cirrus_band]*cos_sun_zenith)
+            swir1_refl = rdn_image[swir1_band, :, :]*np.pi*d2/(solar_flux[swir1_band]*cos_sun_zenith)
+            swir2_refl = rdn_image[swir2_band, :, :]*np.pi*d2/(solar_flux[swir2_band]*cos_sun_zenith)
         rdn_image.flush()
         del rdn_image
         
@@ -220,15 +220,15 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
     elif if_vnir:
         # Calculate the reflectance at different bands.
         if rdn_header['interleave'].lower() == 'bil':
-            blue_refl = rdn_image[:,blue_band,:]*np.pi*d2/(solar_flux[blue_band]*cos_sun_zenith)
-            green_refl = rdn_image[:,green_band,:]*np.pi*d2/(solar_flux[green_band]*cos_sun_zenith)
-            red_refl = rdn_image[:,red_band,:]*np.pi*d2/(solar_flux[red_band]*cos_sun_zenith)
-            nir_refl = rdn_image[:,nir_band,:]*np.pi*d2/(solar_flux[nir_band]*cos_sun_zenith)
+            blue_refl = rdn_image[:, blue_band, :]*np.pi*d2/(solar_flux[blue_band]*cos_sun_zenith)
+            green_refl = rdn_image[:, green_band, :]*np.pi*d2/(solar_flux[green_band]*cos_sun_zenith)
+            red_refl = rdn_image[:, red_band, :]*np.pi*d2/(solar_flux[red_band]*cos_sun_zenith)
+            nir_refl = rdn_image[:, nir_band, :]*np.pi*d2/(solar_flux[nir_band]*cos_sun_zenith)
         else:
-            blue_refl = rdn_image[blue_band,:,:]*np.pi*d2/(solar_flux[blue_band]*cos_sun_zenith)
-            green_refl = rdn_image[green_band,:,:]*np.pi*d2/(solar_flux[green_band]*cos_sun_zenith)
-            red_refl = rdn_image[red_band,:,:]*np.pi*d2/(solar_flux[red_band]*cos_sun_zenith)
-            nir_refl = rdn_image[nir_band,:,:]*np.pi*d2/(solar_flux[nir_band]*cos_sun_zenith)
+            blue_refl = rdn_image[blue_band, :, :]*np.pi*d2/(solar_flux[blue_band]*cos_sun_zenith)
+            green_refl = rdn_image[green_band, :, :]*np.pi*d2/(solar_flux[green_band]*cos_sun_zenith)
+            red_refl = rdn_image[red_band, :, :]*np.pi*d2/(solar_flux[red_band]*cos_sun_zenith)
+            nir_refl = rdn_image[nir_band, :, :]*np.pi*d2/(solar_flux[nir_band]*cos_sun_zenith)
         rdn_image.flush()
         del rdn_image
         
@@ -283,11 +283,11 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
     elif if_swir:
         # Calculate the reflectance at different bands.
         if rdn_header['interleave'] == 'bil':
-            cirrus_refl = rdn_image[:,cirrus_band,:]*np.pi*d2/(solar_flux[cirrus_band]*cos_sun_zenith)
-            swir1_refl = rdn_image[:,swir1_band,:]*np.pi*d2/(solar_flux[swir1_band]*cos_sun_zenith)
+            cirrus_refl = rdn_image[:, cirrus_band, :]*np.pi*d2/(solar_flux[cirrus_band]*cos_sun_zenith)
+            swir1_refl = rdn_image[:, swir1_band, :]*np.pi*d2/(solar_flux[swir1_band]*cos_sun_zenith)
         else:
-            cirrus_refl = rdn_image[cirrus_band,:,:]*np.pi*d2/(solar_flux[cirrus_band]*cos_sun_zenith)
-            swir1_refl = rdn_image[swir1_band,:,:]*np.pi*d2/(solar_flux[swir1_band]*cos_sun_zenith)
+            cirrus_refl = rdn_image[cirrus_band, :, :]*np.pi*d2/(solar_flux[cirrus_band]*cos_sun_zenith)
+            swir1_refl = rdn_image[swir1_band, :, :]*np.pi*d2/(solar_flux[swir1_band]*cos_sun_zenith)
         rdn_image.flush()
         del rdn_image
         
@@ -402,12 +402,12 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
                     '22: cloud shadow']
     pre_class_header['class lookup'] = [
                     80, 80, 80,
-                    0,  0,  0,
+                    0, 0, 0,
                     0, 160, 250,
                     0, 200, 250,
                     0, 240, 250,
                     180, 100, 40,
-                    200,  0,  0,
+                    200, 0, 0,
                     250, 250, 250,
                     240, 240, 170,
                     225, 225, 150,
@@ -418,7 +418,7 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
                     130, 130, 250,
                     180, 180, 180,
                     160, 160, 240,
-                    0,  0, 250,
+                    0, 0, 250,
                     180, 180, 100,
                     160, 160, 100,
                     200, 200, 200,

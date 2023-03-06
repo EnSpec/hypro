@@ -51,20 +51,20 @@ def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
                                  glt_header['samples']))
     
     # Get spatial indices.
-    I, J = np.where((glt_image[0,:,:] >= 0) & (glt_image[1,:,:] >= 0))
+    I, J = np.where((glt_image[0, :, :] >= 0) & (glt_image[1, :, :] >= 0))
     ortho_sca_image = np.zeros((glt_header['lines'], glt_header['samples']), dtype='float32')
     
     # Orthorectify SCA.
     fid = open(ortho_sca_image_file, 'wb')
     for band in range(sca_header['bands']):
-        ortho_sca_image[:,:] = -1000.0
+        ortho_sca_image[:, :] = -1000.0
         offset = sca_header['header offset'] + 4*band*sca_header['lines']*sca_header['samples']
         sca_image = np.memmap(sca_image_file,
                               dtype='float32',
                               mode='r',
                               offset=offset,
                               shape=(sca_header['lines'], sca_header['samples']))
-        ortho_sca_image[I,J] = sca_image[glt_image[0,I,J], glt_image[1,I,J]]
+        ortho_sca_image[I, J] = sca_image[glt_image[0, I, J], glt_image[1, I, J]]
         fid.write(ortho_sca_image.tostring())
         sca_image.flush()
         del sca_image
@@ -133,13 +133,13 @@ def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
                                  glt_header['samples']))
     
     # Get spatial indices.
-    I, J = np.where((glt_image[0,:,:] >= 0) & (glt_image[1,:,:] >= 0))
+    I, J = np.where((glt_image[0, :, :] >= 0) & (glt_image[1, :, :] >= 0))
     ortho_dem_image = np.zeros((glt_header['lines'], glt_header['samples']), dtype='float32')
     
     # Orthorectify DEM.
     fid = open(ortho_dem_image_file, 'wb')
-    ortho_dem_image[:,:] = -1000.0
-    ortho_dem_image[I,J] = igm_image[2, glt_image[0,I,J], glt_image[1,I,J]]
+    ortho_dem_image[:, :] = -1000.0
+    ortho_dem_image[I, J] = igm_image[2, glt_image[0, I, J], glt_image[1, I, J]]
     fid.write(ortho_dem_image.tostring())
     fid.close()
     del ortho_dem_image
@@ -204,7 +204,7 @@ def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
                                  glt_header['samples']))
     
     # Get spatial indices.
-    I, J = np.where((glt_image[0,:,:] >= 0) & (glt_image[1,:,:] >= 0))
+    I, J = np.where((glt_image[0, :, :] >= 0) & (glt_image[1, :, :] >= 0))
     ortho_image = np.zeros((glt_header['lines'], glt_header['samples']), dtype='float32')
     
     # Orthorectify radiance.
@@ -213,8 +213,8 @@ def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
     for band in range(rdn_header['bands']):
         if band % 20 == 0:
             info += '%d, ' % (band+1)
-        ortho_image[:,:] = 0.0
-        ortho_image[I,J] = rdn_image[glt_image[0,I,J], band, glt_image[1,I,J]]
+        ortho_image[:, :] = 0.0
+        ortho_image[I, J] = rdn_image[glt_image[0, I, J], band, glt_image[1, I, J]]
         fid.write(ortho_image.tostring())
     fid.close()
     info += 'Done! %s' % rdn_header['bands']

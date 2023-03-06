@@ -141,8 +141,8 @@ def get_grid_convergence(lon, lat, map_crs):
         transform = osr.CoordinateTransformation(wgs84_crs, map_crs)
         xy0 = np.array(transform.TransformPoints(lon_lat_0))
         xy1 = np.array(transform.TransformPoints(lon_lat_1))
-        dx = xy1[:,0] - xy0[:,0]
-        dy = xy1[:,1] - xy0[:,1]
+        dx = xy1[:, 0] - xy0[:, 0]
+        dy = xy1[:, 1] - xy0[:, 1]
         grid_convergence = np.abs(np.rad2deg(np.arcsin(dx/np.sqrt(dx**2 + dy**2))))
         index = dx*dy > 0
         grid_convergence[index] = -grid_convergence[index]
@@ -229,7 +229,7 @@ def get_sun_angles(longitude, latitude, utc_time):
     ZenithAngle = np.arccos(Cos_Latitude*Cos_HourAngle*np.cos(Declination) + np.sin(Declination)*Sin_Latitude)
     Y = -np.sin(HourAngle)
     X = np.tan(Declination)*Cos_Latitude - Sin_Latitude*Cos_HourAngle
-    Azimuth = np.arctan2(Y,X)
+    Azimuth = np.arctan2(Y, X)
     if Azimuth < 0.0:
         Azimuth = Azimuth + np.pi*2
     Parallax = (EarthMeanRadius/AstronomicalUnit)*np.sin(ZenithAngle)

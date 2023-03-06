@@ -68,7 +68,7 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
                         shape=metadata['shape']) # dimension=[RHO, WVC, VIS, VZA, RAA, WAVE]
     
     # Subtract path radiance.
-    atm_lut_rdn = atm_lut[1,:,vza_index,raa_index,:] - atm_lut[0,:,vza_index,raa_index,:] # dimension=[WVC, VIS, WAVE]
+    atm_lut_rdn = atm_lut[1, :, vza_index, raa_index, :] - atm_lut[0, :, vza_index, raa_index, :] # dimension=[WVC, VIS, WAVE]
     atm_lut.flush()
     del atm_lut
     
@@ -78,7 +78,7 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
     # Do interpolation.
     interp_rdn = np.zeros((len(atm_lut_WVC), len(atm_lut_WAVE)))
     for vis_index, vis_delta in vis_dict.items():
-        interp_rdn += atm_lut_rdn[:,vis_index,:]*vis_delta
+        interp_rdn += atm_lut_rdn[:, vis_index, :]*vis_delta
     del atm_lut_rdn, vis_index, vis_delta
     
     # Build WVC models.
@@ -111,7 +111,7 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
             resampled_rdn = resample_spectra(interp_rdn, atm_lut_WAVE,
                                              sensor_waves[model['band']],
                                              sensor_fwhms[model['band']])
-            ratio = resampled_rdn[:,1]/(left_weight*resampled_rdn[:,0] + right_weight*resampled_rdn[:,2])
+            ratio = resampled_rdn[:, 1]/(left_weight*resampled_rdn[:, 0] + right_weight*resampled_rdn[:, 2])
             index = np.argsort(ratio)
             model['ratio'] = list(ratio[index])
             model['wvc'] = list(atm_lut_WVC[index])
@@ -180,19 +180,19 @@ def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_m
     # If the reflectance at 850 nm is less than 0.01, then mask out these pixels.
     wave, band = get_closest_wave(rdn_header['wavelength'], 470)
     if abs(wave-470) < 20:
-        refl = rdn_image[band,:,:]*np.pi*d2/(solar_flux[band]*cos_sun_zenith)
+        refl = rdn_image[band, :, :]*np.pi*d2/(solar_flux[band]*cos_sun_zenith)
         good_mask_image &= (refl > 0.01)
         del refl
     # If the reflectance at 850 nm is less than 0.10, then mask out these pixels.
     wave, band = get_closest_wave(rdn_header['wavelength'], 850)
     if abs(wave-850) < 20:
-        refl = rdn_image[band,:,:]*np.pi*d2/(solar_flux[band]*cos_sun_zenith)
+        refl = rdn_image[band, :, :]*np.pi*d2/(solar_flux[band]*cos_sun_zenith)
         good_mask_image &= (refl > 0.10)
         del refl
     # If the reflectance at 1600 nm is less than 0.10, then mask out these pixels.
     wave, band = get_closest_wave(rdn_header['wavelength'], 1600)
     if abs(wave-1600) < 20:
-        refl = rdn_image[band,:,:]*np.pi*d2/(solar_flux[band]*cos_sun_zenith)
+        refl = rdn_image[band, :, :]*np.pi*d2/(solar_flux[band]*cos_sun_zenith)
         good_mask_image &= (refl > 0.10)
         del refl
     del wave, band, solar_flux, cos_sun_zenith, d2
@@ -215,7 +215,7 @@ def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_m
                 del band
             
             # Calculate ratios.
-            ratio_image = rdn_image[bands[1],:,:]/(1e-10 + rdn_image[bands[0],:,:]*wvc_model['weight'][0] + rdn_image[bands[2],:,:]*wvc_model['weight'][1])
+            ratio_image = rdn_image[bands[1], :, :]/(1e-10 + rdn_image[bands[0], :, :]*wvc_model['weight'][0] + rdn_image[bands[2], :, :]*wvc_model['weight'][1])
             
             # Calculate water vapor columns.
             wvc_image[good_mask_image] += np.interp(ratio_image[good_mask_image], wvc_model['ratio'], wvc_model['wvc']).astype('float32')

@@ -51,7 +51,7 @@ def build_atm_lut(flight_dict):
     atm_lut_sza, atm_lut_saa = tuple(flight_dict['sun_angles'])
     atm_lut_elev = get_avg_elev(sensor_dict['dem_image_file'])/1000.0 # 1000.0 converts [m] to [km].
     imugps = np.loadtxt(sensor_dict['processed_imugps_file'])
-    flight_altitude = imugps[:,3].mean()/1000.0 # 1000.0 converts [m] to [km]
+    flight_altitude = imugps[:, 3].mean()/1000.0 # 1000.0 converts [m] to [km]
     atm_lut_zout = flight_altitude - atm_lut_elev
     del imugps, flight_altitude, sensor_dict
     

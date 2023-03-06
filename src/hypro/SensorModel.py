@@ -42,7 +42,7 @@ def make_sensor_model(sensor_model_file, fov, ifov, samples, if_rotated):
         return
     
     sensor_model = np.zeros((samples, 3))
-    sensor_model[:,0] = np.arange(samples)
+    sensor_model[:, 0] = np.arange(samples)
     
     fov = np.deg2rad(fov)
     if if_rotated:
@@ -50,8 +50,8 @@ def make_sensor_model(sensor_model_file, fov, ifov, samples, if_rotated):
     else:
         xs = np.linspace(-np.tan(fov/2), np.tan(fov/2), num=samples)
     
-    sensor_model[:,1] = np.arctan(xs)
-    sensor_model[:,2] = ifov/1000
+    sensor_model[:, 1] = np.arctan(xs)
+    sensor_model[:, 2] = ifov/1000
     np.savetxt(sensor_model_file,
                sensor_model,
                header='pixel    vinkelx    vinkely',
@@ -72,7 +72,7 @@ def determine_if_rotated(imu_gps_file):
     """
     
     imugps = np.loadtxt(imu_gps_file)
-    flag = np.sign((imugps[-1,3] - imugps[0,3])*imugps[0,6])
+    flag = np.sign((imugps[-1, 3] - imugps[0, 3])*imugps[0, 6])
     
     if flag == -1:
         logger.info('The sensor is 180 degree rotated.')

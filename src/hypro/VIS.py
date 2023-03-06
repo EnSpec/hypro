@@ -101,9 +101,9 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
                                  sca_header['lines'],
                                  sca_header['samples']))
     # VZA
-    vza_image = np.copy(sca_image[0,:,:])
+    vza_image = np.copy(sca_image[0, :, :])
     # RAA
-    raa_image = saa - sca_image[1,:,:]
+    raa_image = saa - sca_image[1, :, :]
     raa_image[raa_image < 0] += 360.0
     raa_image[raa_image > 180] = 360.0 - raa_image[raa_image > 180]
     # clear data
@@ -125,12 +125,12 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
                                bg_header['samples']))
     
     # Calculate NDVI.
-    red_refl = atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut[...,red_band],
-                             tmp_wvc_image, tmp_vis_image, vza_image, raa_image, rdn_image[red_band,:,:],
+    red_refl = atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut[..., red_band],
+                             tmp_wvc_image, tmp_vis_image, vza_image, raa_image, rdn_image[red_band, :, :],
                              bg_mask)
     
-    nir_refl = atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut[...,nir_band],
-                             tmp_wvc_image, tmp_vis_image, vza_image, raa_image, rdn_image[nir_band,:,:],
+    nir_refl = atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut[..., nir_band],
+                             tmp_wvc_image, tmp_vis_image, vza_image, raa_image, rdn_image[nir_band, :, :],
                              bg_mask)
     ndvi = (nir_refl - red_refl)/(nir_refl + red_refl + 1e-10)
     vis_image = np.zeros((rdn_header['lines'], rdn_header['samples']))
@@ -151,8 +151,8 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
             red_swir_ratio = 0.25
         
         # Calculate SWIR reflectance.
-        swir_refl = atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut[...,swir_band],
-                                  tmp_wvc_image, tmp_vis_image, vza_image, raa_image, rdn_image[swir_band,:,:],
+        swir_refl = atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut[..., swir_band],
+                                  tmp_wvc_image, tmp_vis_image, vza_image, raa_image, rdn_image[swir_band, :, :],
                                   bg_mask)
         
         # Get DDV mask.
@@ -171,9 +171,9 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
         red_refl[rows, columns] = red_swir_ratio*swir_refl[rows, columns]
         del swir_refl
         for row, column in zip(rows, columns):
-            interp_rdn = interp_atm_lut(atm_lut_RHO, atm_lut_WVC, atm_lut_VZA, atm_lut_RAA, atm_lut[...,red_band],
-                                        red_refl[row,column], tmp_wvc_image[row, column], vza_image[row, column], raa_image[row, column])
-            vis_image[row, column] = np.interp(rdn_image[red_band,row,column], interp_rdn[::-1], atm_lut_VIS[::-1])
+            interp_rdn = interp_atm_lut(atm_lut_RHO, atm_lut_WVC, atm_lut_VZA, atm_lut_RAA, atm_lut[..., red_band],
+                                        red_refl[row, column], tmp_wvc_image[row, column], vza_image[row, column], raa_image[row, column])
+            vis_image[row, column] = np.interp(rdn_image[red_band, row, column], interp_rdn[::-1], atm_lut_VIS[::-1])
         rdn_image.flush()
         del rdn_image
         logger.info('Visibility [km] statistics: min=%.2f, max=%.2f, avg=%.2f, sd=%.2f.' % (vis_image[ddv_mask].min(), vis_image[ddv_mask].max(), vis_image[ddv_mask].mean(), vis_image[ddv_mask].std()))
@@ -256,6 +256,6 @@ def interp_atm_lut(atm_lut_RHO, atm_lut_WVC, atm_lut_VZA, atm_lut_RAA, atm_lut, 
     index_combos = combos([list(rho_dict.keys()), list(wvc_dict.keys()), list(vza_dict.keys()), list(raa_dict.keys())])
     for index_combo in index_combos:
         rho_index, wvc_index, vza_index, raa_index = index_combo
-        interp_rdn += atm_lut[rho_index, wvc_index,:,vza_index,raa_index]*rho_dict[rho_index]*wvc_dict[wvc_index]*vza_dict[vza_index]*raa_dict[raa_index]
+        interp_rdn += atm_lut[rho_index, wvc_index, :, vza_index, raa_index]*rho_dict[rho_index]*wvc_dict[wvc_index]*vza_dict[vza_index]*raa_dict[raa_index]
     
     return interp_rdn

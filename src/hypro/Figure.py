@@ -50,7 +50,7 @@ def plot_angle_geometry(angle_geometry_figure_file, sca_image_file):
     # Scatter plot of view geometry.
     plt.figure(figsize=(10, 10))
     ax = plt.subplot(111, projection='polar')
-    ax.scatter(np.deg2rad(sca_image[1,::10,::10].flatten()), sca_image[0,::10,::10].flatten(), color='green', marker='.',s=10)
+    ax.scatter(np.deg2rad(sca_image[1, ::10, ::10].flatten()), sca_image[0, ::10, ::10].flatten(), color='green', marker='.', s=10)
     sca_image.flush()
     del sca_image
     
@@ -58,7 +58,7 @@ def plot_angle_geometry(angle_geometry_figure_file, sca_image_file):
     ax.scatter(np.deg2rad(float(sca_header['sun azimuth'])), float(sca_header['sun zenith']), color='red', marker='*', s=500)
     ax.set_theta_direction(-1)
     ax.set_theta_zero_location('N')
-    _,_ = ax.set_thetagrids([0, 45, 90, 135, 180, 225, 270, 315], labels=('0 N', '45', '90 E', '135', '180 S', '225', '270 W', '315'))
+    _, _ = ax.set_thetagrids([0, 45, 90, 135, 180, 225, 270, 315], labels=('0 N', '45', '90 E', '135', '180 S', '225', '270 W', '315'))
     ax.tick_params(labelsize=20)
     plt.savefig(angle_geometry_figure_file, dpi=1000)
     plt.close()
@@ -99,8 +99,8 @@ def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imug
                           mode='r',
                           offset=0,
                           shape=(2, igm_header['lines'], igm_header['samples']))
-    cols = (igm_image[0,:,:] - dem_geotransform[0])/dem_geotransform[1]
-    rows = (igm_image[1,:,:] - dem_geotransform[3])/dem_geotransform[5]
+    cols = (igm_image[0, :, :] - dem_geotransform[0])/dem_geotransform[1]
+    rows = (igm_image[1, :, :] - dem_geotransform[3])/dem_geotransform[5]
     igm_image.flush()
     del igm_image
     
@@ -111,12 +111,12 @@ def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imug
     plt.figure(figsize=(10, 10.0*dem_image.shape[0]/dem_image.shape[1]))
     plt.imshow(dem_image, cmap='gray', vmin=dem_image.min(), vmax=dem_image.max())
     del dem_image
-    plt.plot(cols[:,0], rows[:,0], '-', color='lime', lw=2, label='Image Area')
-    plt.plot(cols[:,-1], rows[:,-1], '-', color='lime', lw=2)
-    plt.plot(cols[0,:], rows[0,:], '-', color='lime', lw=2)
-    plt.plot(cols[-1,:], rows[-1,:], '-', color='lime', lw=2)
-    cols = (imugps[:,1] - dem_geotransform[0])/dem_geotransform[1]
-    rows = (imugps[:,2] - dem_geotransform[3])/dem_geotransform[5]
+    plt.plot(cols[:, 0], rows[:, 0], '-', color='lime', lw=2, label='Image Area')
+    plt.plot(cols[:, -1], rows[:, -1], '-', color='lime', lw=2)
+    plt.plot(cols[0, :], rows[0, :], '-', color='lime', lw=2)
+    plt.plot(cols[-1, :], rows[-1, :], '-', color='lime', lw=2)
+    cols = (imugps[:, 1] - dem_geotransform[0])/dem_geotransform[1]
+    rows = (imugps[:, 2] - dem_geotransform[3])/dem_geotransform[5]
     plt.plot(cols, rows, '--', color='red', lw=2, label='Flight')
     plt.scatter(cols[0], rows[0], c='navy', s=20, label='Start')
     plt.scatter(cols[-1], rows[-1], c='orange', s=20, label='End')
@@ -218,11 +218,11 @@ def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
                         0, -float(glt_header['map info'][6])))
     ds.SetProjection(glt_header['coordinate system string'])
     image = np.zeros((glt_header['lines'], glt_header['samples']), dtype='uint8')
-    I,J = np.where((glt_image[0,:,:] >= 0) & (glt_image[1,:,:] >= 0))
+    I, J = np.where((glt_image[0, :, :] >= 0) & (glt_image[1, :, :] >= 0))
     for band_index, rgb_band in enumerate(rgb_bands):
-        image[:,:] = 0
-        tmp_image = linear_percent_stretch(rdn_image[:,rgb_band,:])
-        image[I,J] = tmp_image[glt_image[0,I,J], glt_image[1,I,J]]
+        image[:, :] = 0
+        tmp_image = linear_percent_stretch(rdn_image[:, rgb_band, :])
+        image[I, J] = tmp_image[glt_image[0, I, J], glt_image[1, I, J]]
         ds.GetRasterBand(band_index+1).WriteArray(image)
         del tmp_image
     glt_image.flush()
@@ -348,7 +348,7 @@ def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_
         # Title
         ax.set_title(r'$\lambda$=%.2fnm, FWHM=%.2fnm' % (center_waves[index], fwhms[index]), fontsize=10)
         # Left y-axis
-        y = np.copy(shifts[0,index,:])
+        y = np.copy(shifts[0, index, :])
         i = np.abs(y-y.mean()) > 3*y.std()
         y[i] = np.nan
         ax.plot(sample_indices, y, '-', color='blue', alpha=0.3, lw=1, label=r'$\Delta\lambda$')
@@ -370,7 +370,7 @@ def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_
         ax.set_xlim(x_lim)
         # Right y-axis
         twin_ax = ax.twinx()
-        y = np.copy(shifts[1,index,:])
+        y = np.copy(shifts[1, index, :])
         i = np.abs(y-y.mean()) > 3*y.std()
         y[i] = np.nan
         twin_ax.plot(sample_indices, y, '-', color='red', alpha=0.3, lw=1, label=r'$\Delta$FWHM')
@@ -438,13 +438,13 @@ def plot_wvc_histogram(wvc_histogram_figure_file, water_vapor_column_image_file)
         freq.append(np.sum(index)/wvc_image.size*100)
     freq = np.array(freq)
     freq_max = 100
-    plt.figure(figsize=(10,6))
+    plt.figure(figsize=(10, 6))
     plt.bar(wvc_bins[:-1], freq, width=1, color='darkgreen', edgecolor='black', linewidth=1)
     plt.vlines([wvc_image.mean()], 0, freq_max, color='darkred', lw=2, linestyles='solid', label=r'WVC$_{Mean}$')
     plt.vlines([wvc_image.mean() - 2*wvc_image.std()], 0, freq_max, color='darkred', lw=2, linestyles='dotted', label=r'WVC$_{Mean}$-2WVC$_{SD}$')
     plt.vlines([wvc_image.mean() + 2*wvc_image.std()], 0, freq_max, color='darkred', lw=2, linestyles='dashed', label=r'WVC$_{Mean}$+2WVC$_{SD}$')
     plt.xticks(ticks=np.arange(0, 51, 5), labels=np.arange(0, 51, 5), fontsize=20)
-    plt.yticks(ticks=np.arange(0,101,10), labels=np.arange(0,101,10), fontsize=20)
+    plt.yticks(ticks=np.arange(0, 101, 10), labels=np.arange(0, 101, 10), fontsize=20)
     plt.xlabel('Water Vapor Column (mm)', fontsize=20)
     plt.ylabel('Relative Frequency (%)', fontsize=20)
     plt.xlim(0, 50)

@@ -93,7 +93,7 @@ def resample_spectra(spectra, src_waves, dst_waves, dst_fwhms, src_fwhms=None):
             a = gaussian(src_waves - 0.5, dst_wave, dst_fwhm)
             b = gaussian(src_waves + 0.5, dst_wave, dst_fwhm)
             area = (a + b)/2
-            dst_matrix.append(np.divide(area,np.sum(area) + 1e-10))
+            dst_matrix.append(np.divide(area, np.sum(area) + 1e-10))
         coef = np.array(dst_matrix).T
     else:
         one_NM = np.arange(300, 2600)
@@ -102,15 +102,15 @@ def resample_spectra(spectra, src_waves, dst_waves, dst_fwhms, src_fwhms=None):
             a = gaussian(one_NM - .5, dst_wave, dst_fwhm)
             b = gaussian(one_NM + .5, dst_wave, dst_fwhm)
             areas = (a + b)/2
-            dst_matrix.append(np.divide(areas,np.sum(areas) + 1e-10))
+            dst_matrix.append(np.divide(areas, np.sum(areas) + 1e-10))
         dst_matrix = np.array(dst_matrix)
         
         src_matrix = []
-        for src_wave,src_fwhm in zip(src_waves,src_fwhms):
+        for src_wave, src_fwhm in zip(src_waves, src_fwhms):
             a = gaussian(one_NM - .5, src_wave, src_fwhm)
             b = gaussian(one_NM + .5, src_wave, src_fwhm)
             areas = (a + b)/2
-            src_matrix.append(np.divide(areas,np.sum(areas) + 1e-10))
+            src_matrix.append(np.divide(areas, np.sum(areas) + 1e-10))
         src_matrix = np.array(src_matrix)
         
         pseudo = np.linalg.pinv(src_matrix)
@@ -172,6 +172,6 @@ def resample_solar_flux(sensor_waves, sensor_fwhms, file=None):
     
     solar_flux_file = file or BytesIO(pkgutil.get_data(__package__, 'data/solar/irradiance_kurucz1992.dat'))
     solar_flux = np.loadtxt(solar_flux_file)
-    solar_flux = resample_spectra(solar_flux[:,1], solar_flux[:,0], sensor_waves, sensor_fwhms)/10.0 # 10.0: mW/(m2 nm) -> mW/(cm2 um)
+    solar_flux = resample_spectra(solar_flux[:, 1], solar_flux[:, 0], sensor_waves, sensor_fwhms)/10.0 # 10.0: mW/(m2 nm) -> mW/(cm2 um)
     
     return solar_flux

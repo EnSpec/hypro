@@ -106,7 +106,7 @@ def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensor
                                      tmp_header['samples']))
         tmp_ulx, tmp_uly = float(tmp_header['map info'][3]), float(tmp_header['map info'][4])
         tmp_pixel_size = float(tmp_header['map info'][5])
-        resampled_image = resample_ortho_sca(np.copy(tmp_image[0,:,:]), tmp_ulx, tmp_uly, tmp_pixel_size, x, y)
+        resampled_image = resample_ortho_sca(np.copy(tmp_image[0, :, :]), tmp_ulx, tmp_uly, tmp_pixel_size, x, y)
         mask = mask & (resampled_image > 0.0)
         
         # Clear data.
@@ -202,7 +202,7 @@ def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensor
     # Write data.
     fid = open(merged_sca_file, 'wb')
     for band in range(raw_header['bands']):
-        resampled_image = resample_ortho_sca(np.copy(raw_image[band,:,:]),
+        resampled_image = resample_ortho_sca(np.copy(raw_image[band, :, :]),
                                              float(raw_header['map info'][3]),
                                              float(raw_header['map info'][4]),
                                              float(raw_header['map info'][5]),
@@ -277,7 +277,7 @@ def merge_rdn(merged_image_file, mask_file, sensors):
     for sensor_index, sensor_dict in sensors.items():
         tmp_header = read_envi_header(os.path.splitext(sensor_dict['ortho_rdn_image_file'])[0]+'.hdr')
         for band in range(tmp_header['bands']):
-            bands_waves_fwhms.append(['%s_%d' % (sensor_index,band), tmp_header['wavelength'][band], tmp_header['fwhm'][band]])
+            bands_waves_fwhms.append(['%s_%d' % (sensor_index, band), tmp_header['wavelength'][band], tmp_header['fwhm'][band]])
         header_dict[sensor_index] = tmp_header
         image_file_dict[sensor_index] = sensor_dict['ortho_rdn_image_file']
     bands_waves_fwhms.sort(key=lambda x: x[1])
@@ -363,7 +363,7 @@ def resample_ortho_sca(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     from scipy import ndimage
     
     # Average reflectance
-    weights = np.ones((2,2))
+    weights = np.ones((2, 2))
     count = raw_image >= 0.0
     raw_image[~count] = 0.0
     avg_image = ndimage.convolve(raw_image, weights)
@@ -400,7 +400,7 @@ def resample_ortho_dem(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     from scipy import ndimage
     
     # Average reflectance
-    weights = np.ones((2,2))
+    weights = np.ones((2, 2))
     count = raw_image > 0.0
     raw_image[~count] = 0.0
     avg_image = ndimage.convolve(raw_image, weights)
@@ -437,7 +437,7 @@ def resample_ortho_rdn(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     from scipy import ndimage
     
     # Average radiance.
-    weights = np.ones((2,2))
+    weights = np.ones((2, 2))
     count = raw_image > 0.0
     raw_image[~count] = 0.0
     avg_image = ndimage.convolve(raw_image, weights)

@@ -270,7 +270,7 @@ def dn2rdn_Hyspex(rdn_image_file, dn_image_file, radio_cali_file, acquisition_ti
                                 dn_header['samples']))
     
     # Get gain coefficients.
-    gain = radio_cali_coeff[0,:,:] # shape=(bands, samples)
+    gain = radio_cali_coeff[0, :, :] # shape=(bands, samples)
     
     # Do radiometric calibration.
     info = 'Line (max=%d): ' % dn_header['lines']
@@ -283,16 +283,16 @@ def dn2rdn_Hyspex(rdn_image_file, dn_image_file, radio_cali_file, acquisition_ti
         
         # Get offset coefficients.
         if radio_cali_header['bands'] == 2:
-            offset = radio_cali_coeff[1,:,:] # shape=(bands, samples)
+            offset = radio_cali_coeff[1, :, :] # shape=(bands, samples)
         else:
-            background = np.stack([radio_cali_coeff[1,:,:]]*(to_line - from_line))
-            backgroundLast = np.stack([radio_cali_coeff[2,:,:]]*(to_line - from_line))
+            background = np.stack([radio_cali_coeff[1, :, :]]*(to_line - from_line))
+            backgroundLast = np.stack([radio_cali_coeff[2, :, :]]*(to_line - from_line))
             factor = np.arange(from_line, to_line)/dn_header['lines']
-            offset = background + (backgroundLast - background)*factor[:,np.newaxis, np.newaxis] # shape=(to_line-from_line, bands, samples)
+            offset = background + (backgroundLast - background)*factor[:, np.newaxis, np.newaxis] # shape=(to_line-from_line, bands, samples)
             del background, backgroundLast, factor
         
         # Convert DN to radiance.
-        rdn = (dn_image[from_line:to_line,:,:].astype('float32') - offset)*gain # shape=(to_line-from_line, bands, samples)
+        rdn = (dn_image[from_line:to_line, :, :].astype('float32') - offset)*gain # shape=(to_line-from_line, bands, samples)
         
         # Write radiance to the file.
         fid.write(rdn.astype('float32').tostring())
@@ -376,16 +376,16 @@ def resample_rdn(resampled_rdn_image_file, raw_rdn_image_file, smile_effect_file
         to_line = min(from_line+500, raw_rdn_header['lines'])
         
         # Initialize.
-        rdn = np.zeros((to_line-from_line,raw_rdn_header['bands'],raw_rdn_header['samples'])) # shape=(from_line:to_line, bands, samples)
+        rdn = np.zeros((to_line-from_line, raw_rdn_header['bands'], raw_rdn_header['samples'])) # shape=(from_line:to_line, bands, samples)
         
         # Do spectral interpolation.
         for sample in range(raw_rdn_header['samples']):
-            f = interpolate.interp1d(smile_effect_data[0,:,sample],
-                                     raw_rdn_image[from_line:to_line,:,sample],
+            f = interpolate.interp1d(smile_effect_data[0, :, sample],
+                                     raw_rdn_image[from_line:to_line, :, sample],
                                      kind='cubic',
                                      fill_value='extrapolate',
                                      axis=1)
-            rdn[:,:,sample] = f(raw_rdn_header['wavelength'])
+            rdn[:, :, sample] = f(raw_rdn_header['wavelength'])
             del f
         
         # Write interpolated radiance into the file.
@@ -466,7 +466,7 @@ def get_hyspex_setting(setting_file):
                           "RE": "list_float",
                           "QE": "list_float",
                           "bad_pixels": "list_int"}
-    trans_table = str.maketrans("\n"," ")
+    trans_table = str.maketrans("\n", " ")
     setting = dict()
     fid = open(setting_file, 'r')
     line = fid.readline()

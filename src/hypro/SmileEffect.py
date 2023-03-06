@@ -151,9 +151,9 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
         x = np.array(x)
         
         # Do linear interpolation for invalid values.
-        tmp_index = ~(np.abs(x[:,0]) > 10.0)
-        x[:,0] = np.interp(np.arange(samples), np.arange(samples)[tmp_index], x[tmp_index,0])
-        x[:,1] = np.interp(np.arange(samples), np.arange(samples)[tmp_index], x[tmp_index,1])
+        tmp_index = ~(np.abs(x[:, 0]) > 10.0)
+        x[:, 0] = np.interp(np.arange(samples), np.arange(samples)[tmp_index], x[tmp_index, 0])
+        x[:, 1] = np.interp(np.arange(samples), np.arange(samples)[tmp_index], x[tmp_index, 1])
         del tmp_index
         
         # Append shifts.
@@ -167,12 +167,12 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
     del sensor_rdn
     
     # Reshape data.
-    shifts = np.dstack(shifts).astype('float32').swapaxes(0,1).swapaxes(1,2)
+    shifts = np.dstack(shifts).astype('float32').swapaxes(0, 1).swapaxes(1, 2)
     
     # Write shifts to a binary file.
     fid = open(sensor_dict['smile_effect_at_atm_features_file'], 'wb')
-    fid.write(shifts[0,:,:].tostring()) # shift in wavelength
-    fid.write(shifts[1,:,:].tostring()) # shift in FWHM
+    fid.write(shifts[0, :, :].tostring()) # shift in wavelength
+    fid.write(shifts[1, :, :].tostring()) # shift in FWHM
     fid.close()
     
     # Write header.
@@ -202,7 +202,7 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
     # center wavelength
     z = np.zeros((shifts.shape[1], shifts.shape[2]), dtype='float64')
     for feature in range(shifts.shape[1]):
-        p = np.poly1d(np.polyfit(x, shifts[0,feature,:], 4))
+        p = np.poly1d(np.polyfit(x, shifts[0, feature, :], 4))
         z[feature, :] = p(x)
     f = interpolate.interp2d(x, y, z, kind='cubic')
     z_new = f(x_new, y_new) + np.expand_dims(sensor_wave, axis=1)
@@ -211,7 +211,7 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
     # bandwidth
     z = np.zeros((shifts.shape[1], shifts.shape[2]), dtype='float64')
     for feature in range(shifts.shape[1]):
-        p = np.poly1d(np.polyfit(x, shifts[1,feature,:], 5))
+        p = np.poly1d(np.polyfit(x, shifts[1, feature, :], 5))
         z[feature, :] = p(x)
     f = interpolate.interp2d(x, y, z, kind='cubic')
     z_new = f(x_new, y_new) + np.expand_dims(sensor_fwhm, axis=1)
@@ -286,7 +286,7 @@ def interp_atm_lut(atm_lut_file, WVC, VIS, VZA, RAA):
         # Update interpolated radiance.
         for index_combo in index_combos:
             wvc_index, vis_index, vza_index, raa_index = index_combo
-            interp_rdn[i,:] += atm_lut[1,wvc_index,vis_index,vza_index,raa_index,:]*wvc_dict[wvc_index]*vis_dict[vis_index]*vza_dict[vza_index]*raa_dict[raa_index]
+            interp_rdn[i, :] += atm_lut[1, wvc_index, vis_index, vza_index, raa_index, :]*wvc_dict[wvc_index]*vis_dict[vis_index]*vza_dict[vza_index]*raa_dict[raa_index]
         del index_combo, index_combos
     
     # Clear atmospheric lookup table.
@@ -343,10 +343,10 @@ def average_rdn(avg_rdn_file, rdn_image_file, sca_image_file, pre_class_image_fi
             info += '%d, ' % (band+1)
         
         # Build a temporary mask.
-        tmp_mask = mask & (rdn_image[:,band,:] > 0.0)
+        tmp_mask = mask & (rdn_image[:, band, :] > 0.0)
         
         # Average radiance.
-        rdn = np.ma.array(rdn_image[:,band,:], mask=~tmp_mask).mean(axis=0) # shape = (samples,1)
+        rdn = np.ma.array(rdn_image[:, band, :], mask=~tmp_mask).mean(axis=0) # shape = (samples,1)
         
         # Interpolate bad radiance values.
         for bad_sample in np.where(rdn.mask)[0]:
@@ -379,8 +379,8 @@ def average_rdn(avg_rdn_file, rdn_image_file, sca_image_file, pre_class_image_fi
     saa = float(sca_header['sun azimuth'])
     
     # Average scan angles.
-    avg_vza = np.ma.array(sca_image[0,:,:], mask=~mask).mean(axis=0)
-    avg_vaa = np.ma.array(sca_image[1,:,:], mask=~mask).mean(axis=0)
+    avg_vza = np.ma.array(sca_image[0, :, :], mask=~mask).mean(axis=0)
+    avg_vaa = np.ma.array(sca_image[1, :, :], mask=~mask).mean(axis=0)
     avg_raa = saa-avg_vaa
     avg_raa[avg_raa < 0] += 360.0
     avg_raa[avg_raa > 180] = 360.0 - avg_raa[avg_raa > 180]

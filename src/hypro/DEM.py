@@ -75,12 +75,12 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
     """
     buffer = 500
     imugps = np.loadtxt(imugps_file)
-    altitude = imugps[:,3].max()
+    altitude = imugps[:, 3].max()
     half_swath = np.tan(np.deg2rad(fov/2))*altitude
-    x_min = imugps[:,1].min() - half_swath - buffer
-    x_max = imugps[:,1].max() + half_swath + buffer
-    y_min = imugps[:,2].min() - half_swath - buffer
-    y_max = imugps[:,2].max() + half_swath + buffer
+    x_min = imugps[:, 1].min() - half_swath - buffer
+    x_max = imugps[:, 1].max() + half_swath + buffer
+    y_min = imugps[:, 2].min() - half_swath - buffer
+    y_max = imugps[:, 2].max() + half_swath + buffer
     del imugps, half_swath, altitude, buffer
     
     # Process DEM.
@@ -158,7 +158,7 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
     dem_header['coordinate system string'] = map_crs.ExportToWkt()
     dem_header['map info'] = [map_crs.GetAttrValue('projcs').replace(',', ''),
                   1, 1, geotransform[0], geotransform[3], geotransform[1], geotransform[1],
-                  ' ',' ', map_crs.GetAttrValue('datum').replace(',', ''), map_crs.GetAttrValue('unit')]
+                  ' ', ' ', map_crs.GetAttrValue('datum').replace(',', ''), map_crs.GetAttrValue('unit')]
     if map_crs.GetAttrValue('PROJECTION').lower() == 'transverse_mercator':
         dem_header['map info'][7] = map_crs.GetUTMZone()
         if y_min > 0.0:

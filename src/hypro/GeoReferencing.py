@@ -53,7 +53,7 @@ def calculate_igm(igm_image_file, imugps_file, sensor_model_file, dem_image_file
     imugps = np.loadtxt(imugps_file) # ID, X, Y, Z, R, P, H, R_Offset, P_Offset, H_Offset, Grid_Convergence
     
     # Read sensor model data.
-    sensor_model = np.loadtxt(sensor_model_file, skiprows=1)[:,1:]
+    sensor_model = np.loadtxt(sensor_model_file, skiprows=1)[:, 1:]
     
     # Read DEM data.
     ds = gdal.Open(dem_image_file, gdal.GA_ReadOnly)
@@ -64,17 +64,17 @@ def calculate_igm(igm_image_file, imugps_file, sensor_model_file, dem_image_file
     
     # Apply boresight offsets.
     if boresight_options[0]:
-        imugps[:,4] += imugps[:,7]
+        imugps[:, 4] += imugps[:, 7]
     if boresight_options[1]:
-        imugps[:,5] += imugps[:,8]
+        imugps[:, 5] += imugps[:, 8]
     if boresight_options[2]:
-        imugps[:,6] += imugps[:,9]
+        imugps[:, 6] += imugps[:, 9]
     if boresight_options[3]:
-        imugps[:,3] += imugps[:,10]
-    imugps[:,6] -= imugps[:,11] # Heading - grid convergence
+        imugps[:, 3] += imugps[:, 10]
+    imugps[:, 6] -= imugps[:, 11] # Heading - grid convergence
     
     # Get scan vectors.
-    L0 = get_scan_vectors(imugps[:,4:7], sensor_model)
+    L0 = get_scan_vectors(imugps[:, 4:7], sensor_model)
     del sensor_model
     
     # Get start and end points of ray tracing.
@@ -82,7 +82,7 @@ def calculate_igm(igm_image_file, imugps_file, sensor_model_file, dem_image_file
     dem_min = dem_image[index].min()
     dem_max = dem_image[index].max()
     del index
-    xyz0, xyz1 = get_xyz0_xyz1(imugps[:,1:4], L0, dem_min, dem_max)
+    xyz0, xyz1 = get_xyz0_xyz1(imugps[:, 1:4], L0, dem_min, dem_max)
     
     # Ray tracing.
     lines = imugps.shape[0]
@@ -118,7 +118,7 @@ def calculate_igm(igm_image_file, imugps_file, sensor_model_file, dem_image_file
     for nan_line in nan_lines:
         index = np.argmin(np.abs(nonnan_lines - nan_line))
         nonnan_line = nonnan_lines[index]
-        igm_image[:,nan_line,:] = igm_image[:,nonnan_line,:]
+        igm_image[:, nan_line, :] = igm_image[:, nonnan_line, :]
         del index, nonnan_line
     logger.info('IGM interpolation complete.')
     
@@ -180,9 +180,9 @@ def calculate_sca(sca_image_file, imugps_file, igm_image_file, sun_angles):
     imugps = np.loadtxt(imugps_file) # ID, X, Y, Z, R, P, H, ...
     
     # Calculate sensor angles.
-    DX = igm_image[0,:,:] - np.expand_dims(imugps[:,1], axis=1)
-    DY = igm_image[1,:,:] - np.expand_dims(imugps[:,2], axis=1)
-    DZ = igm_image[2,:,:] - np.expand_dims(imugps[:,3], axis=1)
+    DX = igm_image[0, :, :] - np.expand_dims(imugps[:, 1], axis=1)
+    DY = igm_image[1, :, :] - np.expand_dims(imugps[:, 2], axis=1)
+    DZ = igm_image[2, :, :] - np.expand_dims(imugps[:, 3], axis=1)
     
     igm_image.flush()
     del imugps, igm_image
@@ -273,10 +273,10 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
                           shape=(igm_header['bands'], igm_header['lines'], igm_header['samples']))
     
     # Estimate output spatial extent.
-    X_Min = igm_image[0,:,:].min()
-    X_Max = igm_image[0,:,:].max()
-    Y_Min = igm_image[1,:,:].min()
-    Y_Max = igm_image[1,:,:].max()
+    X_Min = igm_image[0, :, :].min()
+    X_Max = igm_image[0, :, :].max()
+    Y_Min = igm_image[1, :, :].min()
+    Y_Max = igm_image[1, :, :].max()
     X_Min = np.floor(X_Min/pixel_size)*pixel_size - pixel_size
     X_Max = np.ceil(X_Max/pixel_size)*pixel_size + pixel_size
     Y_Min = np.floor(Y_Min/pixel_size)*pixel_size - pixel_size
@@ -286,7 +286,7 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
     
     # Build VRT for IGM.
     igm_vrt_file = os.path.splitext(igm_image_file)[0]+'.vrt'
-    igm_vrt = open(igm_vrt_file,'w')
+    igm_vrt = open(igm_vrt_file, 'w')
     igm_vrt.write('<VRTDataset rasterxsize="%s" rasterysize="%s">\n' % (igm_header['samples'], igm_header['lines']))
     for band in range(igm_header['bands']):
         igm_vrt.write('\t<VRTRasterBand dataType="%s" band="%s">\n' % ("Float64", band+1))
@@ -313,7 +313,7 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
                             shape=(2,
                                    igm_header['lines'],
                                    igm_header['samples']))
-    index_image[0,:,:], index_image[1,:,:] = np.mgrid[0:igm_header['lines'], 0:igm_header['samples']]
+    index_image[0, :, :], index_image[1, :, :] = np.mgrid[0:igm_header['lines'], 0:igm_header['samples']]
     index_image.flush()
     del index_image
     
@@ -332,7 +332,7 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
     
     # Build VRT for IGM Index.
     index_vrt_file = os.path.splitext(index_image_file)[0]+'.vrt'
-    index_vrt = open(index_vrt_file,'w')
+    index_vrt = open(index_vrt_file, 'w')
     index_vrt.write('<VRTDataset rasterxsize="%s" rasterysize="%s">\n' % (index_header['samples'], index_header['lines']))
     index_vrt.write('\t<Metadata Domain = "GEOLOCATION">\n')
     index_vrt.write('\t\t<mdi key="X_DATASET">%s</mdi>\n' % igm_image_file.replace('&', '&amp;'))
@@ -382,7 +382,7 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
                           offset=0,
                           shape=(2, lines, samples))
     for band in range(ds.RasterCount):
-        glt_image[band,:,:] = ds.GetRasterBand(band+1).ReadAsArray()
+        glt_image[band, :, :] = ds.GetRasterBand(band+1).ReadAsArray()
     glt_image.flush()
     del glt_image
     ds = None
@@ -401,7 +401,7 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
     glt_header['data ignore value'] = -1
     glt_header['band names'] = ['Image Row', 'Image Column']
     glt_header['coordinate system string'] = map_crs.ExportToWkt()
-    glt_header['map info'] = [map_crs.GetAttrValue('projcs').replace(',',''),
+    glt_header['map info'] = [map_crs.GetAttrValue('projcs').replace(',', ''),
               1, 1, X_Min, Y_Max, pixel_size, pixel_size, ' ', ' ',
               map_crs.GetAttrValue('datum'), map_crs.GetAttrValue('unit')]
     if map_crs.GetAttrValue('PROJECTION').lower() == 'transverse_mercator':
@@ -453,7 +453,7 @@ def get_scan_vectors(imu, sensor_model):
             Sensor scan vectors, dimension: [3, n_detectors, n_lines].
     """
     
-    roll, pitch, heading = imu[:,0], imu[:,1], imu[:,2]
+    roll, pitch, heading = imu[:, 0], imu[:, 1], imu[:, 2]
     n_lines = imu.shape[0]
     n_detectors = sensor_model.shape[0]
     
@@ -469,8 +469,8 @@ def get_scan_vectors(imu, sensor_model):
     
     # Initialize scan vectors
     L0 = -np.ones((3, n_detectors), dtype='float32')
-    L0[0,:] = np.tan(sensor_model[:,1]) # Along-track vector component
-    L0[1,:] = np.tan(sensor_model[:,0])
+    L0[0, :] = np.tan(sensor_model[:, 1]) # Along-track vector component
+    L0[1, :] = np.tan(sensor_model[:, 0])
     
     # Initialize rotation matrices
     R = np.zeros((3, 3, n_lines), dtype='float32')
@@ -521,19 +521,19 @@ def get_xyz0_xyz1(xyz, L0, h_min, h_max):
     n_lines = xyz.shape[0]
     n_detectors = L0.shape[1]
     
-    x = np.tile(xyz[:,0], (n_detectors, 1))
-    y = np.tile(xyz[:,1], (n_detectors, 1))
-    z = np.tile(xyz[:,2], (n_detectors, 1))
+    x = np.tile(xyz[:, 0], (n_detectors, 1))
+    y = np.tile(xyz[:, 1], (n_detectors, 1))
+    z = np.tile(xyz[:, 2], (n_detectors, 1))
     
     xyz0 = np.ones((3, n_detectors, n_lines))
-    xyz0[0,:,:] = (h_max - z)*L0[0,:,:]/L0[2,:,:] + x
-    xyz0[1,:,:] = (h_max - z)*L0[1,:,:]/L0[2,:,:] + y
-    xyz0[2,:,:] = h_max
+    xyz0[0, :, :] = (h_max - z)*L0[0, :, :]/L0[2, :, :] + x
+    xyz0[1, :, :] = (h_max - z)*L0[1, :, :]/L0[2, :, :] + y
+    xyz0[2, :, :] = h_max
     
     xyz1 = np.ones((3, n_detectors, n_lines))
-    xyz1[0,:,:] = (h_min - z)*L0[0,:,:]/L0[2,:,:] + x
-    xyz1[1,:,:] = (h_min - z)*L0[1,:,:]/L0[2,:,:] + y
-    xyz1[2,:,:] = h_min
+    xyz1[0, :, :] = (h_min - z)*L0[0, :, :]/L0[2, :, :] + x
+    xyz1[1, :, :] = (h_min - z)*L0[1, :, :]/L0[2, :, :] + y
+    xyz1[2, :, :] = h_min
     
     del x, y, z
     
@@ -571,12 +571,12 @@ def ray_tracer_ufunc(xyz0, xyz1, L0, dem, dem_gt, output):
     
     # Geotransform: (ulx, x_res, 0, uly, 0, y_res)
     gt = np.array(dem_gt)
-    dem_origin = gt[[0,3]]
-    resolution = gt[[1,5]]
+    dem_origin = gt[[0, 3]]
+    resolution = gt[[1, 5]]
     
     for i in range(xyz0.shape[1]): # Iterate over detectors
         for j in range(xyz0.shape[2]): # Iterate over scanlines
-            output[:,j,i] = ray_tracing(xyz0[:,i,j], xyz1[:,i,j], L0[:,i,j], dem, dem_origin, resolution)
+            output[:, j, i] = ray_tracing(xyz0[:, i, j], xyz1[:, i, j], L0[:, i, j], dem, dem_origin, resolution)
 
 
 @jit

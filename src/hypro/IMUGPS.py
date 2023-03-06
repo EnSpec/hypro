@@ -50,35 +50,35 @@ def prepare_imugps_Hyspex(processed_imugps_file, raw_imugps_file, boresight_offs
     processed_imugps = np.zeros((raw_imugps.shape[0], 15))
     
     # Scan line index.
-    processed_imugps[:,0] = raw_imugps[:,0]
+    processed_imugps[:, 0] = raw_imugps[:, 0]
     
     # GPS and IMU.
     wgs84_crs = define_wgs84_crs()
     transform = osr.CoordinateTransformation(wgs84_crs, map_crs)
-    xyz = np.array(transform.TransformPoints(raw_imugps[:,1:3]))
-    processed_imugps[:,1] = xyz[:,0] # Flight easting
-    processed_imugps[:,2] = xyz[:,1] # Flight northing
-    processed_imugps[:,3] = raw_imugps[:,3]# Flight altitude
-    processed_imugps[:,4] = raw_imugps[:,4]# Roll
-    processed_imugps[:,5] = raw_imugps[:,5]# Pitch
-    processed_imugps[:,6] = raw_imugps[:,6]# Heading
+    xyz = np.array(transform.TransformPoints(raw_imugps[:, 1:3]))
+    processed_imugps[:, 1] = xyz[:, 0] # Flight easting
+    processed_imugps[:, 2] = xyz[:, 1] # Flight northing
+    processed_imugps[:, 3] = raw_imugps[:, 3]# Flight altitude
+    processed_imugps[:, 4] = raw_imugps[:, 4]# Roll
+    processed_imugps[:, 5] = raw_imugps[:, 5]# Pitch
+    processed_imugps[:, 6] = raw_imugps[:, 6]# Heading
     del transform, xyz
     
     # Boresight offsets.
     for i in range(len(boresight_options)):
         if boresight_options[i]:
-            processed_imugps[:,7+i] = boresight_offsets[i]
+            processed_imugps[:, 7+i] = boresight_offsets[i]
     
     # Grid convergence.
-    grid_convergence = get_grid_convergence(raw_imugps[:,1], raw_imugps[:,2], map_crs)
-    processed_imugps[:,11] = grid_convergence
+    grid_convergence = get_grid_convergence(raw_imugps[:, 1], raw_imugps[:, 2], map_crs)
+    processed_imugps[:, 11] = grid_convergence
     
     # Longitude and latitude.
-    processed_imugps[:,12] = raw_imugps[:,1]# Longitude
-    processed_imugps[:,13] = raw_imugps[:,2]# Latitude
+    processed_imugps[:, 12] = raw_imugps[:, 1]# Longitude
+    processed_imugps[:, 13] = raw_imugps[:, 2]# Latitude
     
     # Timestamp.
-    processed_imugps[:,14] = raw_imugps[:,7]
+    processed_imugps[:, 14] = raw_imugps[:, 7]
     
     # Save the new IMU/GPS data.
     header = ['Map coordinate system = %s' % (map_crs.ExportToWkt()),

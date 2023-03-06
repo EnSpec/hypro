@@ -46,12 +46,12 @@ def atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut,
     # Interpolate the lookup table.
     pts = np.array([wvc_image[~bg_mask], vis_image[~bg_mask], vza_image[~bg_mask], raa_image[~bg_mask]]).T
     
-    interp_fun = RegularGridInterpolator((atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA), atm_lut[0,...])
+    interp_fun = RegularGridInterpolator((atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA), atm_lut[0, ...])
     interp_rdn_000 = interp_fun(pts)
-    interp_fun = RegularGridInterpolator((atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA), atm_lut[1,...])
+    interp_fun = RegularGridInterpolator((atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA), atm_lut[1, ...])
     interp_rdn_050 = interp_fun(pts) - interp_rdn_000
     
-    interp_fun = RegularGridInterpolator((atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA), atm_lut[2,...])
+    interp_fun = RegularGridInterpolator((atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA), atm_lut[2, ...])
     interp_rdn_100 = interp_fun(pts) - interp_rdn_000
     
     del interp_fun, pts
@@ -108,9 +108,9 @@ def atm_corr_image(flight_dict):
                                  sca_header['lines'],
                                  sca_header['samples']))
     # VZA
-    vza_image = np.copy(sca_image[0,:,:])
+    vza_image = np.copy(sca_image[0, :, :])
     # RAA
-    raa_image = saa - sca_image[1,:,:]
+    raa_image = saa - sca_image[1, :, :]
     raa_image[raa_image < 0] += 360.0
     raa_image[raa_image > 180] = 360.0 - raa_image[raa_image > 180]
     # clear data
@@ -180,7 +180,7 @@ def atm_corr_image(flight_dict):
                                   offset=offset,
                                   shape=(rdn_header['lines'],
                                          rdn_header['samples']))
-            refl = atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, np.copy(atm_lut[...,band]),
+            refl = atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, np.copy(atm_lut[..., band]),
                                  wvc_image, vis_image, vza_image, raa_image, rdn_image,
                                  bg_mask)
             fid.write(refl.astype('float32').tostring())
