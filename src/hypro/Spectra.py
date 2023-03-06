@@ -38,12 +38,12 @@ def estimate_fwhms_from_waves(waves):
     
     Parameters
     ----------
-    waves : array
+    waves : ndarray
         Wavelengths, in nm.
     
     Returns
     -------
-    fwhms : array
+    fwhms : ndarray
         Full widths at half maximum, in nm.
     """
     
@@ -59,7 +59,7 @@ def gaussian(x, mu, fwhm):
     
     Parameters
     ----------
-    x : array
+    x : ndarray
         Wavelengths along which to generate Gaussian.
     mu : float
         Center wavelength.
@@ -68,6 +68,7 @@ def gaussian(x, mu, fwhm):
     
     Returns
     -------
+    array
         Numpy array of Gaussian along input range.
     """
     
@@ -81,20 +82,20 @@ def resample_spectra(spectra, src_waves, dst_waves, dst_fwhms, src_fwhms=None):
     
     Parameters
     ----------
-    spectra : array
+    spectra : ndarray
         Spectra to be resampled.
-    src_waves : array
+    src_waves : ndarray
         List of source wavelength centers.
-    dst_waves : array
+    dst_waves : ndarray
         List of destination wavelength centers.
-    dst_fwhms : array
+    dst_fwhms : ndarray
         List of destination full widths at half maximum.
-    src_fwhms : array
+    src_fwhms : ndarray
         List of source full widths at half maximum.
     
     Returns
     -------
-    resampled_spectra : array
+    resampled_spectra : ndarray
         Resampled spectral data.
     
     Notes
@@ -143,13 +144,14 @@ def get_closest_wave(waves, center_wave):
     
     Parameters
     ----------
-    waves : array
+    waves : ndarray
         Wavelength array.
     center_wave : float
         Center wavelength.
     
     Returns
     -------
+    tuple
         Closest wavelength and its band index.
     """
     
@@ -163,14 +165,14 @@ def continuum_removal(spectra, waves):
     
     Parameters
     ----------
-    spectra : 1D or 2D array
+    spectra : ndarray, 1D or 2D
         Raw spectral data, dimension: [Bands] or [Bands, Columns].
     waves : list
         Spectral wavelengths.
     
     Returns
     -------
-    cont_rmd_spectra : 1D or 2D array
+    cont_rmd_spectra : ndarray, 1D or 2D
         Continuum-removed spectra, dimension: [Bands] or [Bands, Columns].
     """
     
@@ -186,16 +188,16 @@ def resample_solar_flux(sensor_waves, sensor_fwhms, file=None):
     
     Parameters
     ----------
-    sensor_waves : array
+    sensor_waves : ndarray
         Sensor wavelengths.
-    sensor_fwhms : array
+    sensor_fwhms : ndarray
         Sensor FWHMs.
     file : str
         Solar flux filename.
     
     Returns
     -------
-    solar_flux : array
+    solar_flux : ndarray
         Resampled solar flux.
     """
     

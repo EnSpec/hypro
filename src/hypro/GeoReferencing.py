@@ -41,7 +41,7 @@ def calculate_igm(igm_image_file, imugps_file, sensor_model_file, dem_image_file
         The sensor model filename.
     dem_image_file : str
         The DEM image filename.
-    boresight_options : list of boolean
+    boresight_options : list of bool
         Boresight offset options, true or false.
     """
     
@@ -249,7 +249,7 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
         Input geometry filename.
     pixel_size : float
         Output image pixel size.
-    map_crs : osr object
+    map_crs : osr.SpatialReference
         GLT image map coordinate system.
     
     Notes
@@ -445,14 +445,14 @@ def get_scan_vectors(imu, sensor_model):
     
     Parameters
     ----------
-    imu : 2D array
+    imu : ndarray, 2D
         Flight IMU data, dimension: [n_lines, 3].
         
         - Column 0: Roll
         - Column 1: Pitch
         - Column 2: Heading
     
-    sensor_model : 2D array
+    sensor_model : ndarray, 2D
         Sensor model data, dimension: [n_detectors, 2].
         
         - Column 0: across-track angle component.
@@ -460,7 +460,7 @@ def get_scan_vectors(imu, sensor_model):
     
     Returns
     -------
-    L0 : 3D array
+    L0 : ndarray, 3D
         Sensor scan vectors, dimension: [3, n_detectors, n_lines].
     
     Notes
@@ -545,16 +545,16 @@ def get_xyz0_xyz1(xyz, L0, h_min, h_max):
     
     Parameters
     ----------
-    xyz : 2D array
+    xyz : ndarray, 2D
         Flight map x, y, z map coordinates, dimension: [N_lines, 3].
-    L0 : 3D array
+    L0 : ndarray, 3D
         Scan vectors, dimension: [3, N_Detectors, N_Lines].
     h_min, h_max : float
         Vertical bounds for ray tracing.
     
     Returns
     -------
-    xyz0, xyz1 : 3D array
+    xyz0, xyz1 : ndarray, 3D
         Starting and ending points, dimension: [3, N_Detectors, N_Lines].
     
     References
@@ -591,24 +591,25 @@ def ray_tracer_ufunc(xyz0, xyz1, L0, dem, dem_gt, output):
     
     Parameters
     ----------
-    xyz0 : 3D array, shape=(3, scanlines, detectors)
+    xyz0 : ndarray, 3D, shape=(3, scanlines, detectors)
         Ray tracing starting positions for each map grid cell.
-    xyz1 : 3D array, shape=(3, scanlines, detectors)
+    xyz1 : ndarray, 3D, shape=(3, scanlines, detectors)
         Ray tracing ending positions for each map grid cell.
-    L0 : 3D array, shape=(3, scanlines, detectors)
+    L0 : ndarray, 3D, shape=(3, scanlines, detectors)
         Scan vectors.
-    dem : 2D array, shape=(scanlines, detectors)
+    dem : ndarray, 2D, shape=(scanlines, detectors)
         Digital elevation model.
     dem_gt : tuple, 6 elements
         Geotransform array containing DEM geographic parameters in GDAL format,
         i.e. as ``(ulx, x_res, 0, uly, 0, y_res)``
-    output : optional, 3D array, shape=(3, detectors, scanlines)
+    output : optional, array, 3D, shape=(3, detectors, scanlines)
         Array to which outputs are written. If not passed, a new array is created
         and returned. Otherwise, the array is modified in place and the ``ufunc``
         returns ``None``.
     
     Returns
     -------
+    ndarray or None
         3D array if ``output`` is not specified, otherwise ``None``.
     
     Notes
@@ -634,21 +635,22 @@ def ray_tracing(XYZ0, XYZ1, V, DEM, DEM_X0Y0, DEM_Resolution):
     
     Parameters
     ----------
-    XYZ0 : float list, 3 elements
+    XYZ0 : list of float, 3 elements
         Ray tracing starting point, [MapX0, MapY0, MapZ0].
-    XYZ1 : float list, 3 elements
+    XYZ1 : list of float, 3 elements
         Ray tracing ending point, [MapX1, MapY1, MapZ1].
-    V : float list, 3 elements
+    V : list of float, 3 elements
         Scan vector.
-    DEM : 2D array, float
+    DEM : ndarray of float, 2D
         DEM image data.
-    DEM_X0Y0 : float list
+    DEM_X0Y0 : list of float
         The upper-left corner map coordinates of the DEM.
-    DEM_Resolution : float list
+    DEM_Resolution : list of float
         DEM resolution.
     
     Returns
     -------
+    ndarray
         A 3-element vector, [MapX, MapY, MapZ]: the pixel's geolocation and elevation.
     
     Notes

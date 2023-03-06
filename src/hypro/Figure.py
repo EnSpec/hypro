@@ -142,12 +142,12 @@ def linear_percent_stretch(raw_image):
     
     Parameters
     ----------
-    raw_image : 2D array
+    raw_image : ndarray, 2D
         Raw image data.
     
     Returns
     -------
-    stretched_image : 2D array
+    stretched_image : ndarray, 2D
         Percent_stretched image.
     
     References

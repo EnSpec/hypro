@@ -331,12 +331,12 @@ def combos(indices):
     
     Parameters
     ----------
-    indices : list of int lists
+    indices : list of list of int
         List of index lists.
     
     Returns
     -------
-    list of tuples
+    list of tuple
         Cartesian product of the input lists.
     """
     

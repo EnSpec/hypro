@@ -58,6 +58,7 @@ def is_northern(lat):
     
     Returns
     -------
+    int
         1: northern, 0: southern.
     """
     
@@ -79,7 +80,7 @@ def define_utm_crs(lon, lat):
     
     Returns
     -------
-    crs : osr.SpatialReference object
+    crs : osr.SpatialReference
         UTM map coordinate system.
     """
     
@@ -97,7 +98,7 @@ def define_wgs84_crs():
     
     Returns
     -------
-    crs : osr.SpatialReference object
+    crs : osr.SpatialReference
         WGS84 map coordinate system.
     """
     
@@ -118,7 +119,7 @@ def get_raster_crs(file):
     
     Returns
     -------
-    crs : osr object
+    crs : osr.SpatialReference
         Map coordinate system.
     """
     
@@ -138,16 +139,16 @@ def get_grid_convergence(lon, lat, map_crs):
     
     Parameters
     ----------
-    lon : list of floats
+    lon : list of float
         Longitude. West: negative; East: positive.
-    lat : list of floats
+    lat : list of float
         Latitude. North: positive; South: negative.
     map_crs : osr.SpatialReference
         Map coordinate system
     
     Returns
     -------
-    grid_convergence : array of floats
+    grid_convergence : ndarray of float
         Grid convergence in degrees.
     """
     
@@ -188,7 +189,7 @@ def get_map_crs(dem, longitude, latitude):
     
     Returns
     -------
-    map_crs : osr object
+    map_crs : osr.SpatialReference
         Map coordinate system.
     
     Notes

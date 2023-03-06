@@ -248,14 +248,14 @@ def interp_atm_lut(atm_lut_file, WVC, VIS, VZA, RAA):
     ----------
     atm_lut_file : str
         Atmospheric lookup table filename.
-    WVC, VIS, VZA, RAA : list of floats
+    WVC, VIS, VZA, RAA : list of float
         Water vapor column, visibility, view zenith angles and relative azimuth angles.
     
     Returns
     -------
-    WAVE : array
+    WAVE : ndarray
         Wavelengths of the atmospheric lookup table radiance.
-    lut_rdn : 2D array
+    lut_rdn : ndarray, 2D
         Interpolated path radiance (albedo=0.0, 0.5, 1.0).
     """
     
@@ -312,9 +312,9 @@ def average_rdn(avg_rdn_file, rdn_image_file, sca_image_file, pre_class_image_fi
     ----------
     avg_rdn_file : str
         Average radiance data filename.
-    rdn_image_file : 3D array
+    rdn_image_file : ndarray, 3D
         Radiance image filename, in BIL format.
-    sca_image_file : 3D array
+    sca_image_file : ndarray, 3D
         Scan angle image filename, in BSQ format.
     pre_class_image_file : str
         Pre-classification image filename.
@@ -422,9 +422,9 @@ def interpolate_values(A, map):
     
     Parameters
     ----------
-    A : 1D array
+    A : ndarray, 1D
         Input array to be modified.
-    map : 1D array
+    map : ndarray, 1D
         Boolean map indicating which elements should be replaced
     """
     
@@ -439,15 +439,15 @@ def cost_fun(shifts, sensor_wave, sensor_fwhm, sensor_rdn, lut_wave, lut_rdn):
     ----------
     shifts : list of float
         Shift in wavelength and FWHM.
-    sensor_wave : 1D array
+    sensor_wave : ndarray, 1D
         Sensor wavelengths.
-    sensor_fwhm : 1D array
+    sensor_fwhm : ndarray, 1D
         Sensor FWHMs.
-    sensor_rdn : 1D array
+    sensor_rdn : ndarray, 1D
         Sensor radiance.
-    lut_wave : 1D array
+    lut_wave : ndarray, 1D
         LUT wavelengths.
-    lut_rdn : 1D array
+    lut_rdn : ndarray, 1D
         LUT at-sensor radiance.
     
     Returns

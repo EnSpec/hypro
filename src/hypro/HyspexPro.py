@@ -52,7 +52,7 @@ def get_flight_indices(config):
     
     Returns
     -------
-    flight_indices : list of strs
+    flight_indices : list of str
         Flight indices.
     """
     
@@ -222,7 +222,7 @@ def get_center_lon_lat(raw_imugps_file):
     
     Returns
     -------
-    [lon, lat] : list of floats
+    list of float
         Image center longitude and latitude.
     """
     
@@ -300,7 +300,7 @@ def HyspexPro(config_file):
     
     Parameters
     ----------
-    config_file
+    config_file : str
         JSON file containing processing configuration parameters.
     """
     

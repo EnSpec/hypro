@@ -29,21 +29,21 @@ def atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut,
     
     Parameters
     ----------
-    atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA : list of floats
+    atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA : list of float
         Atmospheric lookup table water vapor column, visibility, view zenith and
         relative azimuth angle grids.
     atm_lut : ndarray
         Atmospheric lookup table, shape = (RHO, WVC, VIS, VZA, RAA).
-    wvc_image, vis_image, vza_image, raa_image : 2D arrays.
+    wvc_image, vis_image, vza_image, raa_image : ndarray, 2D
         Water vapor column, visibility, view zenith and relative azimuth angle images.
-    rdn_image : 2D array
+    rdn_image : ndarray, 2D
         Radiance image.
-    bg_mask : 2D bool array
+    bg_mask : ndarray of bool, 2D
         Background mask.
     
     Returns
     -------
-    rho : 2D array
+    rho : ndarray, 2D
         Surface reflectance.
     """
     

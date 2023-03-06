@@ -64,7 +64,7 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
         IMU & GPS data filename.
     fov : float
         Sensor field of view [deg].
-    map_crs : osr object
+    map_crs : osr.SpatialReference
         Map coordinate system.
     pixel_size : float
         Image pixel size [deg].

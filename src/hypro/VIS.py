@@ -45,7 +45,7 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
         Radiance filename.
     sca_file : str
         Scan angle filename.
-    background_mask_file :
+    background_mask_file : str
         Background mask filename.
     """
     
@@ -239,7 +239,7 @@ def interp_atm_lut(atm_lut_RHO, atm_lut_WVC, atm_lut_VZA, atm_lut_RAA, atm_lut, 
     
     Parameters
     ----------
-    atm_lut_RHO, atm_lut_WVC, atm_lut_VZA, atm_lut_RAA : list of floats
+    atm_lut_RHO, atm_lut_WVC, atm_lut_VZA, atm_lut_RAA : list of float
         Atmospheric lookup table grids.
     atm_lut : ndarray
         Atmospheric lookup table, shape=(RHO, WVC, VIS, VZA, RAA).
@@ -248,7 +248,7 @@ def interp_atm_lut(atm_lut_RHO, atm_lut_WVC, atm_lut_VZA, atm_lut_RAA, atm_lut, 
     
     Returns
     -------
-    interp_rdn : 1D array
+    interp_rdn : ndarray, 1D
         Interpolated radiance.
     """
     

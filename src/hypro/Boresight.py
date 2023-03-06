@@ -37,7 +37,7 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
         The sensor model filename.
     dem_image_file : str
         The DEM image filename.
-    boresight_options : list of boolean
+    boresight_options : list of bool
         Boresight offset options, true or false.
     """
     
@@ -162,21 +162,21 @@ def cost_fun(boresight_offsets, flight_xyz, flight_imu, flight_sensor_model, dem
     ----------
     boresight_offsets : list of float
         Boresight offsets.
-    flight_xyz : 2D array
+    flight_xyz : ndarray, 2D
         Flight x, y, z data, shape=(n_gcps, 3)
-    flight_imu : 2D
+    flight_imu : ndarray, 2D
         Flight roll, pitch, heading data, shape=(n_gcps, 3)
-    flight_sensor_model : 2D
+    flight_sensor_model : ndarray, 2D
         Flight sensor model data, shape=(n_gcps, 2)
-    dem_image : 2D array
+    dem_image : ndarray, 2D
         DEM data.
     dem_ulxy : list of float
         Map coordinates of DEM upper-left corner.
     dem_pixel_size : list of float
         DEM pixel size.
-    gcp_xyz : 2D array
+    gcp_xyz : ndarray, 2D
         GPC map coordinates, shape=(n_gcps, 3).
-    boresight_options : list of boolean
+    boresight_options : list of bool
         Boresight offset options, true or false.
     """
     
@@ -196,24 +196,24 @@ def estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_mo
     ----------
     boresight_offsets : list of float
         Boresight offsets.
-    flight_xyz : 2D array
+    flight_xyz : ndarray, 2D
         Flight x, y, z data, shape=(n_gcps, 3)
-    flight_imu : 2D
+    flight_imu : ndarray, 2D
         Flight roll, pitch, heading data, shape=(n_gcps, 3)
-    flight_sensor_model : 2D
+    flight_sensor_model : ndarray, 2D
         Flight sensor model data, shape=(n_gcps, 2)
-    dem_image : 2D array
+    dem_image : ndarray, 2D
         DEM data.
     dem_ulxy : list of float
         Map coordinates of DEM upper-left corner.
     dem_pixel_size : list of float
         DEM pixel size.
-    boresight_options : list of boolean
+    boresight_options : list of bool
         Boresight offset options, true or false.
     
     Returns
     -------
-    gcp_xyz : 2D array
+    gcp_xyz : ndarray, 2D
         Estimated GCP x, y and z.
     """
     

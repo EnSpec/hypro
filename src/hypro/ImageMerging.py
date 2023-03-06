@@ -354,18 +354,18 @@ def resample_ortho_sca(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     
     Parameters
     ----------
-    raw_image : 2D array
+    raw_image : ndarray, 2D
         Raw georectified scan angle image data.
     raw_ulx, raw_uly : float
         Map coordinates of the upper-left corner of the raw image.
     raw_pixel_size : float
         Pixel size of the raw image.
-    x, y : 2D array
+    x, y : ndarray, 2D
         New map grids.
     
     Returns
     -------
-    resampled_image : 2D array
+    resampled_image : ndarray, 2D
         Resampled georectified scan angle image.
     """
     
@@ -395,18 +395,18 @@ def resample_ortho_dem(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     
     Parameters
     ----------
-    raw_image : 2D array
+    raw_image : ndarray, 2D
         Raw orthorectified DEM image data.
     raw_ulx, raw_uly : float
         Map coordinates of the upper-left corner of the raw image.
     raw_pixel_size : float
         Pixel size of the raw image.
-    x, y : 2D array
+    x, y : ndarray, 2D
         New map grids.
     
     Returns
     -------
-    resampled_image : 2D array
+    resampled_image : ndarray, 2D
         Resampled georectified DEM image.
     """
     
@@ -436,18 +436,18 @@ def resample_ortho_rdn(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     
     Parameters
     ----------
-    raw_image : 2D array
+    raw_image : ndarray, 2D
         Radiance image data.
     raw_ulx, raw_uly : float
         Map coordinates of the upper-left corner of the raw image.
     raw_pixel_size : float
         Pixel size of the raw image.
-    x, y : 2D array
+    x, y : ndarray, 2D
         New map grids.
     
     Returns
     -------
-    resampled_image : 2D array
+    resampled_image : ndarray, 2D
         Resampled reflectance image.
     """
     

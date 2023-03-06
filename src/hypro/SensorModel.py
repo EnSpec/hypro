@@ -73,7 +73,7 @@ def determine_if_rotated(imu_gps_file):
     
     Returns
     -------
-    True or False : bool
+    bool
         Whether the sensor is 180 degree rotated.
     """
     
