@@ -38,7 +38,7 @@ def prepare_imugps_Hyspex(processed_imugps_file, raw_imugps_file, boresight_offs
     """
     
     if os.path.exists(processed_imugps_file):
-        logger.info('Write the IMU and GPS data to %s.' %processed_imugps_file)
+        logger.info('Write the IMU and GPS data to %s.' % processed_imugps_file)
         return
     
     from Geography import define_wgs84_crs, get_grid_convergence
@@ -81,7 +81,7 @@ def prepare_imugps_Hyspex(processed_imugps_file, raw_imugps_file, boresight_offs
     processed_imugps[:,14] = raw_imugps[:,7]
     
     # Save the new IMU/GPS data.
-    header = ['Map coordinate system = %s' %(map_crs.ExportToWkt()),
+    header = ['Map coordinate system = %s' % (map_crs.ExportToWkt()),
               'Index    '+
               'Map_X    Map_Y    Map_Z    Roll    Pitch    Heading    '+
               'Roll_Offset    Pitch_Offset    Heading_Offset    Altitude_Offset    Grid_Convergence    '+
@@ -91,4 +91,4 @@ def prepare_imugps_Hyspex(processed_imugps_file, raw_imugps_file, boresight_offs
                processed_imugps,
                header='\n'.join(header),
                fmt='%d    %.3f    %.3f    %.3f    %.10f    %.10f    %.10f    %.10f    %.10f    %.10f    %.10f    %.10f    %.10f    %.10f    %.5f')
-    logger.info('Write the IMU and GPS data to %s.' %processed_imugps_file)
+    logger.info('Write the IMU and GPS data to %s.' % processed_imugps_file)

@@ -77,7 +77,7 @@ def atm_corr_image(flight_dict):
     """
     
     if os.path.exists(flight_dict['refl_file']):
-        logger.info('Write the reflectance image to %s.' %flight_dict['refl_file'])
+        logger.info('Write the reflectance image to %s.' % flight_dict['refl_file'])
         return
     
     from ENVI import read_envi_header, write_envi_header
@@ -111,8 +111,8 @@ def atm_corr_image(flight_dict):
     vza_image = np.copy(sca_image[0,:,:])
     # RAA
     raa_image = saa-sca_image[1,:,:]
-    raa_image[raa_image<0] += 360.0
-    raa_image[raa_image>180] = 360.0-raa_image[raa_image>180]
+    raa_image[raa_image < 0] += 360.0
+    raa_image[raa_image > 180] = 360.0-raa_image[raa_image > 180]
     # clear data
     sca_image.flush()
     del sca_header, saa
@@ -147,20 +147,20 @@ def atm_corr_image(flight_dict):
                         shape=(bg_header['lines'],
                                bg_header['samples']))
     
-    wvc_image[wvc_image>=atm_lut_WVC.max()] = atm_lut_WVC.max()-0.1
-    vis_image[vis_image>=atm_lut_VIS.max()] = atm_lut_VIS.max()-0.1
-    vza_image[vza_image>=atm_lut_VZA.max()] = atm_lut_VZA.max()-0.1
-    raa_image[raa_image>=atm_lut_RAA.max()] = atm_lut_RAA.max()-0.1
+    wvc_image[wvc_image >= atm_lut_WVC.max()] = atm_lut_WVC.max()-0.1
+    vis_image[vis_image >= atm_lut_VIS.max()] = atm_lut_VIS.max()-0.1
+    vza_image[vza_image >= atm_lut_VZA.max()] = atm_lut_VZA.max()-0.1
+    raa_image[raa_image >= atm_lut_RAA.max()] = atm_lut_RAA.max()-0.1
     
     # remove outliers in wvc and vis.
     avg_wvc = wvc_image[~bg_mask].mean()
     std_wvc = wvc_image[~bg_mask].std()
-    index = (np.abs(wvc_image-avg_wvc)>2*std_wvc)&(~bg_mask)
+    index = (np.abs(wvc_image-avg_wvc) > 2*std_wvc) & (~bg_mask)
     wvc_image[index] = avg_wvc
     
     avg_vis = vis_image[~bg_mask].mean()
     std_vis = vis_image[~bg_mask].std()
-    index = (np.abs(vis_image-avg_vis)>2*std_vis)&(~bg_mask)
+    index = (np.abs(vis_image-avg_vis) > 2*std_vis) & (~bg_mask)
     vis_image[index] = avg_vis
     del index
     
@@ -168,9 +168,9 @@ def atm_corr_image(flight_dict):
     # Do atmospheric correction.
     info = 'Bands = '
     for band in range(rdn_header['bands']):
-        if band%20==0:
-            info += '%d, ' %(band+1)
-        if (rdn_header['wavelength'][band]>=1340.0 and rdn_header['wavelength'][band]<=1440.0) or (rdn_header['wavelength'][band]>=1800.0 and rdn_header['wavelength'][band]<=1980.0) or rdn_header['wavelength'][band]>=2460.0:
+        if band % 20 == 0:
+            info += '%d, ' % (band+1)
+        if (rdn_header['wavelength'][band] >= 1340.0 and rdn_header['wavelength'][band] <= 1440.0) or (rdn_header['wavelength'][band] >= 1800.0 and rdn_header['wavelength'][band] <= 1980.0) or rdn_header['wavelength'][band] >= 2460.0:
             fid.write(np.zeros((rdn_header['lines'], rdn_header['samples'])).astype('float32').tostring())
         else:
             offset = rdn_header['header offset']+4*band*rdn_header['lines']*rdn_header['samples']# in bytes
@@ -188,7 +188,7 @@ def atm_corr_image(flight_dict):
             del refl, rdn_image
     
     fid.close()
-    info += '%d, Done!' %band
+    info += '%d, Done!' % band
     logger.info(info)
     
     # Clear data
@@ -199,4 +199,4 @@ def atm_corr_image(flight_dict):
     
     rdn_header['description'] = 'Reflectance [0-1]'
     write_envi_header(os.path.splitext(flight_dict['refl_file'])[0]+'.hdr', rdn_header)
-    logger.info('Write the reflectance image to %s.' %flight_dict['refl_file'])
+    logger.info('Write the reflectance image to %s.' % flight_dict['refl_file'])

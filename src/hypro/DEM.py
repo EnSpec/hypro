@@ -36,7 +36,7 @@ def get_avg_elev(dem_image_file):
     
     ds = gdal.Open(dem_image_file, gdal.GA_ReadOnly)
     dem_image = ds.GetRasterBand(1).ReadAsArray()
-    avg_elev = dem_image[dem_image>0].mean() # Negative values are ignored.
+    avg_elev = dem_image[dem_image > 0].mean() # Negative values are ignored.
     ds = None
     del dem_image
     
@@ -61,7 +61,7 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
     """
     
     if os.path.exists(dem_image_file):
-        logger.info('Write the DEM to %s.' %dem_image_file)
+        logger.info('Write the DEM to %s.' % dem_image_file)
         return
     
     from ENVI import empty_envi_header, write_envi_header
@@ -96,7 +96,7 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
         row_0 = int((y_max-geotransform[3])/geotransform[5])
         row_1 = int((y_min-geotransform[3])/geotransform[5])
         
-        if (col_0>ds.RasterXSize-1) or (row_0>ds.RasterYSize-1) or (col_1<0) or (row_1<0):
+        if (col_0 > ds.RasterXSize-1) or (row_0 > ds.RasterYSize-1) or (col_1 < 0) or (row_1 < 0):
             logger.error('The input DEM image does not cover the flight area.')
             raise IOError('The input DEM image does not cover the flight area.')
         
@@ -104,8 +104,8 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
         row_0 = max(row_0, 0)
         col_1 = min(col_1, ds.RasterXSize-1)
         row_1 = min(row_1, ds.RasterYSize-1)
-        cols  = int(col_1-col_0)
-        rows  = int(row_1-row_0)
+        cols = int(col_1-col_0)
+        rows = int(row_1-row_0)
         
         # Read a subset of DEM.
         dem_image = ds.GetRasterBand(1).ReadAsArray(col_0, row_0, cols, rows)
@@ -161,11 +161,11 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
                   ' ',' ', map_crs.GetAttrValue('datum').replace(',', ''), map_crs.GetAttrValue('unit')]
     if map_crs.GetAttrValue('PROJECTION').lower() == 'transverse_mercator':
         dem_header['map info'][7] = map_crs.GetUTMZone()
-        if y_min>0.0:
+        if y_min > 0.0:
             dem_header['map info'][8] = 'North'
         else:
             dem_header['map info'][8] = 'South'
     write_envi_header(os.path.splitext(dem_image_file)[0]+'.hdr', dem_header)
     del dem_header
     
-    logger.info('Write the DEM to %s.' %dem_image_file)
+    logger.info('Write the DEM to %s.' % dem_image_file)

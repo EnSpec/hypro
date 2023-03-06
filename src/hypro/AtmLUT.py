@@ -23,10 +23,10 @@ logger = logging.getLogger(__name__)
 # Define atmospheric database parameters. Do not make any change to them.
 atm_db_VZA_grid_size = 5 # view zenith angle grid size, in [deg]
 atm_db_RAA_grid_size = 15 # relative azimuth angle grid size, in [deg]
-atm_db_RHO =  np.array([0, 0.5, 1.0]) # surface albedo, unitless
-atm_db_WVC =  np.array([4, 10, 15, 20, 25, 30, 35, 40, 45, 50]) # water vapor column, in [mm]
-atm_db_VIS =  np.array([5, 10, 20, 40, 80, 120]) # aerosol visibility, in [km]
-atm_db_WAVE =  np.arange(4000, 25001)/10 # wavelength, in [nm]
+atm_db_RHO = np.array([0, 0.5, 1.0]) # surface albedo, unitless
+atm_db_WVC = np.array([4, 10, 15, 20, 25, 30, 35, 40, 45, 50]) # water vapor column, in [mm]
+atm_db_VIS = np.array([5, 10, 20, 40, 80, 120]) # aerosol visibility, in [km]
+atm_db_WAVE = np.arange(4000, 25001)/10 # wavelength, in [nm]
 atm_db_SZA = np.array([0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70]) # Sun zenith angle, in [deg]
 atm_db_VZA = np.array([0, 5, 10, 15, 20, 25, 30, 40]) # view zenith angle, in [deg]
 atm_db_RAA = np.array([0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]) # relative azimuth angle, in [deg]
@@ -43,7 +43,7 @@ def build_atm_lut(flight_dict):
     import glob
     
     if os.path.exists(flight_dict['raw_atm_lut_file']):
-        logger.info('Write the raw ALT to %s.' %flight_dict['raw_atm_lut_file'])
+        logger.info('Write the raw ALT to %s.' % flight_dict['raw_atm_lut_file'])
         return
     
     # Get sun angles (zenith and azimuth), above-sea-level elevation, above-ground flight altitude.
@@ -58,7 +58,7 @@ def build_atm_lut(flight_dict):
     # Get the ELEV and ZOUT grids of the atmospheric database.
     atm_db_folders = glob.glob(os.path.join(flight_dict['atm_database_dir'], flight_dict['atm_mode'], 'ELEV_*ZOUT_*'))
     if atm_db_folders == []:
-        raise IOError('Cannot find any atmospheric database file under %s.' %(os.path.join(flight_dict['atm_database_dir'], flight_dict['atm_mode'])))
+        raise IOError('Cannot find any atmospheric database file under %s.' % (os.path.join(flight_dict['atm_database_dir'], flight_dict['atm_mode'])))
     atm_db_ELEV = []
     atm_db_ZOUT = []
     for folder in atm_db_folders:
@@ -70,28 +70,28 @@ def build_atm_lut(flight_dict):
     atm_db_ZOUT = sorted(list(set(atm_db_ZOUT))) # Remove duplicates, and sort values;
     
     # Get the elevation interpolation range.
-    if np.all(np.array(atm_db_ELEV)<atm_lut_elev) or np.all(np.array(atm_db_ELEV)>atm_lut_elev):
-        raise IOError('The above-sea-level elevation (%.2f) is out of range (%.2f - %.2f).' %(atm_lut_elev, min(atm_db_ELEV), max(atm_db_ELEV)))
+    if np.all(np.array(atm_db_ELEV) < atm_lut_elev) or np.all(np.array(atm_db_ELEV) > atm_lut_elev):
+        raise IOError('The above-sea-level elevation (%.2f) is out of range (%.2f - %.2f).' % (atm_lut_elev, min(atm_db_ELEV), max(atm_db_ELEV)))
     elev_dict = get_interp_range(atm_db_ELEV, atm_lut_elev)
     
     # Get the above-ground flight altitude interpolation range.
-    if np.all(np.array(atm_db_ZOUT)<atm_lut_zout) or np.all(np.array(atm_db_ZOUT)>atm_lut_zout):
-        raise IOError('The above-ground flight altitude (%.2f) is out of range (%.2f - %.2f).' %(atm_lut_zout, min(atm_db_ZOUT), max(atm_db_ZOUT)))
+    if np.all(np.array(atm_db_ZOUT) < atm_lut_zout) or np.all(np.array(atm_db_ZOUT) > atm_lut_zout):
+        raise IOError('The above-ground flight altitude (%.2f) is out of range (%.2f - %.2f).' % (atm_lut_zout, min(atm_db_ZOUT), max(atm_db_ZOUT)))
     zout_dict = get_interp_range(atm_db_ZOUT, atm_lut_zout)
     
     # Get the Sun zenith angle interpolation range.
-    if np.all(np.array(atm_db_SZA)<atm_lut_sza) or np.all(np.array(atm_db_SZA)>atm_lut_sza):
-        raise IOError('The Sun zenith angle (%.2f) is out of range (%.2f - %.2f).' %(atm_lut_sza, min(atm_db_SZA), max(atm_db_SZA)))
+    if np.all(np.array(atm_db_SZA) < atm_lut_sza) or np.all(np.array(atm_db_SZA) > atm_lut_sza):
+        raise IOError('The Sun zenith angle (%.2f) is out of range (%.2f - %.2f).' % (atm_lut_sza, min(atm_db_SZA), max(atm_db_SZA)))
     sza_dict = get_interp_range(atm_db_SZA, atm_lut_sza)
     
     # Print out interpolation ranges.
     logger.info('Atmospheric database interpolation point and range:')
     index = list(elev_dict.keys())
-    logger.info('ELEV [km] = %.2f, %.2f - %.2f' %(atm_lut_elev, atm_db_ELEV[index[0]], atm_db_ELEV[index[1]]))
+    logger.info('ELEV [km] = %.2f, %.2f - %.2f' % (atm_lut_elev, atm_db_ELEV[index[0]], atm_db_ELEV[index[1]]))
     index = list(zout_dict.keys())
-    logger.info('ZOUT [km] = %.2f, %.2f - %.2f' %(atm_lut_zout, atm_db_ZOUT[index[0]], atm_db_ZOUT[index[1]]))
+    logger.info('ZOUT [km] = %.2f, %.2f - %.2f' % (atm_lut_zout, atm_db_ZOUT[index[0]], atm_db_ZOUT[index[1]]))
     index = list(sza_dict.keys())
-    logger.info('SZA [deg] = %.2f, %.2f - %.2f' %(atm_lut_sza, atm_db_SZA[index[0]], atm_db_SZA[index[1]]))
+    logger.info('SZA [deg] = %.2f, %.2f - %.2f' % (atm_lut_sza, atm_db_SZA[index[0]], atm_db_SZA[index[1]]))
     
     # Initialize the atmospheric lookup table.
     atm_lut = np.memmap(flight_dict['raw_atm_lut_file'],
@@ -110,11 +110,11 @@ def build_atm_lut(flight_dict):
     for index_combo in index_combos:
         elev_index, zout_index, sza_index = index_combo
         # Get atmospheric database filename: atm_database/ELEV_xxxx_ZOUT_xxxx/ELEV_xxxx_ZOUT_xxxx_SZA_xxx.
-        basename = 'ELEV_%04d_ZOUT_%04d' %(atm_db_ELEV[elev_index]*1000, atm_db_ZOUT[zout_index]*1000)
+        basename = 'ELEV_%04d_ZOUT_%04d' % (atm_db_ELEV[elev_index]*1000, atm_db_ZOUT[zout_index]*1000)
         atm_db_file = os.path.join(flight_dict['atm_database_dir'],
                                    flight_dict['atm_mode'],
                                    basename,
-                                   '%s_SZA_%03d' %(basename, atm_db_SZA[sza_index]))
+                                   '%s_SZA_%03d' % (basename, atm_db_SZA[sza_index]))
         
         # Read atmospheric database data.
         atm_db = np.memmap(atm_db_file,
@@ -159,7 +159,7 @@ def build_atm_lut(flight_dict):
     atm_lut_metadata['WAVE'] = list(atm_db_WAVE)
     write_binary_metadata(flight_dict['raw_atm_lut_file']+'.meta', atm_lut_metadata)
     
-    logger.info('Write the raw ALT to %s.' %flight_dict['raw_atm_lut_file'])
+    logger.info('Write the raw ALT to %s.' % flight_dict['raw_atm_lut_file'])
 
 
 def resample_atm_lut(resampled_atm_lut_file, raw_atm_lut_file, rdn_header_file):
@@ -174,7 +174,7 @@ def resample_atm_lut(resampled_atm_lut_file, raw_atm_lut_file, rdn_header_file):
     """
     
     if os.path.exists(resampled_atm_lut_file):
-        logger.info('Write the resampled ALT to %s.' %resampled_atm_lut_file)
+        logger.info('Write the resampled ALT to %s.' % resampled_atm_lut_file)
         return
     
     from ENVI import read_envi_header
@@ -222,7 +222,7 @@ def resample_atm_lut(resampled_atm_lut_file, raw_atm_lut_file, rdn_header_file):
     atm_lut_metadata['WAVE'] = rdn_header['wavelength']
     write_binary_metadata(resampled_atm_lut_file+'.meta', atm_lut_metadata)
     
-    logger.info('Write the resampled ALT to %s.' %resampled_atm_lut_file)
+    logger.info('Write the resampled ALT to %s.' % resampled_atm_lut_file)
 
 
 def write_binary_metadata(metadata_file, metadata):
@@ -241,14 +241,14 @@ def write_binary_metadata(metadata_file, metadata):
         if type(metadata[key]) is list:
             value = []
             for i, v in enumerate(metadata[key]):
-                if (i+1)%5==0:
+                if (i+1) % 5 == 0:
                     value.append(str(v)+'\n')
                 else:
                     value.append(str(v))
-            value = '{%s}' %(', '.join(value))
+            value = '{%s}' % (', '.join(value))
         else:
             value = str(metadata[key])
-        fid.write('%s = %s\n' %(key, value))
+        fid.write('%s = %s\n' % (key, value))
     fid.close()
 
 
@@ -293,8 +293,8 @@ def get_interp_range(xs, x):
     """ Get the interpolation range.
     """
     
-    x_index0 = np.where(xs<=x)[0][-1]
-    x_index1 = np.where(xs>x)[0][0]
+    x_index0 = np.where(xs <= x)[0][-1]
+    x_index1 = np.where(xs > x)[0][0]
     x_delta0 = (xs[x_index1]-x)/(xs[x_index1]-xs[x_index0])
     x_delta1 = (x-xs[x_index0])/(xs[x_index1]-xs[x_index0])
     

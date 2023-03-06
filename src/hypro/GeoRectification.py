@@ -33,7 +33,7 @@ def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
     """
     
     if os.path.exists(ortho_sca_image_file):
-        logger.info('Write the georectified SCA image to %s.' %ortho_sca_image_file)
+        logger.info('Write the georectified SCA image to %s.' % ortho_sca_image_file)
         return
     
     from ENVI import empty_envi_header, read_envi_header, write_envi_header
@@ -51,7 +51,7 @@ def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
                                  glt_header['samples']))
     
     # Get spatial indices.
-    I, J = np.where((glt_image[0,:,:]>=0)&(glt_image[1,:,:]>=0))
+    I, J = np.where((glt_image[0,:,:] >= 0) & (glt_image[1,:,:] >= 0))
     ortho_sca_image = np.zeros((glt_header['lines'], glt_header['samples']), dtype='float32')
     
     # Orthorectify SCA.
@@ -93,7 +93,7 @@ def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
     write_envi_header(ortho_sca_image_file+'.hdr', ortho_sca_header)
     del glt_header, sca_header, ortho_sca_header
     
-    logger.info('Write the georectified SCA image to %s.' %ortho_sca_image_file)
+    logger.info('Write the georectified SCA image to %s.' % ortho_sca_image_file)
 
 
 def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
@@ -108,7 +108,7 @@ def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
     """
     
     if os.path.exists(ortho_dem_image_file):
-        logger.info('Write the georectified DEM image to %s.' %ortho_dem_image_file)
+        logger.info('Write the georectified DEM image to %s.' % ortho_dem_image_file)
         return
     
     from ENVI import empty_envi_header, read_envi_header, write_envi_header
@@ -133,7 +133,7 @@ def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
                                  glt_header['samples']))
     
     # Get spatial indices.
-    I, J = np.where((glt_image[0,:,:]>=0)&(glt_image[1,:,:]>=0))
+    I, J = np.where((glt_image[0,:,:] >= 0) & (glt_image[1,:,:] >= 0))
     ortho_dem_image = np.zeros((glt_header['lines'], glt_header['samples']), dtype='float32')
     
     # Orthorectify DEM.
@@ -164,7 +164,7 @@ def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
     write_envi_header(ortho_dem_image_file+'.hdr', ortho_dem_header)
     del glt_header, ortho_dem_header
     
-    logger.info('Write the georectified DEM image to %s.' %ortho_dem_image_file)
+    logger.info('Write the georectified DEM image to %s.' % ortho_dem_image_file)
 
 
 def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
@@ -179,7 +179,7 @@ def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
     """
     
     if os.path.exists(ortho_rdn_image_file):
-        logger.info('Write the georectified radiance image to %s.' %ortho_rdn_image_file)
+        logger.info('Write the georectified radiance image to %s.' % ortho_rdn_image_file)
         return
     
     from ENVI import empty_envi_header, read_envi_header, write_envi_header
@@ -204,20 +204,20 @@ def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
                                  glt_header['samples']))
     
     # Get spatial indices.
-    I, J = np.where((glt_image[0,:,:]>=0)&(glt_image[1,:,:]>=0))
+    I, J = np.where((glt_image[0,:,:] >= 0) & (glt_image[1,:,:] >= 0))
     ortho_image = np.zeros((glt_header['lines'], glt_header['samples']), dtype='float32')
     
     # Orthorectify radiance.
     fid = open(ortho_rdn_image_file, 'wb')
-    info = 'Band (max=%d): ' %rdn_header['bands']
+    info = 'Band (max=%d): ' % rdn_header['bands']
     for band in range(rdn_header['bands']):
-        if band%20==0:
-            info += '%d, ' %(band+1)
+        if band % 20 == 0:
+            info += '%d, ' % (band+1)
         ortho_image[:,:] = 0.0
         ortho_image[I,J] = rdn_image[glt_image[0,I,J], band, glt_image[1,I,J]]
         fid.write(ortho_image.tostring())
     fid.close()
-    info += 'Done! %s' %rdn_header['bands']
+    info += 'Done! %s' % rdn_header['bands']
     logger.info(info)
     del ortho_image
     rdn_image.flush()
@@ -245,4 +245,4 @@ def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
     write_envi_header(ortho_rdn_image_file+'.hdr', ortho_rdn_header)
     del glt_header, rdn_header, ortho_rdn_header
     
-    logger.info('Write the georectified radiance image to %s.' %ortho_rdn_image_file)
+    logger.info('Write the georectified radiance image to %s.' % ortho_rdn_image_file)

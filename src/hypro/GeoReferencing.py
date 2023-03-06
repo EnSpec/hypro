@@ -43,7 +43,7 @@ def calculate_igm(igm_image_file, imugps_file, sensor_model_file, dem_image_file
     """
     
     if os.path.exists(igm_image_file):
-        logger.info('Write the IGM to %s.' %igm_image_file)
+        logger.info('Write the IGM to %s.' % igm_image_file)
         return
     
     from ENVI import empty_envi_header, write_envi_header
@@ -78,7 +78,7 @@ def calculate_igm(igm_image_file, imugps_file, sensor_model_file, dem_image_file
     del sensor_model
     
     # Get start and end points of ray tracing.
-    index = dem_image>0.0
+    index = dem_image > 0.0
     dem_min = dem_image[index].min()
     dem_max = dem_image[index].max()
     del index
@@ -130,7 +130,7 @@ def calculate_igm(igm_image_file, imugps_file, sensor_model_file, dem_image_file
     
     # Write IGM header file.
     igm_header = empty_envi_header()
-    igm_header['description'] = 'IGM (map coordinate system=%s)' %(dem_prj)
+    igm_header['description'] = 'IGM (map coordinate system=%s)' % (dem_prj)
     igm_header['file type'] = 'ENVI Standard'
     igm_header['samples'] = samples
     igm_header['lines'] = lines
@@ -144,7 +144,7 @@ def calculate_igm(igm_image_file, imugps_file, sensor_model_file, dem_image_file
     write_envi_header(igm_header_file, igm_header)
     del igm_header, dem_prj
     
-    logger.info('Write the IGM to %s.' %igm_image_file)
+    logger.info('Write the IGM to %s.' % igm_image_file)
 
 
 def calculate_sca(sca_image_file, imugps_file, igm_image_file, sun_angles):
@@ -161,7 +161,7 @@ def calculate_sca(sca_image_file, imugps_file, igm_image_file, sun_angles):
     """
     
     if os.path.exists(sca_image_file):
-        logger.info('Write the SCA to %s.' %sca_image_file)
+        logger.info('Write the SCA to %s.' % sca_image_file)
         return
     
     from ENVI import empty_envi_header, read_envi_header, write_envi_header
@@ -189,19 +189,19 @@ def calculate_sca(sca_image_file, imugps_file, igm_image_file, sun_angles):
     
     view_zenith = np.abs(np.arctan(np.sqrt(DX**2+DY**2)/DZ))
     
-    index = view_zenith>=np.deg2rad(40.0)
+    index = view_zenith >= np.deg2rad(40.0)
     if np.any(index):
         view_zenith[index] = np.deg2rad(39.0)
     del index
     
     view_azimuth = np.arcsin(np.abs(DX)/np.sqrt(DX**2+DY**2))
     
-    index = (DX>0)&(DY<0)
-    view_azimuth[index]=np.pi-view_azimuth[index]
-    index = (DX<0)&(DY<0)
-    view_azimuth[index]=np.pi+view_azimuth[index]
-    index = (DX<0)&(DY>0)
-    view_azimuth[index]=2*np.pi-view_azimuth[index]
+    index = (DX > 0) & (DY < 0)
+    view_azimuth[index] = np.pi-view_azimuth[index]
+    index = (DX < 0) & (DY < 0)
+    view_azimuth[index] = np.pi+view_azimuth[index]
+    index = (DX < 0) & (DY > 0)
+    view_azimuth[index] = 2*np.pi-view_azimuth[index]
     del DX, DY, DZ, index
     
     # Save scan angles.
@@ -229,7 +229,7 @@ def calculate_sca(sca_image_file, imugps_file, igm_image_file, sun_angles):
     write_envi_header(sca_header_file, sca_header)
     del sca_header
     
-    logger.info('Write the SCA to %s.' %sca_image_file)
+    logger.info('Write the SCA to %s.' % sca_image_file)
 
 
 def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
@@ -259,7 +259,7 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
     """
     
     if os.path.exists(glt_image_file):
-        logger.info('Write the GLT to %s.' %glt_image_file)
+        logger.info('Write the GLT to %s.' % glt_image_file)
         return
     
     from ENVI import empty_envi_header, read_envi_header, write_envi_header
@@ -287,18 +287,18 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
     # Build VRT for IGM.
     igm_vrt_file = os.path.splitext(igm_image_file)[0]+'.vrt'
     igm_vrt = open(igm_vrt_file,'w')
-    igm_vrt.write('<VRTDataset rasterxsize="%s" rasterysize="%s">\n' %(igm_header['samples'], igm_header['lines']))
+    igm_vrt.write('<VRTDataset rasterxsize="%s" rasterysize="%s">\n' % (igm_header['samples'], igm_header['lines']))
     for band in range(igm_header['bands']):
         igm_vrt.write('\t<VRTRasterBand dataType="%s" band="%s">\n' % ("Float64", band+1))
         igm_vrt.write('\t\t<SimpleSource>\n')
-        igm_vrt.write('\t\t\t<SourceFilename relativeToVRT="1">%s</SourceFilename>\n' %igm_image_file.replace('&', '&amp;'))
-        igm_vrt.write('\t\t\t<SourceBand>%s</SourceBand>\n' %(band+1))
-        igm_vrt.write('\t\t\t<SourceProperties RasterXSize="%s" RasterYSize="%s" DataType="%s" BlockXSize="%s" BlockYSize="%s" />\n' %(igm_header['samples'],
+        igm_vrt.write('\t\t\t<SourceFilename relativeToVRT="1">%s</SourceFilename>\n' % igm_image_file.replace('&', '&amp;'))
+        igm_vrt.write('\t\t\t<SourceBand>%s</SourceBand>\n' % (band+1))
+        igm_vrt.write('\t\t\t<SourceProperties RasterXSize="%s" RasterYSize="%s" DataType="%s" BlockXSize="%s" BlockYSize="%s" />\n' % (igm_header['samples'],
                                                                                                                                        igm_header['lines'],
                                                                                                                                        "Float64",
                                                                                                                                        igm_header['samples'], 1))
-        igm_vrt.write('\t\t\t<SrcRect xOff="0" yOff="0" xSize="%s" ySize="%s" />\n' %(igm_header['samples'], igm_header['lines']))
-        igm_vrt.write('\t\t\t<DstRect xOff="0" yOff="0" xSize="%s" ySize="%s" />\n' %(igm_header['samples'], igm_header['lines']))
+        igm_vrt.write('\t\t\t<SrcRect xOff="0" yOff="0" xSize="%s" ySize="%s" />\n' % (igm_header['samples'], igm_header['lines']))
+        igm_vrt.write('\t\t\t<DstRect xOff="0" yOff="0" xSize="%s" ySize="%s" />\n' % (igm_header['samples'], igm_header['lines']))
         igm_vrt.write("\t\t</SimpleSource>\n")
         igm_vrt.write("\t</VRTRasterBand>\n")
     igm_vrt.write("</VRTDataset>\n")
@@ -333,11 +333,11 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
     # Build VRT for IGM Index.
     index_vrt_file = os.path.splitext(index_image_file)[0]+'.vrt'
     index_vrt = open(index_vrt_file,'w')
-    index_vrt.write('<VRTDataset rasterxsize="%s" rasterysize="%s">\n' %(index_header['samples'], index_header['lines']))
+    index_vrt.write('<VRTDataset rasterxsize="%s" rasterysize="%s">\n' % (index_header['samples'], index_header['lines']))
     index_vrt.write('\t<Metadata Domain = "GEOLOCATION">\n')
-    index_vrt.write('\t\t<mdi key="X_DATASET">%s</mdi>\n' %igm_image_file.replace('&', '&amp;'))
+    index_vrt.write('\t\t<mdi key="X_DATASET">%s</mdi>\n' % igm_image_file.replace('&', '&amp;'))
     index_vrt.write('\t\t<mdi key="X_BAND">1</mdi>\n')
-    index_vrt.write('\t\t<mdi key="Y_DATASET">%s</mdi>\n' %igm_image_file.replace('&', '&amp;'))
+    index_vrt.write('\t\t<mdi key="Y_DATASET">%s</mdi>\n' % igm_image_file.replace('&', '&amp;'))
     index_vrt.write('\t\t<mdi key="Y_BAND">2</mdi>\n')
     index_vrt.write('\t\t<mdi key="PIXEL_OFFSET">0</mdi>\n')
     index_vrt.write('\t\t<mdi key="LINE_OFFSET">0</mdi>\n')
@@ -347,14 +347,14 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
     for band in range(index_header['bands']):
         index_vrt.write('\t<VRTRasterBand dataType="%s" band="%s">\n' % ("Int16", band+1))
         index_vrt.write('\t\t<SimpleSource>\n')
-        index_vrt.write('\t\t\t<SourceFilename relativeToVRT="1">%s</SourceFilename>\n' %index_image_file.replace('&', '&amp;'))
-        index_vrt.write('\t\t\t<SourceBand>%s</SourceBand>\n' %(band+1))
-        index_vrt.write('\t\t\t<SourceProperties RasterXSize="%s" RasterYSize="%s" DataType="%s" BlockXSize="%s" BlockYSize="%s" />\n' %(index_header['samples'],
+        index_vrt.write('\t\t\t<SourceFilename relativeToVRT="1">%s</SourceFilename>\n' % index_image_file.replace('&', '&amp;'))
+        index_vrt.write('\t\t\t<SourceBand>%s</SourceBand>\n' % (band+1))
+        index_vrt.write('\t\t\t<SourceProperties RasterXSize="%s" RasterYSize="%s" DataType="%s" BlockXSize="%s" BlockYSize="%s" />\n' % (index_header['samples'],
                                                                                                                                        index_header['lines'],
                                                                                                                                        "Int32",
                                                                                                                                        index_header['samples'], 1))
-        index_vrt.write('\t\t\t<SrcRect xOff="0" yOff="0" xSize="%s" ySize="%s" />\n' %(index_header['samples'], index_header['lines']))
-        index_vrt.write('\t\t\t<DstRect xOff="0" yOff="0" xSize="%s" ySize="%s" />\n' %(index_header['samples'], index_header['lines']))
+        index_vrt.write('\t\t\t<SrcRect xOff="0" yOff="0" xSize="%s" ySize="%s" />\n' % (index_header['samples'], index_header['lines']))
+        index_vrt.write('\t\t\t<DstRect xOff="0" yOff="0" xSize="%s" ySize="%s" />\n' % (index_header['samples'], index_header['lines']))
         index_vrt.write("\t\t</SimpleSource>\n")
         index_vrt.write("\t</VRTRasterBand>\n")
     index_vrt.write("</VRTDataset>\n")
@@ -406,7 +406,7 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
               map_crs.GetAttrValue('datum'), map_crs.GetAttrValue('unit')]
     if map_crs.GetAttrValue('PROJECTION').lower() == 'transverse_mercator':
         glt_header['map info'][7] = map_crs.GetUTMZone()
-        if Y_Max>0.0:
+        if Y_Max > 0.0:
             glt_header['map info'][8] = 'North'
         else:
             glt_header['map info'][8] = 'South'
@@ -420,7 +420,7 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
     os.remove(igm_vrt_file)
     os.remove(tmp_glt_image_file)
     
-    logger.info('Write the GLT to %s.' %glt_image_file)
+    logger.info('Write the GLT to %s.' % glt_image_file)
 
 
 def get_scan_vectors(imu, sensor_model):
@@ -458,7 +458,7 @@ def get_scan_vectors(imu, sensor_model):
     n_detectors = sensor_model.shape[0]
     
     # Navigational standard angles -> Euler angles
-    heading[heading<0] = heading[heading<0]+360 # heading: -180~180 -> 0~360
+    heading[heading < 0] = heading[heading < 0]+360 # heading: -180~180 -> 0~360
     heading = 90-heading # heading angle -> euler angle
     pitch = -pitch # pitch angle -> euler angle
     
@@ -607,7 +607,7 @@ def ray_tracing(XYZ0, XYZ1, V, DEM, DEM_X0Y0, DEM_Resolution):
         A 3-element vector, [MapX, MapY, MapZ]: the pixel's geolocation and elevation.
     """
     
-    if np.abs(XYZ0[0]-XYZ1[0])<1e-2 and np.abs(XYZ0[1]-XYZ1[1])<1e-2:
+    if np.abs(XYZ0[0]-XYZ1[0]) < 1e-2 and np.abs(XYZ0[1]-XYZ1[1]) < 1e-2:
         return np.array([XYZ0[0], XYZ0[1], XYZ0[2]])
     
     cellsize_x, cellsize_y = DEM_Resolution
@@ -655,7 +655,7 @@ def ray_tracing(XYZ0, XYZ1, V, DEM, DEM_X0Y0, DEM_Resolution):
         est_Y = (DEM[the_y, the_x]-XYZ0[2])*V[1]/V[2]+XYZ0[1]
         diff_x = (est_X-DEM_X0Y0[0])/cellsize_x-the_x
         diff_y = (est_Y-DEM_X0Y0[1])/cellsize_y-the_y
-        if diff_x>=-0.01 and diff_x<1.01 and diff_y>=-0.01 and diff_y<1.01:
+        if diff_x >= -0.01 and diff_x < 1.01 and diff_y >= -0.01 and diff_y < 1.01:
             break
         if tx < ty:
             the_x = the_x+x_step
@@ -663,7 +663,7 @@ def ray_tracing(XYZ0, XYZ1, V, DEM, DEM_X0Y0, DEM_Resolution):
         else:
             the_y = the_y+y_step
             ty = ty+delta_ty
-        if (the_x<0) or (the_y <0) or (the_x>x_dim-1) or (the_y>y_dim-1):
+        if (the_x < 0) or (the_y < 0) or (the_x > x_dim-1) or (the_y > y_dim-1):
             return np.array([np.nan, np.nan, np.nan])
     
     return np.array([est_X, est_Y, DEM[the_y, the_x]])

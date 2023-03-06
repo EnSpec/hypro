@@ -45,10 +45,10 @@ def get_flight_indices(config):
     
     sensor_name = config['Sensors'][list(config['Sensors'].keys())[0]]['id']
     flight_indices = []
-    dn_image_files = glob.glob(os.path.join(config['Data']['input_dir'], '*%s*.hyspex' %sensor_name))
+    dn_image_files = glob.glob(os.path.join(config['Data']['input_dir'], '*%s*.hyspex' % sensor_name))
     for dn_image_file in dn_image_files:
         basename = os.path.basename(dn_image_file)
-        span = re.search('%s' %sensor_name, basename).span()
+        span = re.search('%s' % sensor_name, basename).span()
         flight_indices.append(basename[:span[0]-1])
         del basename, span
     del dn_image_files, sensor_name
@@ -68,7 +68,7 @@ def create_flight_log(output_dir, log_file_basename):
             Flight log.
     """
     
-    log_file = os.path.join(output_dir, '%s.log' %log_file_basename)
+    log_file = os.path.join(output_dir, '%s.log' % log_file_basename)
     logging.basicConfig(filename=log_file,
                         level=logging.DEBUG,
                         format="%(asctime)s %(funcName)25s: %(message)s",
@@ -128,7 +128,7 @@ def initialize_flight_dict(config, flight_index):
         sensor_dict = config['Sensors'][sensor_index].copy()
         
         # digital number (DN) image
-        dn_image_file = search_file(config['Data']['input_dir'], '%s_%s*.hyspex' %(flight_index, sensor_dict['id']))
+        dn_image_file = search_file(config['Data']['input_dir'], '%s_%s*.hyspex' % (flight_index, sensor_dict['id']))
         sensor_dict['dn_image_file'] = dn_image_file
         
         # radiometric calibration parameters
@@ -151,7 +151,7 @@ def initialize_flight_dict(config, flight_index):
         sensor_dict['sensor_model_file'] = config['Geometric_Correction']['sensor_model_file'][sensor_index]
         
         # IMU & GPS
-        raw_imugps_file = search_file(config['Data']['input_dir'], '%s_%s*.txt' %(flight_index, sensor_dict['id']))
+        raw_imugps_file = search_file(config['Data']['input_dir'], '%s_%s*.txt' % (flight_index, sensor_dict['id']))
         sensor_dict['raw_imugps_file'] = raw_imugps_file
         
         # output directory
@@ -180,9 +180,9 @@ def search_file(in_dir, keyword):
     file = glob.glob(os.path.join(in_dir, keyword))
     
     if len(file) == 0:
-        raise IOError('Cannot find any file in %s with the keyword: %s.' %(in_dir, keyword))
+        raise IOError('Cannot find any file in %s with the keyword: %s.' % (in_dir, keyword))
     elif len(file) > 1:
-        raise IOError('Multiple files are found in %s with the keyword: %s.' %(in_dir, keyword))
+        raise IOError('Multiple files are found in %s with the keyword: %s.' % (in_dir, keyword))
     else:
         return file[0]
 
@@ -274,39 +274,39 @@ def HyspexPro(config_file):
     for flight_index in flight_indices:
         print(flight_index)
         #----------------------------------------Part 0----------------------------------------#
-        flight_log.info('%sFlight: %s%s' %('='*20, flight_index, '='*20))
+        flight_log.info('%sFlight: %s%s' % ('='*20, flight_index, '='*20))
         
         # Initialize the flight dictionary.
         flight_dict = initialize_flight_dict(config, flight_index)
         
         #----------------------------------------Part 1----------------------------------------#
-        flight_log.info('%sPART 1: Extract flight information.' %('-'*10))
+        flight_log.info('%sPART 1: Extract flight information.' % ('-'*10))
         
         # center longitude and latitude
         sensor_dict = flight_dict['sensors'][list(flight_dict['sensors'].keys())[0]]
         flight_dict['center_lon_lat'] = get_center_lon_lat(sensor_dict['raw_imugps_file'])
-        flight_log.info('Image center longitude and latitude [deg]: %.6f, %.6f' %(flight_dict['center_lon_lat'][0], flight_dict['center_lon_lat'][1]))
+        flight_log.info('Image center longitude and latitude [deg]: %.6f, %.6f' % (flight_dict['center_lon_lat'][0], flight_dict['center_lon_lat'][1]))
         
         # image acquisition time
         flight_dict['acquisition_time'] = get_acquisition_time(os.path.splitext(sensor_dict['dn_image_file'])[0]+'.hdr', sensor_dict['raw_imugps_file'])
-        flight_log.info('Image acquisition time: %s' %flight_dict['acquisition_time'])
+        flight_log.info('Image acquisition time: %s' % flight_dict['acquisition_time'])
         
         # Sun-Earth distance
         flight_dict['sun_earth_distance'] = get_sun_earth_distance(flight_dict['acquisition_time'])
         
         # map coordinate system
         flight_dict['map_crs'] = get_map_crs(flight_dict['dem'], flight_dict['center_lon_lat'][0], flight_dict['center_lon_lat'][1])
-        flight_log.info('Map coordinate system: %s' %flight_dict['map_crs'].GetAttrValue('projcs'))
+        flight_log.info('Map coordinate system: %s' % flight_dict['map_crs'].GetAttrValue('projcs'))
         
         # sun zenith and azimuth angles
         flight_dict['sun_angles'] = get_sun_angles(flight_dict['center_lon_lat'][0], flight_dict['center_lon_lat'][1], flight_dict['acquisition_time'])
-        flight_log.info('Sun zenith and azimuth angle [deg]: %.2f, %.2f' %(flight_dict['sun_angles'][0], flight_dict['sun_angles'][1]))
+        flight_log.info('Sun zenith and azimuth angle [deg]: %.2f, %.2f' % (flight_dict['sun_angles'][0], flight_dict['sun_angles'][1]))
         del sensor_dict
         
         #----------------------------------------Part 2----------------------------------------#
-        flight_log.info('%sPart 2: Do georeferencing.' %('-'*10))
+        flight_log.info('%sPart 2: Do georeferencing.' % ('-'*10))
         for sensor_index, sensor_dict in flight_dict['sensors'].items():
-            flight_log.info('Sensor: %s' %sensor_index)
+            flight_log.info('Sensor: %s' % sensor_index)
             
             # Initialize.
             basename = os.path.basename(sensor_dict['dn_image_file'][:-len('_raw.hyspex')])
@@ -397,14 +397,14 @@ def HyspexPro(config_file):
         del sensor_index, sensor_dict
         
         #----------------------------------------Part 3----------------------------------------#
-        flight_log.info('%sPart 3: Build an ALT (Atmospheric Lookup Table).' %('-'*10))
-        flight_dict['raw_atm_lut_file'] = os.path.join(flight_dict['atm_dir'], '%s_RawALT' %flight_index)
+        flight_log.info('%sPart 3: Build an ALT (Atmospheric Lookup Table).' % ('-'*10))
+        flight_dict['raw_atm_lut_file'] = os.path.join(flight_dict['atm_dir'], '%s_RawALT' % flight_index)
         build_atm_lut(flight_dict)
         
         #----------------------------------------Part 4----------------------------------------#
-        flight_log.info('%sPart 4: Do radiometric calibrations.' %('-'*10))
+        flight_log.info('%sPart 4: Do radiometric calibrations.' % ('-'*10))
         for sensor_index, sensor_dict in flight_dict['sensors'].items():
-            flight_log.info('Sensor: %s' %sensor_index)
+            flight_log.info('Sensor: %s' % sensor_index)
             
             # Initialize.
             basename = os.path.basename(sensor_dict['dn_image_file'][:-len('_raw.hyspex')])
@@ -435,9 +435,9 @@ def HyspexPro(config_file):
         del sensor_index, sensor_dict
         
         #----------------------------------------Part 5----------------------------------------#
-        flight_log.info('%sPart 5: Detect smile effects.' %('-'*10))
+        flight_log.info('%sPart 5: Detect smile effects.' % ('-'*10))
         for sensor_index, sensor_dict in flight_dict['sensors'].items():
-            flight_log.info('Sensor: %s' %sensor_index)
+            flight_log.info('Sensor: %s' % sensor_index)
             
             # Initialize.
             basename = os.path.basename(sensor_dict['dn_image_file'][:-len('_raw.hyspex')])
@@ -501,9 +501,9 @@ def HyspexPro(config_file):
         del sensor_index, sensor_dict
         
         #----------------------------------------Part 6----------------------------------------#
-        flight_log.info('%sPart 6: Do georectification.' %('-'*10))
+        flight_log.info('%sPart 6: Do georectification.' % ('-'*10))
         for sensor_index, sensor_dict in flight_dict['sensors'].items():
-            flight_log.info('Sensor: %s' %sensor_index)
+            flight_log.info('Sensor: %s' % sensor_index)
             
             # Initialize.
             basename = os.path.basename(sensor_dict['dn_image_file'][:-len('_raw.hyspex')])
@@ -530,13 +530,13 @@ def HyspexPro(config_file):
                              sensor_dict['glt_image_file'])
         
         #----------------------------------------Part 7----------------------------------------#
-        flight_log.info('%sPart 7: Merge images from different sensors.' %('-'*10))
+        flight_log.info('%sPart 7: Merge images from different sensors.' % ('-'*10))
         
         # Merge DEM and SCA.
         flight_log.info('Merge orthorectified DEM and SCA images.')
-        flight_dict['background_mask_file'] = os.path.join(flight_dict['merge_dir'], '%s_BackgroundMask' %flight_index)
-        flight_dict['merged_dem_file'] = os.path.join(flight_dict['merge_dir'], '%s_DEM' %flight_index)
-        flight_dict['merged_sca_file'] = os.path.join(flight_dict['merge_dir'], '%s_SCA' %flight_index)
+        flight_dict['background_mask_file'] = os.path.join(flight_dict['merge_dir'], '%s_BackgroundMask' % flight_index)
+        flight_dict['merged_dem_file'] = os.path.join(flight_dict['merge_dir'], '%s_DEM' % flight_index)
+        flight_dict['merged_sca_file'] = os.path.join(flight_dict['merge_dir'], '%s_SCA' % flight_index)
         merge_dem_sca(flight_dict['background_mask_file'],
                       flight_dict['merged_dem_file'],
                       flight_dict['merged_sca_file'],
@@ -544,24 +544,24 @@ def HyspexPro(config_file):
         
         # Merge radiance images.
         flight_log.info('Merge orthorectified radiance images.')
-        flight_dict['merged_rdn_file'] = os.path.join(flight_dict['merge_dir'], '%s_Rdn' %flight_index)
+        flight_dict['merged_rdn_file'] = os.path.join(flight_dict['merge_dir'], '%s_Rdn' % flight_index)
         merge_rdn(flight_dict['merged_rdn_file'],
                   flight_dict['background_mask_file'],
                   flight_dict['sensors'])
         
         #----------------------------------------Part 8----------------------------------------#
-        flight_log.info('%sPart 8: Do atmospheric correction.' %('-'*10))
+        flight_log.info('%sPart 8: Do atmospheric correction.' % ('-'*10))
         
         # Resample atmospheric lookup table to sensor wavelengths.
         flight_log.info('Resample the raw ALT to sensor wavelengths.')
-        flight_dict['resampled_atm_lut_file'] = os.path.join(flight_dict['atm_dir'], '%s_ResampledALT' %flight_index)
+        flight_dict['resampled_atm_lut_file'] = os.path.join(flight_dict['atm_dir'], '%s_ResampledALT' % flight_index)
         resample_atm_lut(flight_dict['resampled_atm_lut_file'],
                          flight_dict['raw_atm_lut_file'],
                          os.path.splitext(flight_dict['merged_rdn_file'])[0]+'.hdr')
         
         # Estimate visibility.
-        flight_dict['vis_file'] = os.path.join(flight_dict['merge_dir'], '%s_VIS' %flight_index)
-        flight_dict['ddv_file'] = os.path.join(flight_dict['merge_dir'], '%s_DDV' %flight_index)
+        flight_dict['vis_file'] = os.path.join(flight_dict['merge_dir'], '%s_VIS' % flight_index)
+        flight_dict['ddv_file'] = os.path.join(flight_dict['merge_dir'], '%s_DDV' % flight_index)
         estimate_vis(flight_dict['vis_file'],
                      flight_dict['ddv_file'],
                      flight_dict['resampled_atm_lut_file'],
@@ -571,7 +571,7 @@ def HyspexPro(config_file):
         
         # Estimate water vapor column.
         flight_log.info('Estimate WVC.')
-        flight_dict['wvc_file'] = os.path.join(flight_dict['merge_dir'], '%s_WVC' %flight_index)
+        flight_dict['wvc_file'] = os.path.join(flight_dict['merge_dir'], '%s_WVC' % flight_index)
         estimate_wvc(flight_dict['wvc_file'],
                      flight_dict['merged_rdn_file'],
                      flight_dict['sensors'],
@@ -581,7 +581,7 @@ def HyspexPro(config_file):
         
         # Do atmospheric corrections.
         flight_log.info('Do atmospheric corrections.')
-        flight_dict['refl_file'] = os.path.join(flight_dict['merge_dir'], '%s_Refl' %flight_index)
+        flight_dict['refl_file'] = os.path.join(flight_dict['merge_dir'], '%s_Refl' % flight_index)
         atm_corr_image(flight_dict)
     
     logging.shutdown()

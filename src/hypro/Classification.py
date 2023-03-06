@@ -41,7 +41,7 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
     """
     
     if os.path.exists(pre_class_image_file):
-        logger.info('Write the pre-classification map to %s.' %(pre_class_image_file))
+        logger.info('Write the pre-classification map to %s.' % (pre_class_image_file))
         return
     
     from ENVI import empty_envi_header, read_envi_header, write_envi_header
@@ -64,7 +64,7 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
                                      rdn_header['lines'],
                                      rdn_header['samples']))
     else:
-        logger.error('Cannot read radiance data from %s format file.' %rdn_header['interleave'])
+        logger.error('Cannot read radiance data from %s format file.' % rdn_header['interleave'])
     
     # Read solar flux.
     solar_flux = resample_solar_flux(rdn_header['wavelength'], rdn_header['fwhm'], file=solar_flux_file)
@@ -91,8 +91,8 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
     swir2_wave, swir2_band = get_closest_wave(rdn_header['wavelength'], 2200)
     
     # Determine the sensor type.
-    if_vnir =  abs(blue_wave-470)<20 and abs(green_wave-550)<20 and abs(red_wave-660)<20 and abs(nir_wave-850)<20
-    if_swir =  abs(cirrus_wave-1380)<20 and abs(swir1_wave-1650)<20 and abs(swir2_wave-2200)<20
+    if_vnir = abs(blue_wave-470) < 20 and abs(green_wave-550) < 20 and abs(red_wave-660) < 20 and abs(nir_wave-850) < 20
+    if_swir = abs(cirrus_wave-1380) < 20 and abs(swir1_wave-1650) < 20 and abs(swir2_wave-2200) < 20
     if_whole = if_vnir and if_swir
     
     # Do classification.
@@ -123,72 +123,72 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
         ndsi = (green_refl-swir1_refl)/(green_refl+swir1_refl+1e-10)
         
         # water
-        water = (nir_refl<0.05)&(swir1_refl<0.03)
+        water = (nir_refl < 0.05) & (swir1_refl < 0.03)
         
         # land
         land = ~water
         
         # shadow
-        shadow = (water|land)&(green_refl<0.01)
-        land = land&(~shadow)
-        water = water&(~shadow)
+        shadow = (water | land) & (green_refl < 0.01)
+        land = land & (~shadow)
+        water = water & (~shadow)
         
         # cloud over land
         Tc = 0.20
-        cloud_over_land = land&(blue_refl>Tc)&(red_refl>0.15)&(nir_refl<red_refl*2.0)&(nir_refl>red_refl*0.8)&(nir_refl>swir1_refl)&(ndsi<0.7)
-        land = land&(~cloud_over_land)
+        cloud_over_land = land & (blue_refl > Tc) & (red_refl > 0.15) & (nir_refl < red_refl*2.0) & (nir_refl > red_refl*0.8) & (nir_refl > swir1_refl) & (ndsi < 0.7)
+        land = land & (~cloud_over_land)
         
         # cloud over water
-        cloud_over_water = water&(blue_refl<0.40)&(blue_refl>0.20)&(green_refl<blue_refl)&(nir_refl<green_refl)&(swir1_refl<0.15)&(ndsi<0.20)
-        water = water&(~cloud_over_water)
+        cloud_over_water = water & (blue_refl < 0.40) & (blue_refl > 0.20) & (green_refl < blue_refl) & (nir_refl < green_refl) & (swir1_refl < 0.15) & (ndsi < 0.20)
+        water = water & (~cloud_over_water)
         
         # cloud shadow
-        cloud_shadow = (water|land)&(nir_refl<0.12)&(nir_refl>0.04)&(swir1_refl<0.20)
-        land = land&(~cloud_shadow)
-        water = water&(~cloud_shadow)
+        cloud_shadow = (water | land) & (nir_refl < 0.12) & (nir_refl > 0.04) & (swir1_refl < 0.20)
+        land = land & (~cloud_shadow)
+        water = water & (~cloud_shadow)
         
         # snow/ice
-        snow_ice = land&(((blue_refl>0.22)&(ndsi>0.60))|((green_refl>0.22)&(ndsi>0.25)&(swir2_refl<0.5*green_refl)))
-        land = land&(~snow_ice)
+        snow_ice = land & (((blue_refl > 0.22) & (ndsi > 0.60)) | ((green_refl > 0.22) & (ndsi > 0.25) & (swir2_refl < 0.5*green_refl)))
+        land = land & (~snow_ice)
         
         # cirrus over land and water
-        thin_cirrus = (cirrus_refl<0.015)&(cirrus_refl>0.010)
-        medium_cirrus = (cirrus_refl<0.025)&(cirrus_refl>=0.015)
-        thick_cirrus = (cirrus_refl<0.040)&(cirrus_refl>=0.025)
+        thin_cirrus = (cirrus_refl < 0.015) & (cirrus_refl > 0.010)
+        medium_cirrus = (cirrus_refl < 0.025) & (cirrus_refl >= 0.015)
+        thick_cirrus = (cirrus_refl < 0.040) & (cirrus_refl >= 0.025)
         
-        thin_cirrus_over_land = land&thin_cirrus
-        land = land&(~thin_cirrus_over_land)
+        thin_cirrus_over_land = land & thin_cirrus
+        land = land & (~thin_cirrus_over_land)
         
-        medium_cirrus_over_land = land&medium_cirrus
-        land = land&(~medium_cirrus_over_land)
+        medium_cirrus_over_land = land & medium_cirrus
+        land = land & (~medium_cirrus_over_land)
         
-        thick_cirrus_over_land = land&thick_cirrus
-        land = land&(~thick_cirrus_over_land)
+        thick_cirrus_over_land = land & thick_cirrus
+        land = land & (~thick_cirrus_over_land)
         
-        thin_cirrus_over_water = water&thin_cirrus
-        water = water&(~thin_cirrus_over_water)
+        thin_cirrus_over_water = water & thin_cirrus
+        water = water & (~thin_cirrus_over_water)
         
-        medium_cirrus_over_water = water&thin_cirrus
-        water = water&(~medium_cirrus_over_water)
+        medium_cirrus_over_water = water & thin_cirrus
+        water = water & (~medium_cirrus_over_water)
         
-        thick_cirrus_over_water = water&thin_cirrus
-        water = water&(~thick_cirrus_over_water)
+        thick_cirrus_over_water = water & thin_cirrus
+        water = water & (~thick_cirrus_over_water)
         
-        cirrus_cloud = (water|land)&(cirrus_refl<0.050)&(cirrus_refl>0.040)
-        land = land&(~cirrus_cloud)
-        water = water&(~cirrus_cloud)
+        cirrus_cloud = (water | land) & (cirrus_refl < 0.050) & (cirrus_refl > 0.040)
+        land = land & (~cirrus_cloud)
+        water = water & (~cirrus_cloud)
         
-        thick_cirrus_cloud = (water|land)&(cirrus_refl>0.050)
-        land = land&(~thick_cirrus_cloud)
-        water = water&(~thick_cirrus_cloud)
+        thick_cirrus_cloud = (water | land) & (cirrus_refl > 0.050)
+        land = land & (~thick_cirrus_cloud)
+        water = water & (~thick_cirrus_cloud)
         
         # haze over water
         T2 = 0.04
         T1 = 0.12
-        thin_haze_over_water = water&(nir_refl>=T1)&(nir_refl<=0.06)
-        water = water&(~thin_haze_over_water)
-        medium_haze_over_water = water&(nir_refl>=0.06)&(nir_refl<=T2)
-        water = water&(~medium_haze_over_water)
+        thin_haze_over_water = water & (nir_refl >= T1) & (nir_refl <= 0.06)
+        water = water & (~thin_haze_over_water)
+        medium_haze_over_water = water & (nir_refl >= 0.06) & (nir_refl <= T2)
+        water = water & (~medium_haze_over_water)
         
         # Assign class values.
         pre_class_image[shadow] = 1
@@ -233,37 +233,37 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
         del rdn_image
         
         # water
-        water = nir_refl<0.05
+        water = nir_refl < 0.05
         
         # land
         land = ~water
         
         # shadow
-        shadow = (water|land)&(green_refl<0.01)
-        land = land&(~shadow)
-        water = water&(~shadow)
+        shadow = (water | land) & (green_refl < 0.01)
+        land = land & (~shadow)
+        water = water & (~shadow)
         
         # cloud over land
         Tc = 0.20
-        cloud_over_land = land&(blue_refl>Tc)&(red_refl>0.15)&(nir_refl<red_refl*2.0)&(nir_refl>red_refl*0.8)
-        land = land&(~cloud_over_land)
+        cloud_over_land = land & (blue_refl > Tc) & (red_refl > 0.15) & (nir_refl < red_refl*2.0) & (nir_refl > red_refl*0.8)
+        land = land & (~cloud_over_land)
         
         # cloud over water
-        cloud_over_water = water&(blue_refl<0.40)&(blue_refl>0.20)&(green_refl<blue_refl)&(nir_refl<green_refl)
-        water = water&(~cloud_over_water)
+        cloud_over_water = water & (blue_refl < 0.40) & (blue_refl > 0.20) & (green_refl < blue_refl) & (nir_refl < green_refl)
+        water = water & (~cloud_over_water)
         
         # cloud shadow
-        cloud_shadow = (water|land)&(nir_refl<0.12)&(nir_refl>0.04)
-        land = land&(~cloud_shadow)
-        water = water&(~cloud_shadow)
+        cloud_shadow = (water | land) & (nir_refl < 0.12) & (nir_refl > 0.04)
+        land = land & (~cloud_shadow)
+        water = water & (~cloud_shadow)
         
         # haze over water
         T2 = 0.04
         T1 = 0.12
-        thin_haze_over_water = water&(nir_refl>=T1)&(nir_refl<=0.06)
-        water = water&(~thin_haze_over_water)
-        medium_haze_over_water = water&(nir_refl>=0.06)&(nir_refl<=T2)
-        water = water&(~medium_haze_over_water)
+        thin_haze_over_water = water & (nir_refl >= T1) & (nir_refl <= 0.06)
+        water = water & (~thin_haze_over_water)
+        medium_haze_over_water = water & (nir_refl >= 0.06) & (nir_refl <= T2)
+        water = water & (~medium_haze_over_water)
         
         # Assign class values.
         pre_class_image[shadow] = 1
@@ -292,41 +292,41 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
         del rdn_image
         
         # water
-        water = swir1_refl<0.03
+        water = swir1_refl < 0.03
         
         # land
         land = ~water
         
         # cirrus over land and water
-        thin_cirrus = (cirrus_refl<0.015)&(cirrus_refl>0.010)
-        medium_cirrus = (cirrus_refl<0.025)&(cirrus_refl>=0.015)
-        thick_cirrus = (cirrus_refl<0.040)&(cirrus_refl>=0.025)
+        thin_cirrus = (cirrus_refl < 0.015) & (cirrus_refl > 0.010)
+        medium_cirrus = (cirrus_refl < 0.025) & (cirrus_refl >= 0.015)
+        thick_cirrus = (cirrus_refl < 0.040) & (cirrus_refl >= 0.025)
         
-        thin_cirrus_over_land = land&thin_cirrus
-        land = land&(~thin_cirrus_over_land)
+        thin_cirrus_over_land = land & thin_cirrus
+        land = land & (~thin_cirrus_over_land)
         
-        medium_cirrus_over_land = land&medium_cirrus
-        land = land&(~medium_cirrus_over_land)
+        medium_cirrus_over_land = land & medium_cirrus
+        land = land & (~medium_cirrus_over_land)
         
-        thick_cirrus_over_land = land&thick_cirrus
-        land = land&(~thick_cirrus_over_land)
+        thick_cirrus_over_land = land & thick_cirrus
+        land = land & (~thick_cirrus_over_land)
         
-        thin_cirrus_over_water = water&thin_cirrus
-        water = water&(~thin_cirrus_over_water)
+        thin_cirrus_over_water = water & thin_cirrus
+        water = water & (~thin_cirrus_over_water)
         
-        medium_cirrus_over_water = water&thin_cirrus
-        water = water&(~medium_cirrus_over_water)
+        medium_cirrus_over_water = water & thin_cirrus
+        water = water & (~medium_cirrus_over_water)
         
-        thick_cirrus_over_water = water&thin_cirrus
-        water = water&(~thick_cirrus_over_water)
+        thick_cirrus_over_water = water & thin_cirrus
+        water = water & (~thick_cirrus_over_water)
         
-        cirrus_cloud = (water|land)&(cirrus_refl<0.050)&(cirrus_refl>0.040)
-        land = land&(~cirrus_cloud)
-        water = water&(~cirrus_cloud)
+        cirrus_cloud = (water | land) & (cirrus_refl < 0.050) & (cirrus_refl > 0.040)
+        land = land & (~cirrus_cloud)
+        water = water & (~cirrus_cloud)
         
-        thick_cirrus_cloud = (water|land)&(cirrus_refl>0.050)
-        land = land&(~thick_cirrus_cloud)
-        water = water&(~thick_cirrus_cloud)
+        thick_cirrus_cloud = (water | land) & (cirrus_refl > 0.050)
+        land = land & (~thick_cirrus_cloud)
+        water = water & (~thick_cirrus_cloud)
         
         # Assign class values.
         pre_class_image[thin_cirrus_over_water] = 2
@@ -429,4 +429,4 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
     pre_class_header['coordinate system string'] = rdn_header['coordinate system string']
     write_envi_header(os.path.splitext(pre_class_image_file)[0]+'.hdr', pre_class_header)
     
-    logger.info('Write the pre-classification map to %s.' %(pre_class_image_file))
+    logger.info('Write the pre-classification map to %s.' % (pre_class_image_file))

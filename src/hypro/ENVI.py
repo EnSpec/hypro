@@ -147,7 +147,7 @@ def read_envi_header(file):
             key = key.strip()
             value = value.translate(trans_tab).strip()
             if key in envi_value_types.keys():
-                if envi_value_types[key]   == 'int':
+                if envi_value_types[key] == 'int':
                     value = int(value)
                 elif envi_value_types[key] == 'float':
                     value = float(value)
@@ -184,7 +184,7 @@ def check_envi_required_fields(header):
                        'samples']
     for field in required_fields:
         if header[field] is None:
-            raise ValueError('No value for %s!' %field)
+            raise ValueError('No value for %s!' % field)
 
 
 def empty_envi_header():
@@ -228,17 +228,17 @@ def write_envi_header(file, header):
             else:
                 N = 5
             for i, v in enumerate(header[field]):
-                if (i+1)%N==0:
+                if (i+1) % N == 0:
                     value.append(str(v)+'\n')
                 else:
                     value.append(str(v))
-            value = '{%s}' %(', '.join(value))
+            value = '{%s}' % (', '.join(value))
         elif field in ['description',
                        'coordinate system string']:
-            value = '{%s}' %(header[field])
+            value = '{%s}' % (header[field])
         else:
             value = str(header[field])
-        fid.write('%s = %s\n' %(field, value))
+        fid.write('%s = %s\n' % (field, value))
         header.pop(field)
     
     for field in header.keys():
@@ -247,13 +247,13 @@ def write_envi_header(file, header):
         if type(header[field]) is list:
             value = []
             for i, v in enumerate(header[field]):
-                if (i+1)%5==0:
+                if (i+1) % 5 == 0:
                     value.append(str(v)+'\n')
                 else:
                     value.append(str(v))
-            value = '{%s}' %(', '.join(value))
+            value = '{%s}' % (', '.join(value))
         else:
             value = str(header[field])
-        fid.write('%s = %s\n' %(field, value))
+        fid.write('%s = %s\n' % (field, value))
     
     fid.close()

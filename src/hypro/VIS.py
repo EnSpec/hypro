@@ -47,8 +47,8 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
     """
     
     if os.path.exists(ddv_file) and os.path.exists(vis_file):
-        logger.info('Write the visibility map to %s.' %vis_file)
-        logger.info('Write the DDV map to %s.' %ddv_file)
+        logger.info('Write the visibility map to %s.' % vis_file)
+        logger.info('Write the DDV map to %s.' % ddv_file)
         return
     
     from ENVI import read_envi_header, empty_envi_header, write_envi_header
@@ -66,8 +66,8 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
     swir2_wave, swir2_band = get_closest_wave(rdn_header['wavelength'], 2130)
     
     # Determine the sensor type.
-    if_vnir =  abs(red_wave-660)<20 and abs(nir_wave-850)<20
-    if_swir =  abs(swir1_wave-1650)<20 or abs(swir2_wave-2130)<20
+    if_vnir = abs(red_wave-660) < 20 and abs(nir_wave-850) < 20
+    if_swir = abs(swir1_wave-1650) < 20 or abs(swir2_wave-2130) < 20
     
     # Read atmospheric lookup table.
     atm_lut_metadata = read_binary_metadata(atm_lut_file+'.meta')
@@ -104,8 +104,8 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
     vza_image = np.copy(sca_image[0,:,:])
     # RAA
     raa_image = saa-sca_image[1,:,:]
-    raa_image[raa_image<0] += 360.0
-    raa_image[raa_image>180] = 360.0-raa_image[raa_image>180]
+    raa_image[raa_image < 0] += 360.0
+    raa_image[raa_image > 180] = 360.0-raa_image[raa_image > 180]
     # clear data
     sca_image.flush()
     del sca_header, saa, sca_image
@@ -139,7 +139,7 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
         logger.info('Both VNIR and SWIR bands are used for estimating visibility.')
         
         # Decide which SWIR band to use.
-        if abs(swir2_wave-2130)<20:
+        if abs(swir2_wave-2130) < 20:
             swir_wave = swir2_wave
             swir_band = swir2_band
             swir_refl_upper_bounds = [0.05, 0.10, 0.12]
@@ -157,12 +157,12 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
         
         # Get DDV mask.
         for swir_refl_upper_bound in swir_refl_upper_bounds:
-            ddv_mask = (ndvi>0.10)&(swir_refl<swir_refl_upper_bound)&(swir_refl>0.01)
+            ddv_mask = (ndvi > 0.10) & (swir_refl < swir_refl_upper_bound) & (swir_refl > 0.01)
             percentage = np.sum(ddv_mask[~bg_mask])/np.sum(~bg_mask)
             if percentage > 0.02:
-                logger.info('The SWIR wavelength %.2f is used for detecting dark dense vegetation.' %swir_wave)
-                logger.info('The SWIR reflectance upper boundary is %.2f.' %swir_refl_upper_bound)
-                logger.info('The number of DDV pixels is %.2f%%.' %(percentage*100))
+                logger.info('The SWIR wavelength %.2f is used for detecting dark dense vegetation.' % swir_wave)
+                logger.info('The SWIR reflectance upper boundary is %.2f.' % swir_refl_upper_bound)
+                logger.info('The number of DDV pixels is %.2f%%.' % (percentage*100))
                 break
         # Estimate Visibility.
         rows, columns = np.where(ddv_mask)
@@ -176,7 +176,7 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
             vis_image[row, column] = np.interp(rdn_image[red_band,row,column], interp_rdn[::-1], atm_lut_VIS[::-1])
         rdn_image.flush()
         del rdn_image
-        logger.info('Visibility [km] statistics: min=%.2f, max=%.2f, avg=%.2f, sd=%.2f.' %(vis_image[ddv_mask].min(), vis_image[ddv_mask].max(), vis_image[ddv_mask].mean(), vis_image[ddv_mask].std()))
+        logger.info('Visibility [km] statistics: min=%.2f, max=%.2f, avg=%.2f, sd=%.2f.' % (vis_image[ddv_mask].min(), vis_image[ddv_mask].max(), vis_image[ddv_mask].mean(), vis_image[ddv_mask].std()))
         
         # Fill gaps with average values.
         vis_image[~ddv_mask] = vis_image[ddv_mask].mean()
@@ -201,7 +201,7 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
         ddv_header['coordinate system string'] = rdn_header['coordinate system string']
         write_envi_header(os.path.splitext(ddv_file)[0]+'.hdr', ddv_header)
         
-        logger.info('Write the DDV mask to %s.' %ddv_file)
+        logger.info('Write the DDV mask to %s.' % ddv_file)
     else:
         logger.info('Cannot find appropriate bands for estimating visibility; a constant visibility (23 km) is used.')
         vis_image = tmp_vis_image
@@ -225,7 +225,7 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
     vis_header['map info'] = rdn_header['map info']
     vis_header['coordinate system string'] = rdn_header['coordinate system string']
     write_envi_header(os.path.splitext(vis_file)[0]+'.hdr', vis_header)
-    logger.info('Write the visibility image to %s.' %vis_file)
+    logger.info('Write the visibility image to %s.' % vis_file)
     
     # Clear data
     del ndvi, red_refl, nir_refl, rdn_header

@@ -50,8 +50,8 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
     """
     
     if os.path.exists(sensor_dict['smile_effect_at_atm_features_file']) and os.path.exists(sensor_dict['smile_effect_file']):
-        logger.info('Write smile effect at atmospheric absorption features to %s.' %sensor_dict['smile_effect_at_atm_features_file'])
-        logger.info('Write smile effect to %s.' %sensor_dict['smile_effect_file'])
+        logger.info('Write smile effect at atmospheric absorption features to %s.' % sensor_dict['smile_effect_at_atm_features_file'])
+        logger.info('Write smile effect to %s.' % sensor_dict['smile_effect_file'])
         return
     
     from ENVI import empty_envi_header, read_envi_header, write_envi_header
@@ -81,7 +81,7 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
         except:
             vza.append(np.nan)
             raa.append(np.nan)
-            logger.info('No spectrum for column: %s.' %(i+1))
+            logger.info('No spectrum for column: %s.' % (i+1))
     del tmp_vza, tmp_raa
     del header
     vza = np.array(vza)
@@ -89,7 +89,7 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
     if np.all(np.isnan(vza)) or np.all(np.isnan(raa)):
         raise IOError("Cannot detect smile effects since all columns do not have spectra.")
     
-    nonnan_index = np.where((~np.isnan(vza))&(~np.isnan(vza)))[0]
+    nonnan_index = np.where((~np.isnan(vza)) & (~np.isnan(vza)))[0]
     vza = np.interp(np.arange(samples), nonnan_index, vza[nonnan_index])
     raa = np.interp(np.arange(samples), nonnan_index, raa[nonnan_index])
     
@@ -110,7 +110,7 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
         logger.info('WVC could not be estimated for some columns. '
                     'Missing values will be interpolated.')
         interpolate_values(wvc, wvc_isnan) # Replace NaNs with interpolated values
-    logger.info('WVC [mm] statistics: min=%.2f, max=%.2f, avg=%.2f, sd=%.2f.' %(wvc.min(), wvc.max(), wvc.mean(), wvc.std()))
+    logger.info('WVC [mm] statistics: min=%.2f, max=%.2f, avg=%.2f, sd=%.2f.' % (wvc.min(), wvc.max(), wvc.mean(), wvc.std()))
     del wvc_models, model
     
     # Interpolate atmospheric lookup table.
@@ -130,7 +130,7 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
         center_wave, band_index = get_closest_wave(sensor_wave, wave)
         
         # Check if continue.
-        if abs(sensor_wave0-wave_range[0])>20 or abs(sensor_wave1-wave_range[1])>20:
+        if abs(sensor_wave0-wave_range[0]) > 20 or abs(sensor_wave1-wave_range[1]) > 20:
             continue
         
         # Get LUT band range.
@@ -138,7 +138,7 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
         _, atm_lut_band1 = get_closest_wave(atm_lut_wave, sensor_wave1+20)
         
         # Optimize.
-        logger.info('Absorption feature center wavelength and range [nm] = %d: %d-%d.' %(wave, wave_range[0], wave_range[1]))
+        logger.info('Absorption feature center wavelength and range [nm] = %d: %d-%d.' % (wave, wave_range[0], wave_range[1]))
         x = []
         for sample in range(samples):
             p = optimize.minimize(cost_fun, [0, 0], method='BFGS',
@@ -151,7 +151,7 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
         x = np.array(x)
         
         # Do linear interpolation for invalid values.
-        tmp_index  = ~(np.abs(x[:,0])>10.0)
+        tmp_index = ~(np.abs(x[:,0]) > 10.0)
         x[:,0] = np.interp(np.arange(samples), np.arange(samples)[tmp_index], x[tmp_index,0])
         x[:,1] = np.interp(np.arange(samples), np.arange(samples)[tmp_index], x[tmp_index,1])
         del tmp_index
@@ -190,7 +190,7 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
     header['band indices'] = band_indices
     write_envi_header(sensor_dict['smile_effect_at_atm_features_file']+'.hdr', header)
     del header
-    logger.info('Write smile effect at atmospheric absorption features to %s.' %sensor_dict['smile_effect_at_atm_features_file'])
+    logger.info('Write smile effect at atmospheric absorption features to %s.' % sensor_dict['smile_effect_at_atm_features_file'])
     
     # Do interpolations.
     fid = open(sensor_dict['smile_effect_file'], 'wb')
@@ -232,7 +232,7 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
     write_envi_header(sensor_dict['smile_effect_file']+'.hdr', header)
     del header, x_new, y_new
     
-    logger.info('Write smile effect to %s.' %sensor_dict['smile_effect_file'])
+    logger.info('Write smile effect to %s.' % sensor_dict['smile_effect_file'])
 
 
 def interp_atm_lut(atm_lut_file, WVC, VIS, VZA, RAA):
@@ -310,7 +310,7 @@ def average_rdn(avg_rdn_file, rdn_image_file, sca_image_file, pre_class_image_fi
     """
     
     if os.path.exists(avg_rdn_file):
-        logger.info('Write the averaged radiance data to %s.' %avg_rdn_file)
+        logger.info('Write the averaged radiance data to %s.' % avg_rdn_file)
         return
     
     from ENVI import empty_envi_header, read_envi_header, write_envi_header
@@ -331,28 +331,28 @@ def average_rdn(avg_rdn_file, rdn_image_file, sca_image_file, pre_class_image_fi
                                 mode='r',
                                 shape=(pre_class_header['lines'],
                                        pre_class_header['samples']))
-    mask = pre_class_image==5 # 5: land (clear)
+    mask = pre_class_image == 5 # 5: land (clear)
     pre_class_image.flush()
     del pre_class_header, pre_class_image
     
     # Average radiance along each column.
     fid = open(avg_rdn_file, 'wb')
-    info = 'Band (max=%d): ' %rdn_header['bands']
+    info = 'Band (max=%d): ' % rdn_header['bands']
     for band in range(rdn_header['bands']):
-        if band%20==0:
-            info += '%d, ' %(band+1)
+        if band % 20 == 0:
+            info += '%d, ' % (band+1)
         
         # Build a temporary mask.
-        tmp_mask = mask&(rdn_image[:,band,:]>0.0)
+        tmp_mask = mask & (rdn_image[:,band,:] > 0.0)
         
         # Average radiance.
         rdn = np.ma.array(rdn_image[:,band,:], mask=~tmp_mask).mean(axis=0) # shape = (samples,1)
         
         # Interpolate bad radiance values.
         for bad_sample in np.where(rdn.mask)[0]:
-            if bad_sample==0:
+            if bad_sample == 0:
                 rdn[bad_sample] = rdn[bad_sample+1]
-            elif bad_sample==rdn_header['samples']-1:
+            elif bad_sample == rdn_header['samples']-1:
                 rdn[bad_sample] = rdn[bad_sample-1]
             else:
                 rdn[bad_sample] = (rdn[bad_sample-1]+rdn[bad_sample+1])/2.0
@@ -382,8 +382,8 @@ def average_rdn(avg_rdn_file, rdn_image_file, sca_image_file, pre_class_image_fi
     avg_vza = np.ma.array(sca_image[0,:,:], mask=~mask).mean(axis=0)
     avg_vaa = np.ma.array(sca_image[1,:,:], mask=~mask).mean(axis=0)
     avg_raa = saa-avg_vaa
-    avg_raa[avg_raa<0] += 360.0
-    avg_raa[avg_raa>180] = 360.0-avg_raa[avg_raa>180]
+    avg_raa[avg_raa < 0] += 360.0
+    avg_raa[avg_raa > 180] = 360.0-avg_raa[avg_raa > 180]
     sca_image.flush()
     del sca_image
     
@@ -403,7 +403,7 @@ def average_rdn(avg_rdn_file, rdn_image_file, sca_image_file, pre_class_image_fi
     avg_rdn_header['RAA'] = list(avg_raa)
     write_envi_header(avg_rdn_file+'.hdr', avg_rdn_header)
     
-    logger.info('Write the averaged radiance data to %s.' %avg_rdn_file)
+    logger.info('Write the averaged radiance data to %s.' % avg_rdn_file)
 
 
 def interpolate_values(A, map):

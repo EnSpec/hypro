@@ -34,7 +34,7 @@ def plot_angle_geometry(angle_geometry_figure_file, sca_image_file):
     """
     
     if os.path.exists(angle_geometry_figure_file):
-        logger.info('Save the angle geometry figure to %s.' %angle_geometry_figure_file)
+        logger.info('Save the angle geometry figure to %s.' % angle_geometry_figure_file)
         return
     
     from ENVI import read_envi_header
@@ -64,7 +64,7 @@ def plot_angle_geometry(angle_geometry_figure_file, sca_image_file):
     plt.close()
     del sca_header, ax
     
-    logger.info('Save the angle geometry figure to %s.' %angle_geometry_figure_file)
+    logger.info('Save the angle geometry figure to %s.' % angle_geometry_figure_file)
 
 
 def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imugps_file):
@@ -81,7 +81,7 @@ def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imug
     """
     
     if os.path.exists(image_area_figure_file):
-        logger.info('Save the image area figure to %s.' %image_area_figure_file)
+        logger.info('Save the image area figure to %s.' % image_area_figure_file)
         return
     
     from ENVI import read_envi_header
@@ -127,7 +127,7 @@ def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imug
     plt.close()
     del cols, rows, imugps
     
-    logger.info('Save the image area figure to %s.' %image_area_figure_file)
+    logger.info('Save the image area figure to %s.' % image_area_figure_file)
 
 
 def linear_percent_stretch(raw_image):
@@ -144,8 +144,8 @@ def linear_percent_stretch(raw_image):
     
     low = np.percentile(raw_image, 2)
     high = np.percentile(raw_image, 98)
-    index1 = raw_image<low
-    index2 = raw_image>high
+    index1 = raw_image < low
+    index2 = raw_image > high
     stretched_image = np.floor((raw_image-low)/(high-low)*255).astype('uint8')
     stretched_image[index1] = 0
     stretched_image[index2] = 255
@@ -165,7 +165,7 @@ def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
     """
     
     if os.path.exists(quicklook_figure_file):
-        logger.info('Save the quicklook figure to %s.' %quicklook_figure_file)
+        logger.info('Save the quicklook figure to %s.' % quicklook_figure_file)
         return
     
     from ENVI import read_envi_header
@@ -186,7 +186,7 @@ def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
     else:
         rgb_bands = []
         wave, _ = get_closest_wave(rdn_header['wavelength'], 450)
-        if abs(wave-450)<10:
+        if abs(wave-450) < 10:
             for rgb_wave in [680, 550, 450]:
                 _, band = get_closest_wave(rdn_header['wavelength'], rgb_wave)
                 rgb_bands.append(band)
@@ -218,7 +218,7 @@ def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
                         0, -float(glt_header['map info'][6])))
     ds.SetProjection(glt_header['coordinate system string'])
     image = np.zeros((glt_header['lines'], glt_header['samples']), dtype='uint8')
-    I,J = np.where((glt_image[0,:,:]>=0)&(glt_image[1,:,:]>=0))
+    I,J = np.where((glt_image[0,:,:] >= 0) & (glt_image[1,:,:] >= 0))
     for band_index, rgb_band in enumerate(rgb_bands):
         image[:,:] = 0
         tmp_image = linear_percent_stretch(rdn_image[:,rgb_band,:])
@@ -231,7 +231,7 @@ def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
     ds = None
     del I, J, glt_header, rdn_header, image
     
-    logger.info('Save the quicklook figure to %s.' %quicklook_figure_file)
+    logger.info('Save the quicklook figure to %s.' % quicklook_figure_file)
 
 
 def plot_avg_rdn(avg_rdn_figure_file, avg_rdn_file):
@@ -244,7 +244,7 @@ def plot_avg_rdn(avg_rdn_figure_file, avg_rdn_file):
     """
     
     if os.path.exists(avg_rdn_figure_file):
-        logger.info('Save the average radiance spectra figure to %s.' %avg_rdn_figure_file)
+        logger.info('Save the average radiance spectra figure to %s.' % avg_rdn_figure_file)
         return
     
     from ENVI import read_envi_header
@@ -269,7 +269,7 @@ def plot_avg_rdn(avg_rdn_figure_file, avg_rdn_file):
     avg_rdn.flush()
     del avg_rdn
     
-    logger.info('Save the average radiance spectra figure to %s.' %avg_rdn_figure_file)
+    logger.info('Save the average radiance spectra figure to %s.' % avg_rdn_figure_file)
 
 
 def plot_wvc_model(wvc_model_figure_file, wvc_model_file):
@@ -282,7 +282,7 @@ def plot_wvc_model(wvc_model_figure_file, wvc_model_file):
     """
     
     if os.path.exists(wvc_model_figure_file):
-        logger.info('Save the WVC model figure to %s.' %wvc_model_file)
+        logger.info('Save the WVC model figure to %s.' % wvc_model_file)
         return
     
     import json
@@ -307,7 +307,7 @@ def plot_wvc_model(wvc_model_figure_file, wvc_model_file):
     plt.savefig(wvc_model_figure_file, dpi=1000)
     plt.close()
     
-    logger.info('Save the WVC model figure to %s.' %wvc_model_file)
+    logger.info('Save the WVC model figure to %s.' % wvc_model_file)
 
 
 def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_atm_features_file):
@@ -320,7 +320,7 @@ def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_
     """
     
     if os.path.exists(smile_effect_at_atm_features_figure_file):
-        logger.info('Save the smile effect at atmospheric absorption features figure to %s.' %smile_effect_at_atm_features_figure_file)
+        logger.info('Save the smile effect at atmospheric absorption features figure to %s.' % smile_effect_at_atm_features_figure_file)
         return
     
     from ENVI import read_envi_header
@@ -336,57 +336,57 @@ def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_
                               header['samples']))
     sample_indices = np.arange(header['samples'])
     x_lim = [1, header['samples']]
-    if x_lim[1]-x_lim[0]>1000:
+    if x_lim[1]-x_lim[0] > 1000:
         x_ticks = np.arange(x_lim[0], x_lim[1]+200, 200)
     else:
         x_ticks = np.arange(x_lim[0], x_lim[1]+50, 50)
     fig, axs = plt.subplots(nrows=3, ncols=3, figsize=(20, 20))
     for index, ax in enumerate(axs.flatten()):
-        if index>=header['lines']:
+        if index >= header['lines']:
             ax.axis('off')
             continue
         # Title
-        ax.set_title(r'$\lambda$=%.2fnm, FWHM=%.2fnm' %(center_waves[index], fwhms[index]), fontsize=10)
+        ax.set_title(r'$\lambda$=%.2fnm, FWHM=%.2fnm' % (center_waves[index], fwhms[index]), fontsize=10)
         # Left y-axis
         y = np.copy(shifts[0,index,:])
-        i = np.abs(y-y.mean())>3*y.std()
+        i = np.abs(y-y.mean()) > 3*y.std()
         y[i] = np.nan
         ax.plot(sample_indices, y, '-', color='blue', alpha=0.3, lw=1, label=r'$\Delta\lambda$')
         p = np.poly1d(np.polyfit(sample_indices[~i], y[~i], 6))
         ax.plot(sample_indices, p(sample_indices), '-', color='blue', lw=4)
         y_lim = ax.get_ylim()
         y_lim = [np.floor(y_lim[0]/0.5)*0.5, np.ceil(y_lim[1]/0.5)*0.5]
-        if y_lim[1]-y_lim[0]<=1.0:
+        if y_lim[1]-y_lim[0] <= 1.0:
             y_ticks = np.arange(y_lim[0], y_lim[1]+0.25, 0.25)
-        elif y_lim[1]-y_lim[0]<=3.0:
+        elif y_lim[1]-y_lim[0] <= 3.0:
             y_ticks = np.arange(y_lim[0], y_lim[1]+0.50, 0.50)
         else:
             y_ticks = np.arange(y_lim[0], y_lim[1]+1.00, 1.00)
         y_lim = [y_ticks[0].min(), y_ticks[-1].max()]
         ax.set_yticks(y_ticks)
-        y_ticklabels = ['%.2f' %v for v in y_ticks]
+        y_ticklabels = ['%.2f' % v for v in y_ticks]
         ax.set_yticklabels(y_ticklabels, fontsize=10, color='blue')
         ax.set_ylim(y_lim)
         ax.set_xlim(x_lim)
         # Right y-axis
         twin_ax = ax.twinx()
         y = np.copy(shifts[1,index,:])
-        i = np.abs(y-y.mean())>3*y.std()
+        i = np.abs(y-y.mean()) > 3*y.std()
         y[i] = np.nan
         twin_ax.plot(sample_indices, y, '-', color='red', alpha=0.3, lw=1, label=r'$\Delta$FWHM')
         p = np.poly1d(np.polyfit(sample_indices[~i], y[~i], 6))
         twin_ax.plot(sample_indices, p(sample_indices), '-', color='red', lw=4)
         y_lim = twin_ax.get_ylim()
         y_lim = [np.floor(y_lim[0]/0.5)*0.5, np.ceil(y_lim[1]/0.5)*0.5]
-        if y_lim[1]-y_lim[0]<=1.0:
+        if y_lim[1]-y_lim[0] <= 1.0:
             y_ticks = np.arange(y_lim[0], y_lim[1]+0.01, 0.25)
-        elif y_lim[1]-y_lim[0]<=3.0:
+        elif y_lim[1]-y_lim[0] <= 3.0:
             y_ticks = np.arange(y_lim[0], y_lim[1]+0.50, 0.50)
         else:
             y_ticks = np.arange(y_lim[0], y_lim[1]+1.00, 1.00)
         y_lim = [y_ticks[0].min(), y_ticks[-1].max()]
         twin_ax.set_yticks(y_ticks)
-        y_ticklabels = ['%.2f' %v for v in y_ticks]
+        y_ticklabels = ['%.2f' % v for v in y_ticks]
         twin_ax.set_yticklabels(y_ticklabels, fontsize=10, color='red')
         twin_ax.set_xlim(x_lim)
         twin_ax.set_ylim(y_lim)
@@ -396,7 +396,7 @@ def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_
         ax.set_xticks(x_ticks)
         ax.set_xticklabels(x_ticks, fontsize=10)
         ax.set_xlabel('Across-track Pixel', fontsize=10)
-        if index==0:
+        if index == 0:
             lines, labels = ax.get_legend_handles_labels()
             lines2, labels2 = twin_ax.get_legend_handles_labels()
             ax.legend(lines + lines2, labels + labels2)
@@ -406,7 +406,7 @@ def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_
     shifts.flush()
     del shifts
     
-    logger.info('Save smile effect at atmospheric absorption features figure to %s.' %smile_effect_at_atm_features_figure_file)
+    logger.info('Save smile effect at atmospheric absorption features figure to %s.' % smile_effect_at_atm_features_figure_file)
 
 
 def plot_wvc_histogram(wvc_histogram_figure_file, water_vapor_column_image_file):
@@ -418,7 +418,7 @@ def plot_wvc_histogram(wvc_histogram_figure_file, water_vapor_column_image_file)
     """
     
     if os.path.exists(wvc_histogram_figure_file):
-        logger.info('Save water vapor column histogram figure to %s.' %wvc_histogram_figure_file)
+        logger.info('Save water vapor column histogram figure to %s.' % wvc_histogram_figure_file)
         return
     
     from ENVI import read_envi_header
@@ -434,7 +434,7 @@ def plot_wvc_histogram(wvc_histogram_figure_file, water_vapor_column_image_file)
     wvc_bins = np.arange(0, 51, 1)
     freq = []
     for bin_index in range(len(wvc_bins)-1):
-        index = (wvc_image>=wvc_bins[bin_index])&(wvc_image<wvc_bins[bin_index+1])
+        index = (wvc_image >= wvc_bins[bin_index]) & (wvc_image < wvc_bins[bin_index+1])
         freq.append(np.sum(index)/wvc_image.size*100)
     freq = np.array(freq)
     freq_max = 100
@@ -456,4 +456,4 @@ def plot_wvc_histogram(wvc_histogram_figure_file, water_vapor_column_image_file)
     wvc_image.flush()
     del wvc_image
     
-    logger.info('Save water vapor column histogram figure to %s.' %wvc_histogram_figure_file)
+    logger.info('Save water vapor column histogram figure to %s.' % wvc_histogram_figure_file)

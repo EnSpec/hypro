@@ -41,7 +41,7 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
     """
     
     if os.path.exists(boresight_file):
-        logger.info('Write boresight data to %s.' %boresight_file)
+        logger.info('Write boresight data to %s.' % boresight_file)
         return
     
     from osgeo import gdal, osr
@@ -105,16 +105,16 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
                                 [dem_geotransform[1], dem_geotransform[5]],
                                 gcp_xyz,
                                 boresight_options))
-    logger.info('Roll, pitch, heading and altitude offsets: %s, %s, %s, %s' %(p.x[0], p.x[1], p.x[2], p.x[3]))
+    logger.info('Roll, pitch, heading and altitude offsets: %s, %s, %s, %s' % (p.x[0], p.x[1], p.x[2], p.x[3]))
     
     # Save offsets.
     imugps[:,7] = p.x[0]
     imugps[:,8] = p.x[1]
     imugps[:,9] = p.x[2]
     imugps[:,10] = p.x[3]
-    header = ['Map coordinate system = %s' %(map_crs.ExportToWkt()),
-              'Index    Map_X    Map_Y    Map_Z    Roll    Pitch    Heading    '+
-              'Roll_Offset    Pitch_Offset    Heading_Offset    Altitude_Offset    Grid_Convergence    '+
+    header = ['Map coordinate system = %s' % (map_crs.ExportToWkt()),
+              'Index    Map_X    Map_Y    Map_Z    Roll    Pitch    Heading    ' +
+              'Roll_Offset    Pitch_Offset    Heading_Offset    Altitude_Offset    Grid_Convergence    ' +
               'Longitude    Latitude    Timestamp']
     np.savetxt(imugps_file,
                imugps,
@@ -134,23 +134,23 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
     boresight_data[:,7] = gcp_xyz[:,0]-est_gcp_xyz[:,0]
     boresight_data[:,8] = gcp_xyz[:,1]-est_gcp_xyz[:,1]
     boresight_data[:,9] = np.sqrt(boresight_data[:,7]**2+boresight_data[:,8]**2)
-    header = ['Map coordinate system = %s' %(map_crs.ExportToWkt()),
-              'Roll offset = %s' %(p.x[0]),
-              'Pitch offset = %s' %(p.x[1]),
-              'Heading offset = %s' %(p.x[2]),
-              'Altitude offset = %s' %(p.x[3]),
-              'Min RMS = %.4f' %(boresight_data[:,9].min()),
-              'Mean RMS = %.4f' %(boresight_data[:,9].mean()),
-              'Max RMS = %.4f' %(boresight_data[:,9].max()),
+    header = ['Map coordinate system = %s' % (map_crs.ExportToWkt()),
+              'Roll offset = %s' % (p.x[0]),
+              'Pitch offset = %s' % (p.x[1]),
+              'Heading offset = %s' % (p.x[2]),
+              'Altitude offset = %s' % (p.x[3]),
+              'Min RMS = %.4f' % (boresight_data[:,9].min()),
+              'Mean RMS = %.4f' % (boresight_data[:,9].mean()),
+              'Max RMS = %.4f' % (boresight_data[:,9].max()),
               'Index    Image_X    Image_Y    Map_X    Map_Y    Predict_X    Predict_Y    Error_X    Error_Y    RMS']
     np.savetxt(boresight_file,
                boresight_data,
                header='\n'.join(header),
                fmt='%d    %.3f    %.3f    %.3f    %.3f    %.3f    %.3f    %.3f    %.3f    %.3f')
-    logger.info('Boresight accuracy (min, mean, max): %.2f, %.2f, %2.f.' %(boresight_data[:,9].min(), boresight_data[:,9].mean(), boresight_data[:,9].max()))
+    logger.info('Boresight accuracy (min, mean, max): %.2f, %.2f, %2.f.' % (boresight_data[:,9].min(), boresight_data[:,9].mean(), boresight_data[:,9].max()))
     del boresight_data
     
-    logger.info('Write boresight data to %s.' %boresight_file)
+    logger.info('Write boresight data to %s.' % boresight_file)
 
 
 def cost_fun(boresight_offsets, flight_xyz, flight_imu, flight_sensor_model, dem_image, dem_ulxy, dem_pixel_size, gcp_xyz, boresight_options):
@@ -221,7 +221,7 @@ def estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_mo
     z = flight_xyz[:,2]+boresight_offsets[3] if boresight_options[3] else flight_xyz[:,2]
     
     # Get scan vectors.
-    heading[heading<0] = heading[heading<0]+360 # heading: -180~180 -> 0~360
+    heading[heading < 0] = heading[heading < 0]+360 # heading: -180~180 -> 0~360
     heading = 90-heading # heading angle -> euler angle
     pitch = -pitch # pitch angle -> euler angle
     

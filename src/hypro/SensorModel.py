@@ -38,7 +38,7 @@ def make_sensor_model(sensor_model_file, fov, ifov, samples, if_rotated):
     """
     
     if os.path.exists(sensor_model_file):
-        logger.info('Write the sensor model to %s.' %sensor_model_file)
+        logger.info('Write the sensor model to %s.' % sensor_model_file)
         return
     
     sensor_model = np.zeros((samples, 3))
@@ -58,7 +58,7 @@ def make_sensor_model(sensor_model_file, fov, ifov, samples, if_rotated):
                fmt='%d    %.10f    %.10f')
     del sensor_model, xs
     
-    logger.info('Write the sensor model to %s.' %sensor_model_file)
+    logger.info('Write the sensor model to %s.' % sensor_model_file)
 
 
 def determine_if_rotated(imu_gps_file):

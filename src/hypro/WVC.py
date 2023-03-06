@@ -35,7 +35,7 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
     """
     
     if os.path.exists(wvc_model_file):
-        logger.info('Write WVC models to %s.' %wvc_model_file)
+        logger.info('Write WVC models to %s.' % wvc_model_file)
         return
     
     from AtmLUT import read_binary_metadata, get_interp_range
@@ -57,9 +57,9 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
     atm_lut_RAA = np.array([float(v) for v in metadata['RAA']])
     atm_lut_WAVE = np.array([float(v) for v in metadata['WAVE']])
     # VZA index
-    vza_index = np.where(atm_lut_VZA==min(atm_lut_VZA))[0][-1]
+    vza_index = np.where(atm_lut_VZA == min(atm_lut_VZA))[0][-1]
     # RAA index
-    raa_index = np.where(atm_lut_RAA==min(atm_lut_RAA))[0][-1]
+    raa_index = np.where(atm_lut_RAA == min(atm_lut_RAA))[0][-1]
     
     # Load atmospheric lookup table.
     atm_lut = np.memmap(atm_lut_file,
@@ -93,7 +93,7 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
         right_wave, right_band = get_closest_wave(sensor_waves, wave_3)
         
         # Build the model.
-        if np.abs(left_wave-wave_1)<20 and np.abs(middle_wave-wave_2)<20 and np.abs(right_wave-wave_3)<20:
+        if np.abs(left_wave-wave_1) < 20 and np.abs(middle_wave-wave_2) < 20 and np.abs(right_wave-wave_3) < 20:
             model = dict()
             
             # bands
@@ -117,7 +117,7 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
             model['wvc'] = list(atm_lut_WVC[index])
             
             # Save model parameters.
-            wvc_model['WVC_Model_%d' %wave_2] = model
+            wvc_model['WVC_Model_%d' % wave_2] = model
             
             # Clear data.
             del left_weight, right_weight, resampled_rdn, ratio, index, model
@@ -126,7 +126,7 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
     # Save WVC models to a json file.
     with open(wvc_model_file, 'w') as fid:
         json.dump(wvc_model, fid, indent=4)
-    logger.info('Write WVC models to %s.' %wvc_model_file)
+    logger.info('Write WVC models to %s.' % wvc_model_file)
 
 
 def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_mask_file, solar_flux_file=None):
@@ -149,7 +149,7 @@ def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_m
     """
     
     if os.path.exists(wvc_file):
-        logger.info('Save the WVC image to %s.' %(wvc_file))
+        logger.info('Save the WVC image to %s.' % (wvc_file))
         return
     
     from ENVI import read_envi_header, empty_envi_header, write_envi_header
@@ -179,21 +179,21 @@ def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_m
     d2 = distance**2
     # If the reflectance at 850 nm is less than 0.01, then mask out these pixels.
     wave, band = get_closest_wave(rdn_header['wavelength'], 470)
-    if abs(wave-470)<20:
+    if abs(wave-470) < 20:
         refl = rdn_image[band,:,:]*np.pi*d2/(solar_flux[band]*cos_sun_zenith)
-        good_mask_image &= (refl>0.01)
+        good_mask_image &= (refl > 0.01)
         del refl
     # If the reflectance at 850 nm is less than 0.10, then mask out these pixels.
     wave, band = get_closest_wave(rdn_header['wavelength'], 850)
-    if abs(wave-850)<20:
+    if abs(wave-850) < 20:
         refl = rdn_image[band,:,:]*np.pi*d2/(solar_flux[band]*cos_sun_zenith)
-        good_mask_image &= (refl>0.10)
+        good_mask_image &= (refl > 0.10)
         del refl
     # If the reflectance at 1600 nm is less than 0.10, then mask out these pixels.
     wave, band = get_closest_wave(rdn_header['wavelength'], 1600)
-    if abs(wave-1600)<20:
+    if abs(wave-1600) < 20:
         refl = rdn_image[band,:,:]*np.pi*d2/(solar_flux[band]*cos_sun_zenith)
-        good_mask_image &= (refl>0.10)
+        good_mask_image &= (refl > 0.10)
         del refl
     del wave, band, solar_flux, cos_sun_zenith, d2
     
@@ -230,7 +230,7 @@ def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_m
     
     # Read solar flux.
     wvc_image[~good_mask_image] = wvc_image[good_mask_image].mean()
-    logger.info('WVC [mm] statistics: min=%.2f, max=%.2f, avg=%.2f, sd=%.2f.' %(wvc_image[good_mask_image].min(), wvc_image[good_mask_image].max(), wvc_image[good_mask_image].mean(), wvc_image[good_mask_image].std()))
+    logger.info('WVC [mm] statistics: min=%.2f, max=%.2f, avg=%.2f, sd=%.2f.' % (wvc_image[good_mask_image].min(), wvc_image[good_mask_image].max(), wvc_image[good_mask_image].mean(), wvc_image[good_mask_image].std()))
     wvc_image[bg_mask_image] = -1000.0
     del bg_mask_image, good_mask_image
     
@@ -256,4 +256,4 @@ def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_m
     write_envi_header(wvc_file+'.hdr', wvc_header)
     del wvc_header, rdn_header
     
-    logger.info('Save the WVC image to %s.' %(wvc_file))
+    logger.info('Save the WVC image to %s.' % (wvc_file))

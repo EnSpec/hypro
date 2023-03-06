@@ -33,7 +33,7 @@ def make_radio_cali_file_Hyspex(radio_cali_file, dn_image_file, setting_file):
     """
     
     if os.path.exists(radio_cali_file):
-        logger.info('Write the radiometric calibration coefficients to %s.' %radio_cali_file)
+        logger.info('Write the radiometric calibration coefficients to %s.' % radio_cali_file)
         return
     
     from ENVI import empty_envi_header, write_envi_header
@@ -45,7 +45,7 @@ def make_radio_cali_file_Hyspex(radio_cali_file, dn_image_file, setting_file):
     try:
         fid = open(dn_image_file, 'rb')
     except:
-        logger.error('Cannot read calibration data from %s.' %dn_image_file)
+        logger.error('Cannot read calibration data from %s.' % dn_image_file)
     header['word'] = np.fromfile(fid, dtype=np.int8, count=8)
     header['hdrSize'] = np.fromfile(fid, dtype=np.int32, count=1)[0]
     header['serialNumber'] = np.fromfile(fid, dtype=np.int32, count=1)[0]
@@ -151,7 +151,7 @@ def make_radio_cali_file_Hyspex(radio_cali_file, dn_image_file, setting_file):
     header['background'].shape = (header['spectralSize'], header['spatialSize'])
     
     header['badPixels'] = np.fromfile(fid, dtype=np.uint32, count=header['nobp'])
-    if header['serialNumber']>=3000 and header['serialNumber']<=5000:
+    if header['serialNumber'] >= 3000 and header['serialNumber'] <= 5000:
         header['backgroundLast'] = np.fromfile(fid, dtype=np.float64, count=header['spectralSize']*header['spatialSize'])
         header['backgroundLast'].shape = (header['spectralSize'], header['spatialSize'])
     
@@ -203,7 +203,7 @@ def make_radio_cali_file_Hyspex(radio_cali_file, dn_image_file, setting_file):
     
     # offset
     fid.write(header['background'].tostring())
-    if header['serialNumber']>=3000 and header['serialNumber']<=5000:
+    if header['serialNumber'] >= 3000 and header['serialNumber'] <= 5000:
         fid.write(header['backgroundLast'].tostring())
         bands = 3
     else:
@@ -220,13 +220,13 @@ def make_radio_cali_file_Hyspex(radio_cali_file, dn_image_file, setting_file):
     radio_cali_header['interleave'] = 'bsq'
     radio_cali_header['byte order'] = 0
     radio_cali_header['data type'] = 5
-    radio_cali_header['band names'] = ['gain', 'background'] if bands==2 else ['gain', 'background', 'backgroundLast']
+    radio_cali_header['band names'] = ['gain', 'background'] if bands == 2 else ['gain', 'background', 'backgroundLast']
     radio_cali_header['waves'] = list(header['spectralVector'])
     radio_cali_header['fwhms'] = list(header['fwhms'])
     write_envi_header(os.path.splitext(radio_cali_file)[0]+'.hdr', radio_cali_header)
     del radio_cali_header, header
     
-    logger.info('Write the radiometric calibration coefficients to %s.' %radio_cali_file)
+    logger.info('Write the radiometric calibration coefficients to %s.' % radio_cali_file)
 
 
 def dn2rdn_Hyspex(rdn_image_file, dn_image_file, radio_cali_file, acquisition_time):
@@ -243,7 +243,7 @@ def dn2rdn_Hyspex(rdn_image_file, dn_image_file, radio_cali_file, acquisition_ti
     """
     
     if os.path.exists(rdn_image_file):
-        logger.info('Write the radiance image to %s.' %rdn_image_file)
+        logger.info('Write the radiance image to %s.' % rdn_image_file)
         return
     
     from ENVI import empty_envi_header, read_envi_header, write_envi_header
@@ -273,16 +273,16 @@ def dn2rdn_Hyspex(rdn_image_file, dn_image_file, radio_cali_file, acquisition_ti
     gain = radio_cali_coeff[0,:,:] # shape=(bands, samples)
     
     # Do radiometric calibration.
-    info = 'Line (max=%d): ' %dn_header['lines']
+    info = 'Line (max=%d): ' % dn_header['lines']
     fid = open(rdn_image_file, 'wb')
     for from_line in range(0, dn_header['lines'], 500):
-        info += '%d, ' %(from_line+1)
+        info += '%d, ' % (from_line+1)
         
         # Determine chunk size.
         to_line = min(from_line+500, dn_header['lines'])
         
         # Get offset coefficients.
-        if radio_cali_header['bands']==2:
+        if radio_cali_header['bands'] == 2:
             offset = radio_cali_coeff[1,:,:] # shape=(bands, samples)
         else:
             background = np.stack([radio_cali_coeff[1,:,:]]*(to_line-from_line))
@@ -300,7 +300,7 @@ def dn2rdn_Hyspex(rdn_image_file, dn_image_file, radio_cali_file, acquisition_ti
         # Clear temporary data.
         del rdn, to_line, offset
     fid.close()
-    info += '%d, Done!' %dn_header['lines']
+    info += '%d, Done!' % dn_header['lines']
     logger.info(info)
     
     # Clear data.
@@ -328,7 +328,7 @@ def dn2rdn_Hyspex(rdn_image_file, dn_image_file, radio_cali_file, acquisition_ti
     write_envi_header(os.path.splitext(rdn_image_file)[0]+'.hdr', rdn_header)
     del radio_cali_header, dn_header, rdn_header
     
-    logger.info('Write the radiance image to %s.' %rdn_image_file)
+    logger.info('Write the radiance image to %s.' % rdn_image_file)
 
 
 def resample_rdn(resampled_rdn_image_file, raw_rdn_image_file, smile_effect_file):
@@ -343,7 +343,7 @@ def resample_rdn(resampled_rdn_image_file, raw_rdn_image_file, smile_effect_file
     """
     
     if os.path.exists(resampled_rdn_image_file):
-        logger.info('Write the spectrally resampled radiance image to %s.' %resampled_rdn_image_file)
+        logger.info('Write the spectrally resampled radiance image to %s.' % resampled_rdn_image_file)
         return
     
     from ENVI import read_envi_header, write_envi_header
@@ -368,10 +368,10 @@ def resample_rdn(resampled_rdn_image_file, raw_rdn_image_file, smile_effect_file
                                          smile_effect_header['samples']))
     
     # Do spectral interpolation.
-    info = 'Line (max=%d): ' %smile_effect_header['lines']
+    info = 'Line (max=%d): ' % smile_effect_header['lines']
     fid = open(resampled_rdn_image_file, 'wb')
     for from_line in range(0, raw_rdn_header['lines'], 500):
-        info += '%d, ' %(from_line+1)
+        info += '%d, ' % (from_line+1)
         # Determine chunk size.
         to_line = min(from_line+500, raw_rdn_header['lines'])
         
@@ -392,7 +392,7 @@ def resample_rdn(resampled_rdn_image_file, raw_rdn_image_file, smile_effect_file
         fid.write(rdn.astype('float32').tostring())
         del rdn, to_line
     fid.close()
-    info += '%d, Done!' %smile_effect_header['lines']
+    info += '%d, Done!' % smile_effect_header['lines']
     logger.info(info)
     
     # Clear data.
@@ -404,7 +404,7 @@ def resample_rdn(resampled_rdn_image_file, raw_rdn_image_file, smile_effect_file
     write_envi_header(os.path.splitext(resampled_rdn_image_file)[0]+'.hdr', raw_rdn_header)
     del raw_rdn_header
     
-    logger.info('Write the spectrally resampled radiance image to %s.' %resampled_rdn_image_file)
+    logger.info('Write the spectrally resampled radiance image to %s.' % resampled_rdn_image_file)
 
 
 def get_hyspex_setting(setting_file):
@@ -488,15 +488,15 @@ def get_hyspex_setting(setting_file):
             val_type = setting_value_type[key.strip()]
             if val_type == "list_float":
                 tmp = value.translate(trans_table).strip().split(" ")
-                value= np.array([float(x) for x in tmp])
+                value = np.array([float(x) for x in tmp])
             elif val_type == "list_int":
                 tmp = value.translate(trans_table).strip()
                 if tmp == '':
                     value = None
                 else:
-                    value= np.array([int(x) for x in tmp.split(" ")])
+                    value = np.array([int(x) for x in tmp.split(" ")])
             elif val_type == "list_str":
-                value= [x.strip() for x in value.translate(trans_table).strip().split(" ")]
+                value = [x.strip() for x in value.translate(trans_table).strip().split(" ")]
             elif val_type == "int":
                 value = int(value.translate(trans_table))
             elif val_type == "float":
