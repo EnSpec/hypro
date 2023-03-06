@@ -12,6 +12,8 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
+""" Hyperspectral image processing workflows. """
+
 import argparse
 import glob
 import json
@@ -264,6 +266,11 @@ def get_sun_earth_distance(when):
 
 
 def HyspexPro(config_file):
+    """ Batch processing of raw DN images to surface reflectance.
+    Arguments:
+        config_file
+            JSON file containing processing configuration parameters.
+    """
     
     # Load configurations.
     config = json.load(open(config_file, 'r'))
