@@ -260,16 +260,14 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
        
        - Band 0: Sample Lookup:
          
-         Pixel values indicate the column number of the pixel
-         in the input geometry file that belongs at the given Y
-         location in the output image.
+         Pixel values indicate the column number of the pixel in the input geometry file
+         that belongs at the given Y location in the output image.
        
        - Band 1: Line Lookup:
          
-         Pixel values indicate the row number of the pixel
-         in the input geometry file that belongs at the given X
-         location in the output image.
-    
+         Pixel values indicate the row number of the pixel in the input geometry file
+         that belongs at the given X location in the output image.
+       
        For more details about GLT, refer to [#envi-glt]_.
     
     References
@@ -486,8 +484,8 @@ def get_scan_vectors(imu, sensor_model):
     
     References
     ----------
-    .. [#meyer-1994] Meyer P. (1994). A parametric approach for the geocoding of airborne
-       visible/infrared imaging spectrometer (AVIRIS) data in rugged terrain.
+    .. [#meyer-1994] Meyer P. (1994). A parametric approach for the geocoding of
+       airborne visible/infrared imaging spectrometer (AVIRIS) data in rugged terrain.
        Remote Sensing of Environment, 49, 118-130.
     """
     
@@ -602,12 +600,12 @@ def ray_tracer_ufunc(xyz0, xyz1, L0, dem, dem_gt, output):
     dem : 2D array, shape=(scanlines, detectors)
         Digital elevation model.
     dem_gt : tuple, 6 elements
-        Geotransform array containing DEM geographic parameters
-        in GDAL format, i.e. as ``(ulx, x_res, 0, uly, 0, y_res)``
+        Geotransform array containing DEM geographic parameters in GDAL format,
+        i.e. as ``(ulx, x_res, 0, uly, 0, y_res)``
     output : optional, 3D array, shape=(3, detectors, scanlines)
-        Array to which outputs are written. If not passed, a new
-        array is created and returned. Otherwise, the array is
-        modified in place and the ``ufunc`` returns ``None``.
+        Array to which outputs are written. If not passed, a new array is created
+        and returned. Otherwise, the array is modified in place and the ``ufunc``
+        returns ``None``.
     
     Returns
     -------
@@ -615,9 +613,8 @@ def ray_tracer_ufunc(xyz0, xyz1, L0, dem, dem_gt, output):
     
     Notes
     -----
-    Argument data types are constrained by ``numba`` signatures
-    supplied to ``guvectorize``. If supplied types cannot be
-    coerced to required types by safe casting rules, the
+    Argument data types are constrained by ``numba`` signatures supplied to ``guvectorize``.
+    If supplied types cannot be coerced to required types by safe casting rules, the
     function will raise an error.
     """
     
@@ -660,11 +657,11 @@ def ray_tracing(XYZ0, XYZ1, V, DEM, DEM_X0Y0, DEM_Resolution):
     
     References
     ----------
-    .. [#meyer-1994] Meyer P. (1994). A parametric approach for the geocoding of airborne
-       visible/infrared imaging spectrometer (AVIRIS) data in rugged terrain.
+    .. [#meyer-1994] Meyer P. (1994). A parametric approach for the geocoding of
+       airborne visible/infrared imaging spectrometer (AVIRIS) data in rugged terrain.
        Remote Sensing of Environment, 49, 118-130.
-    .. [#amanatides-1987] Amanatides J. and Woo A. (1987). A fast voxel traversal algorithm
-       for ray tracing. Eurographics, 3-10.
+    .. [#amanatides-1987] Amanatides J. and Woo A. (1987). A fast voxel traversal
+       algorithm for ray tracing. Eurographics, 3-10.
     .. [#ray-tracing-example] https://www.scratchapixel.com/lessons/advanced-rendering/introduction-acceleration-structure/grid
     """
     

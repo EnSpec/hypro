@@ -30,7 +30,8 @@ def atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut,
     Parameters
     ----------
     atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA : list of floats
-        Atmospheric lookup table water vapor column, visibility, view zenith and relative azimuth angle grids.
+        Atmospheric lookup table water vapor column, visibility, view zenith and
+        relative azimuth angle grids.
     atm_lut : ndarray
         Atmospheric lookup table, shape = (RHO, WVC, VIS, VZA, RAA).
     wvc_image, vis_image, vza_image, raa_image : 2D arrays.

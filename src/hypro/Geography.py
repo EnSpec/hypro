@@ -193,9 +193,8 @@ def get_map_crs(dem, longitude, latitude):
     
     Notes
     -----
-    If ``dem`` is a file, the map coordinate system should be
-    the same as that of the DEM file; otherwise define a UTM coordinate system
-    based on the longitude and latitude.
+    If ``dem`` is a file, the map coordinate system should be the same as that of the DEM
+    file; otherwise define a UTM coordinate system based on the longitude and latitude.
     """
     
     if isinstance(dem, (int, float)) or not os.path.isfile(dem):
@@ -231,7 +230,8 @@ def get_sun_angles(longitude, latitude, utc_time):
     
     References
     ----------
-    .. [#blanco-muriel-2001] Manuel Blanco-Muriel, et al. (2001). Computing the solar vector. Solar Energy, 70(5), 431-441.
+    .. [#blanco-muriel-2001] Manuel Blanco-Muriel, et al. (2001). Computing the solar vector.
+       Solar Energy, 70(5), 431-441.
     .. [#psa-sun-position-algorithm] http://www.psa.es/sdg/sunpos.htm
     """
     
