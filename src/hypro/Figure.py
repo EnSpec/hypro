@@ -152,7 +152,7 @@ def linear_percent_stretch(raw_image):
     
     References
     ----------
-    (1) https://www.harrisgeospatial.com/docs/BackgroundStretchTypes.html
+    .. [#envi-contrast-stretch] https://www.harrisgeospatial.com/docs/BackgroundStretchTypes.html
     """
     
     low = np.percentile(raw_image, 2)

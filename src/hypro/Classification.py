@@ -42,7 +42,7 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
     
     Notes
     -----
-    (1) The classification algorithm used here is from ATCOR.
+    The classification algorithm used here is from ATCOR.
     """
     
     if os.path.exists(pre_class_image_file):

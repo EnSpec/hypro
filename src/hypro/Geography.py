@@ -225,10 +225,14 @@ def get_sun_angles(longitude, latitude, utc_time):
     AzimuthAngle : float
         Sun azimuth angle, in degrees.
     
+    Notes
+    -----
+    A C++ implementation of the algorithm is available from [#psa-sun-position-algorithm]_.
+    
     References
     ----------
-    (1) Manuel Blanco-Muriel, et al. (2001). Computing the solar vector. Solar Energy, 70(5), 431-441.
-    (2) The C code is available from: http://www.psa.es/sdg/sunpos.htm
+    .. [#blanco-muriel-2001] Manuel Blanco-Muriel, et al. (2001). Computing the solar vector. Solar Energy, 70(5), 431-441.
+    .. [#psa-sun-position-algorithm] http://www.psa.es/sdg/sunpos.htm
     """
     
     rad = np.pi/180

@@ -16,9 +16,12 @@
 
 Notes
 -----
-(1) The code is adapted from HyTools:
-    https://github.com/EnSpec/HyTools-sandbox/blob/master/hytools/file_io/envi_read.py
-    https://github.com/EnSpec/HyTools-sandbox/blob/master/hytools/file_io/envi_write.py
+The code is adapted from HyTools; See [#ht-envi-read]_ and [#ht-envi-write]_.
+
+References
+----------
+.. [#ht-envi-read] https://github.com/EnSpec/HyTools-sandbox/blob/master/hytools/file_io/envi_read.py
+.. [#ht-envi-write] https://github.com/EnSpec/HyTools-sandbox/blob/master/hytools/file_io/envi_write.py
 """
 
 from copy import deepcopy

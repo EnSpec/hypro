@@ -254,18 +254,27 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
     
     Notes
     -----
-    (1) This code is adapted from Adam Chlus' (chlus@wisc.edu) script.
-    (2) The GLT image consists of two bands:
-            Band 0: Sample Lookup:
-                Pixel values indicate the column number of the pixel
-                in the input geometry file that belongs at the given Y
-                location in the output image.
-            Band 1: Line Lookup:
-                Pixel values indicate the row number of the pixel
-                in the input geometry file that belongs at the given X
-                location in the output image.
-    (3) For more details about GLT, refer to https://www.harrisgeospatial.com/
-        docs/GeoreferenceFromInputGeometry.html.
+    #. This code is adapted from Adam Chlus' (chlus@wisc.edu) script.
+    
+    #. The GLT image consists of two bands:
+       
+       - Band 0: Sample Lookup:
+         
+         Pixel values indicate the column number of the pixel
+         in the input geometry file that belongs at the given Y
+         location in the output image.
+       
+       - Band 1: Line Lookup:
+         
+         Pixel values indicate the row number of the pixel
+         in the input geometry file that belongs at the given X
+         location in the output image.
+    
+       For more details about GLT, refer to [#envi-glt]_.
+    
+    References
+    ----------
+    .. [#envi-glt] https://www.harrisgeospatial.com/docs/GeoreferenceFromInputGeometry.html
     """
     
     if os.path.exists(glt_image_file):
@@ -440,33 +449,46 @@ def get_scan_vectors(imu, sensor_model):
     ----------
     imu : 2D array
         Flight IMU data, dimension: [n_lines, 3].
-        Notes:
-            Roll, pitch and heading are defined according to navigational standards.
-            Column 0: Roll
-                Range: -90~90
-                    Right wing up: positive
-            Column 1: Pitch
-                Range: -90~90
-                    Aircraft nose up: positive
-            Column 2: Heading
-                Range: -180~180 or 0~360
-                    North: 0; East: 90; West: -90 or 270
+        
+        - Column 0: Roll
+        - Column 1: Pitch
+        - Column 2: Heading
+    
     sensor_model : 2D array
         Sensor model data, dimension: [n_detectors, 2].
-            Notes:
-                Column 0: across-track angle component.
-                Column 1: along-track angle component.
+        
+        - Column 0: across-track angle component.
+        - Column 1: along-track angle component.
     
     Returns
     -------
     L0 : 3D array
         Sensor scan vectors, dimension: [3, n_detectors, n_lines].
     
+    Notes
+    -----
+    Roll, pitch and heading are defined according to navigational standards.
+    
+    - Roll
+      
+      - Range: -90~90
+      - Right wing up: positive
+    
+    - Pitch
+      
+      - Range: -90~90
+      - Aircraft nose up: positive
+    
+    - Heading
+      
+      - Range: -180~180 or 0~360
+      - North: 0; East: 90; West: -90 or 270
+    
     References
     ----------
-    (1) Meyer P. (1994). A parametric approach for the geocoding of airborne
-        visible/infrared imaging spectrometer (AVIRIS) data in rugged terrain.
-        Remote Sensing of Environment, 49, 118-130.
+    .. [#meyer-1994] Meyer P. (1994). A parametric approach for the geocoding of airborne
+       visible/infrared imaging spectrometer (AVIRIS) data in rugged terrain.
+       Remote Sensing of Environment, 49, 118-130.
     """
     
     roll, pitch, heading = imu[:, 0], imu[:, 1], imu[:, 2]
@@ -539,7 +561,7 @@ def get_xyz0_xyz1(xyz, L0, h_min, h_max):
     
     References
     ----------
-    (1) Schläpfer D. (2016). PARGE User Manual, Version 3.3.
+    .. [#schlapfer-2016] Schläpfer D. (2016). PARGE User Manual, Version 3.3.
     """
     
     n_lines = xyz.shape[0]
@@ -593,10 +615,10 @@ def ray_tracer_ufunc(xyz0, xyz1, L0, dem, dem_gt, output):
     
     Notes
     -----
-    (1) Argument data types are constrained by ``numba`` signatures
-        supplied to ``guvectorize``. If supplied types cannot be
-        coerced to required types by safe casting rules, the
-        function will raise an error.
+    Argument data types are constrained by ``numba`` signatures
+    supplied to ``guvectorize``. If supplied types cannot be
+    coerced to required types by safe casting rules, the
+    function will raise an error.
     """
     
     # Geotransform: (ulx, x_res, 0, uly, 0, y_res)
@@ -632,15 +654,18 @@ def ray_tracing(XYZ0, XYZ1, V, DEM, DEM_X0Y0, DEM_Resolution):
     -------
         A 3-element vector, [MapX, MapY, MapZ]: the pixel's geolocation and elevation.
     
+    Notes
+    -----
+    An online example is available from [#ray-tracing-example]_.
+    
     References
     ----------
-    (1) Meyer P. (1994). A parametric approach for the geocoding of airborne
-        visible/infrared imaging spectrometer (AVIRIS) data in rugged terrain.
-        Remote Sensing of Environment, 49, 118-130.
-    (2) Amanatides J. and Woo A. (1987). A fast voxel traversal algorithm
-        for ray tracing. Eurographics, 3-10.
-    (3) An online example from https://www.scratchapixel.com/lessons/
-        advanced-rendering/introduction-acceleration-structure/grid.
+    .. [#meyer-1994] Meyer P. (1994). A parametric approach for the geocoding of airborne
+       visible/infrared imaging spectrometer (AVIRIS) data in rugged terrain.
+       Remote Sensing of Environment, 49, 118-130.
+    .. [#amanatides-1987] Amanatides J. and Woo A. (1987). A fast voxel traversal algorithm
+       for ray tracing. Eurographics, 3-10.
+    .. [#ray-tracing-example] https://www.scratchapixel.com/lessons/advanced-rendering/introduction-acceleration-structure/grid
     """
     
     if np.abs(XYZ0[0]-XYZ1[0]) < 1e-2 and np.abs(XYZ0[1]-XYZ1[1]) < 1e-2:

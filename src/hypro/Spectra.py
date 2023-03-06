@@ -16,8 +16,11 @@
 
 Notes
 -----
-(1) The code here is adapted from HyTools:
-    https://github.com/EnSpec/HyTools-sandbox/blob/master/hytools/preprocess/resampling.py
+The code here is adapted from HyTools; see [#ht-resampling]_.
+
+References
+----------
+.. [#ht-resampling] https://github.com/EnSpec/HyTools-sandbox/blob/master/hytools/preprocess/resampling.py
 """
 
 import pkgutil
@@ -96,10 +99,10 @@ def resample_spectra(spectra, src_waves, dst_waves, dst_fwhms, src_fwhms=None):
     
     Notes
     -----
-    (1) Given a set of source wavelengths, destination wavelengths and FWHMs, this
-        function calculates the relative contribution or each input wavelength to
-        the output wavelength. It assumes that output response functions follow
-        a Gaussian distribution.
+    Given a set of source wavelengths, destination wavelengths and FWHMs, this
+    function calculates the relative contribution or each input wavelength to
+    the output wavelength. It assumes that output response functions follow
+    a Gaussian distribution.
     """
     
     if src_fwhms is None:

@@ -252,7 +252,7 @@ def get_acquisition_time(dn_header_file, raw_imugps_file):
     
     Notes
     -----
-    (1) This code is adapted from Brendan Heberlein (bheberlein@wisc.edu).
+    This code is adapted from Brendan Heberlein (bheberlein@wisc.edu).
     """
     
     from datetime import datetime, timedelta
