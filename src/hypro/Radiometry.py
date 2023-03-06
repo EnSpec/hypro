@@ -452,7 +452,7 @@ def get_hyspex_setting(setting_file):
                           "shutter": "int",
                           "SF": "float",
                           "max_framerate": "float",
-                          "aperture_size":"float",
+                          "aperture_size": "float",
                           "pixelsize_x": "float",
                           "pixelsize_y": "float",
                           "Temperature_Calibration": "float",
