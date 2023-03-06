@@ -12,9 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to do radiometric calibrations.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+"""Functions for radiometric calibration of raw imaging spectrometer data."""
 
 import logging
 import os
@@ -25,14 +23,16 @@ logger = logging.getLogger(__name__)
 
 
 def make_radio_cali_file_Hyspex(radio_cali_file, dn_image_file, setting_file):
-    """ Make a HySpex radiometric calibration file.
-    Arguments:
-        radio_cali_file: str
-            HySpex radiometric calibration coefficients filename.
-        dn_image_file: str
-            HySpex digital number (DN) image filename.
-        setting_file: str
-            HySpex radiometric calibration setting filename.
+    """Make a HySpex radiometric calibration file.
+    
+    Parameters
+    ----------
+    radio_cali_file : str
+        HySpex radiometric calibration coefficients filename.
+    dn_image_file : str
+        HySpex digital number (DN) image filename.
+    setting_file : str
+        HySpex radiometric calibration setting filename.
     """
     
     if os.path.exists(radio_cali_file):
@@ -233,16 +233,18 @@ def make_radio_cali_file_Hyspex(radio_cali_file, dn_image_file, setting_file):
 
 
 def dn2rdn_Hyspex(rdn_image_file, dn_image_file, radio_cali_file, acquisition_time):
-    """ Do HySpex radiometric calibration.
-    Arguments:
-        rdn_image_file: str
-            Radiance image filename.
-        dn_image_file: str
-            HySpex DN image filename.
-        radio_cali_file: str
-            HySpex radiometric calibration coefficients filename.
-        acquisition_time: datetime object
-            Acquisition time.
+    """Do HySpex radiometric calibration.
+    
+    Parameters
+    ----------
+    rdn_image_file : str
+        Radiance image filename.
+    dn_image_file : str
+        HySpex DN image filename.
+    radio_cali_file : str
+        HySpex radiometric calibration coefficients filename.
+    acquisition_time : datetime object
+        Acquisition time.
     """
     
     if os.path.exists(rdn_image_file):
@@ -335,14 +337,16 @@ def dn2rdn_Hyspex(rdn_image_file, dn_image_file, radio_cali_file, acquisition_ti
 
 
 def resample_rdn(resampled_rdn_image_file, raw_rdn_image_file, smile_effect_file):
-    """ Resample radiance spectra.
-    Arguments:
-        resampled_rdn_image_file: str
-            Resampled radiance image filename.
-        raw_rdn_image_file: str
-            Raw radiance image filename.
-        smile_effect_file: str
-            Smile effect filename.
+    """Resample radiance spectra.
+    
+    Parameters
+    ----------
+    resampled_rdn_image_file : str
+        Resampled radiance image filename.
+    raw_rdn_image_file : str
+        Raw radiance image filename.
+    smile_effect_file : str
+        Smile effect filename.
     """
     
     if os.path.exists(resampled_rdn_image_file):
@@ -411,13 +415,17 @@ def resample_rdn(resampled_rdn_image_file, raw_rdn_image_file, smile_effect_file
 
 
 def get_hyspex_setting(setting_file):
-    """ Read HySpex setting data.
-    Arguments:
-        setting_file: str
-            HySpex setting filename.
-    Returns:
-        setting: dict
-            HySpex setting.
+    """Read HySpex setting data.
+    
+    Parameters
+    ----------
+    setting_file : str
+        HySpex setting filename.
+    
+    Returns
+    -------
+    setting : dict
+        HySpex setting.
     """
     
     setting_value_type = {"serialnumber": "int",

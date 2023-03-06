@@ -12,9 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to detect smile effects.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+"""Functions for spectral smile effect detection."""
 
 import logging
 import os
@@ -44,12 +42,34 @@ absorption_features = {429: [424, 437],
 
 
 def detect_smile_effect(sensor_dict, atm_lut_file):
-    """ Detect smile effect.
-    Arguments:
-        sensor_dict: dict
-            Sensor configurations.
-        atm_lut_file: str
-            Raw atmospheric lookup table filename.
+    """Detect spectral smile effect using solar & atmospheric absorption features.
+    
+    Parameters
+    ----------
+    sensor_dict : dict
+        Sensor configurations.
+    atm_lut_file : str
+        Raw atmospheric lookup table filename.
+    
+    Notes
+    -----
+    Absorption features of molecular species in the solar & terrestrial atmospheres occur
+    at well-defined wavelengths, and serve as absolute spectral references to calibrate
+    sensor wavelengths directly from airborne at-sensor radiance spectra. HyPro employs
+    a spectrum-matching technique similar to that presented by Gao [#gao-2004]_ for this
+    purpose. The features used include solar Fraunhofer lines in the visible range, and
+    absorptions of several atmospheric gases (O2, H2O, CO2 & CH4) in the red & infrared
+    wavelengths. Many of these are listed in [#richter-2011]_. Note that a narrowband
+    sensor is needed for such features to register in the observed spectrum.
+    
+    References
+    ----------
+    .. [#gao-2004] Gao B-C, Montes MJ & Davis CO (2004). Refinement of wavelength
+       calibrations of hyperspectral imaging data using a spectrum-matching technique.
+       Remote Sens Environ 90(4): 424–33. doi: 10.1016/j.rse.2003.09.002
+    .. [#richter-2011] Richter R, Schläpfer D & Müller A (2011). Operational atmospheric
+       correction for imaging spectrometers accounting for the smile effect. IEEE Trans
+       Geosci Remote Sens 49(5): 1772–80. doi: 10.1109/TGRS.2010.2089799
     """
     
     if os.path.exists(sensor_dict['smile_effect_at_atm_features_file']) and os.path.exists(sensor_dict['smile_effect_file']):
@@ -241,18 +261,25 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
 
 
 def interp_atm_lut(atm_lut_file, WVC, VIS, VZA, RAA):
-    """ Interpolate atmospheric lookup table to different water vapor columns (WVC),
-        visibilities (VIS), view zenith angles (VZA) and relative azimuth angles (RAA).
-    Arguments:
-        atm_lut_file: str
-            Atmospheric lookup table filename.
-        WVC, VIS, VZA, RAA: list of floats
-            Water vapor column, visibility, view zenith angles and relative azimuth angles.
-    Returns:
-        WAVE: array
-            Wavelengths of the atmospheric lookup table radiance.
-        lut_rdn: 2D array
-            Interpolated path radiance (albedo=0.0, 0.5, 1.0).
+    """Interpolate the atmospheric lookup table at the specified parameter values.
+    
+    The lookup table will be interpolated to provide at-sensor radiances for the given
+    values of water vapor column (WVC), aerosol visibility (VIS), view zenith angle (VZA)
+    & relative azimuth angle (RAA).
+    
+    Parameters
+    ----------
+    atm_lut_file : str
+        Atmospheric lookup table filename.
+    WVC, VIS, VZA, RAA : list of float
+        Water vapor column, visibility, view zenith angles and relative azimuth angles.
+    
+    Returns
+    -------
+    WAVE : ndarray
+        Wavelengths of the atmospheric lookup table radiance.
+    lut_rdn : ndarray, 2D
+        Interpolated path radiance (albedo=0.0, 0.5, 1.0).
     """
     
     from hypro.AtmLUT import read_binary_metadata, get_interp_range, combos
@@ -302,16 +329,25 @@ def interp_atm_lut(atm_lut_file, WVC, VIS, VZA, RAA):
 
 
 def average_rdn(avg_rdn_file, rdn_image_file, sca_image_file, pre_class_image_file):
-    """ Average radiance along each column.
-    Arguments:
-        avg_rdn_file: str
-            Average radiance data filename.
-        rdn_image_file: 3D array
-            Radiance image filename, in BIL format.
-        sca_image_file: 3D array
-            Scan angle image filename, in BSQ format.
-        pre_class_image_file: str
-            Pre-classification image filename.
+    """Average radiance along each column.
+    
+    Parameters
+    ----------
+    avg_rdn_file : str
+        Average radiance data filename.
+    rdn_image_file : ndarray, 3D
+        Radiance image filename, in BIL format.
+    sca_image_file : ndarray, 3D
+        Scan angle image filename, in BSQ format.
+    pre_class_image_file : str
+        Pre-classification image filename.
+    
+    Notes
+    -----
+    In the raw sensor image space, a single column contains all the observations from
+    a single spatial pixel in the sensor. The column-averaged radiance spectra provide
+    mean radiance values observed by each individual detector element during acquisition
+    of the image.
     """
     
     if os.path.exists(avg_rdn_file):
@@ -412,12 +448,14 @@ def average_rdn(avg_rdn_file, rdn_image_file, sca_image_file, pre_class_image_fi
 
 
 def interpolate_values(A, map):
-    """ Replace array elements with interpolated values. Input array is modified in-place.
-    Arguments:
-        A: 1D array
-            Input array to be modified.
-        map: 1D array
-            Boolean map indicating which elements should be replaced
+    """Replace array elements with interpolated values. Input array is modified in-place.
+    
+    Parameters
+    ----------
+    A : ndarray, 1D
+        Input array to be modified.
+    map : ndarray, 1D
+        Boolean map indicating which elements should be replaced
     """
     
     def indices(x): return x.nonzero()[0]
@@ -425,23 +463,27 @@ def interpolate_values(A, map):
 
 
 def cost_fun(shifts, sensor_wave, sensor_fwhm, sensor_rdn, lut_wave, lut_rdn):
-    """ Cost function.
-    Arguments:
-        shifts: list of float
-            Shift in wavelength and FWHM.
-        sensor_wave: 1D array
-            Sensor wavelengths.
-        sensor_fwhm: 1D array
-            Sensor FWHMs.
-        sensor_rdn: 1D array
-            Sensor radiance.
-        lut_wave: 1D array
-            LUT wavelengths.
-        lut_rdn: 1D array
-            LUT at-sensor radiance.
-    Returns:
-        cost: float
-            Squared error.
+    """Cost function for smile effect estimation.
+    
+    Parameters
+    ----------
+    shifts : list of float
+        Shift in wavelength and FWHM.
+    sensor_wave : ndarray, 1D
+        Sensor wavelengths.
+    sensor_fwhm : ndarray, 1D
+        Sensor FWHMs.
+    sensor_rdn : ndarray, 1D
+        Sensor radiance.
+    lut_wave : ndarray, 1D
+        Lookup table wavelengths.
+    lut_rdn : ndarray, 1D
+        Lookup table at-sensor radiance.
+    
+    Returns
+    -------
+    cost : float
+        Sum of squared errors between resampled sensor radiances & lookup table radiances.
     """
     
     from hypro.Spectra import continuum_removal, resample_spectra

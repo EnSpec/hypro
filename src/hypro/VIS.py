@@ -12,9 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to estimate visibility.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+"""Functions for visibility estimation."""
 
 import logging
 import os
@@ -33,20 +31,22 @@ atm_db_wvc_lut = {'subarctic_winter': 4.2,
 
 
 def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, background_mask_file):
-    """ Estimate visibility.
-    Arguments:
-        vis_file: str
-            Visibility map filename.
-        ddv_file: str
-            Dark dense vegetation map filename.
-        atm_lut_file: str
-            Atmospheric lookup table filename.
-        rdn_file: str
-            Radiance filename.
-        sca_file: str
-            Scan angle filename.
-        background_mask_file:
-            Background mask filename.
+    """Estimate visibility.
+    
+    Parameters
+    ----------
+    vis_file : str
+        Visibility map filename.
+    ddv_file : str
+        Dark dense vegetation map filename.
+    atm_lut_file : str
+        Atmospheric lookup table filename.
+    rdn_file : str
+        Radiance filename.
+    sca_file : str
+        Scan angle filename.
+    background_mask_file : str
+        Background mask filename.
     """
     
     if os.path.exists(ddv_file) and os.path.exists(vis_file):
@@ -235,15 +235,21 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
 
 
 def interp_atm_lut(atm_lut_RHO, atm_lut_WVC, atm_lut_VZA, atm_lut_RAA, atm_lut, rho, wvc, vza, raa):
-    """ Interpolate the atmospheric lookup table for visibility estimation.
-    Arguments:
-        atm_lut_RHO, atm_lut_WVC, atm_lut_VZA, atm_lut_RAA: list of floats
-            Atmospheric lookup table grids.
-        atm_lut: ndarray
-            Atmospheric lookup table, shape=(RHO, WVC, VIS, VZA, RAA).
-    Returns:
-        interp_rdn: 1D array
-            Interpolated radiance.
+    """Interpolate the atmospheric lookup table for visibility estimation.
+    
+    Parameters
+    ----------
+    atm_lut_RHO, atm_lut_WVC, atm_lut_VZA, atm_lut_RAA : list of float
+        Atmospheric lookup table grids.
+    atm_lut : ndarray
+        Atmospheric lookup table, array with shape ``(RHO, WVC, VIS, VZA, RAA)``.
+    rho, wvc, vza, raa : float
+        Atmospheric parameters.
+    
+    Returns
+    -------
+    interp_rdn : ndarray, 1D
+        Interpolated radiance.
     """
     
     from hypro.AtmLUT import get_interp_range, combos

@@ -12,9 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to process map coordinate systems.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+"""Functions for working with map coordinate systems."""
 
 import os
 
@@ -25,20 +23,24 @@ from osgeo import gdal, osr
 
 
 def set_axis_mapping(crs):
-    """ Set CRS axis mapping to (x,y) order. """
+    """Set CRS axis mapping to (x,y) order."""
     if int(osgeo.__version__[0]) >= 3:
         # By default, GDAL 3 respects axis ordering specified by the CRS
         crs.SetAxisMappingStrategy(osr.OAMS_TRADITIONAL_GIS_ORDER)
 
 
 def get_utm_zone(lon):
-    """ Calculate UTM zone.
-    Arguments:
-        lon: float
-            Longitude, in degrees. West: negative, East: positive.
-    Returns:
-        zone: int
-            UTM zone number.
+    """Calculate UTM zone.
+    
+    Parameters
+    ----------
+    lon : float
+        Longitude, units=[deg]. West: negative, East: positive.
+    
+    Returns
+    -------
+    zone : int
+        UTM zone number.
     """
     
     zone = int(1 + (lon + 180.0)/6.0)
@@ -47,11 +49,16 @@ def get_utm_zone(lon):
 
 
 def is_northern(lat):
-    """ Determine if it is northern hemisphere.
-    Arguments:
-        lat: float
-            Latitude, in degrees. Northern: positive, Southern: negative.
-    Returns:
+    """Determine whether the given latitude falls in the northern hemisphere.
+    
+    Parameters
+    ----------
+    lat : float
+        Latitude, units=[deg]. Northern: positive, Southern: negative.
+    
+    Returns
+    -------
+    int
         1: northern, 0: southern.
     """
     
@@ -62,15 +69,19 @@ def is_northern(lat):
 
 
 def define_utm_crs(lon, lat):
-    """ Define a UTM map coordinate system.
-    Arguments:
-        lon: float
-            Longitude, in degrees. West: negative, East: positive.
-        lat: float
-            Latitude, in degrees. Northern: positive, Southern: negative.
-    Returns:
-        crs: osr.SpatialReference object
-            UTM map coordinate system.
+    """Create a UTM map coordinate system suitable for a given longitude & latitude.
+    
+    Parameters
+    ----------
+    lon : float
+        Longitude, units=[deg]. West: negative, East: positive.
+    lat : float
+        Latitude, units=[deg]. Northern: positive, Southern: negative.
+    
+    Returns
+    -------
+    crs : osr.SpatialReference
+        UTM map coordinate system.
     """
     
     crs = osr.SpatialReference()
@@ -83,10 +94,12 @@ def define_utm_crs(lon, lat):
 
 
 def define_wgs84_crs():
-    """ Define a WGS84 map coordinate system.
-    Returns:
-        crs: osr.SpatialReference object
-            WGS84 map coordinate system.
+    """Create an instance of the WGS84 geographic coordinate system.
+    
+    Returns
+    -------
+    crs : osr.SpatialReference
+        WGS84 map coordinate system.
     """
     
     crs = osr.SpatialReference()
@@ -97,13 +110,17 @@ def define_wgs84_crs():
 
 
 def get_raster_crs(file):
-    """ Get the map coordinate system of a raster image.
-    Arguments:
-        file: str
-            Georeferenced image filename.
-    Returns:
-        crs: osr object
-            Map coordinate system.
+    """Get the coordinate reference system of a raster image.
+    
+    Parameters
+    ----------
+    file : str
+        Georeferenced image filename.
+    
+    Returns
+    -------
+    crs : osr.SpatialReference
+        Map coordinate system.
     """
     
     ds = gdal.Open(file, gdal.GA_ReadOnly)
@@ -118,15 +135,21 @@ def get_raster_crs(file):
 
 
 def get_grid_convergence(lon, lat, map_crs):
-    """ Get grid convergence angles.
-    Arguments:
-        lon: list of floats
-            Longitude. West: negative; East: positive.
-        lat: list of floats
-            Latitude. North: positive; South: negative.
-    Returns:
-        grid_convergence: array of floats
-            Grid convergence in degrees.
+    """Get map grid convergence angles at a given longitude & latitude.
+    
+    Parameters
+    ----------
+    lon : list of float
+        Longitude. West: negative; East: positive.
+    lat : list of float
+        Latitude. North: positive; South: negative.
+    map_crs : osr.SpatialReference
+        Map coordinate system
+    
+    Returns
+    -------
+    grid_convergence : ndarray of float
+        Grid convergence, units=[deg].
     """
     
     lon, lat = np.array(lon), np.array(lat)
@@ -155,19 +178,24 @@ def get_grid_convergence(lon, lat, map_crs):
 
 
 def get_map_crs(dem, longitude, latitude):
-    """ Get map coordinate system.
-    Notes:
-        If `dem` is a file, the map coordinate system should be
-        the same as that of the DEM file; otherwise define a UTM coordinate system
-        based on the longitude and latitude.
-    Arguments:
-        dem: str or float
-            DEM image filename, or user-specified DEM value.
-        longitude, latitude: float
-            Longitude and latitude.
-    Returns:
-        map_crs: osr object
-            Map coordinate system.
+    """Get map coordinate system.
+    
+    Parameters
+    ----------
+    dem : str or float
+        DEM image filename, or user-specified DEM value.
+    longitude, latitude : float
+        Longitude and latitude.
+    
+    Returns
+    -------
+    map_crs : osr.SpatialReference
+        Map coordinate system.
+    
+    Notes
+    -----
+    If ``dem`` is a file, the map coordinate system should be the same as that of the DEM
+    file; otherwise define a UTM coordinate system based on the longitude and latitude.
     """
     
     if isinstance(dem, (int, float)) or not os.path.isfile(dem):
@@ -179,22 +207,34 @@ def get_map_crs(dem, longitude, latitude):
 
 
 def get_sun_angles(longitude, latitude, utc_time):
-    """ Calculate the Sun's position.
-    References:
-        (1) Manuel Blanco-Muriel, et al. (2001). Computing the solar vector. Solar Energy, 70(5), 431-441.
-        (2) The C code is available from: http://www.psa.es/sdg/sunpos.htm
-    Arguments:
-        longitude: float
-            Longitude, in degrees. West: negative, East: positive.
-        latitude: float
-            Latitude, in degrees. Northern: positive, Southern: negative.
-        utc_time: datetime object
-            UTC time.
-    Returns:
-        ZenithAngle: float
-            Sun zenith angle, in degrees.
-        AzimuthAngle: float
-            Sun azimuth angle, in degrees.
+    """Calculate the Sun's position.
+    
+    Parameters
+    ----------
+    longitude : float
+        Longitude, units=[deg]. West: negative, East: positive.
+    latitude : float
+        Latitude, units=[deg]. Northern: positive, Southern: negative.
+    utc_time : datetime object
+        UTC time.
+    
+    Returns
+    -------
+    ZenithAngle : float
+        Sun zenith angle, units=[deg].
+    AzimuthAngle : float
+        Sun azimuth angle, units=[deg].
+    
+    Notes
+    -----
+    A C++ implementation of the algorithm is available from [#psa-sun-position-algorithm]_.
+    
+    References
+    ----------
+    .. [#blanco-muriel-2001] Blanco-Muriel M, Alarcón-Padilla DC, López-Moratalla T
+       & Lara-Coira M (2001). Computing the solar vector. Sol Energy 70(5): 431–41.
+       doi: 10.1016/S0038-092X(00)00156-0
+    .. [#psa-sun-position-algorithm] http://www.psa.es/sdg/sunpos.htm
     """
     
     rad = np.pi/180

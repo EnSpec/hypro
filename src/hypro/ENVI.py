@@ -12,15 +12,16 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to process ENVI format data.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+"""Functions for working with image data in ENVI format.
 
-"""
-Notes:
-    (1) The code is adapted from HyTools:
-        https://github.com/EnSpec/HyTools-sandbox/blob/master/hytools/file_io/envi_read.py
-        https://github.com/EnSpec/HyTools-sandbox/blob/master/hytools/file_io/envi_write.py
+Notes
+-----
+The code is adapted from HyTools; See [#ht-envi-read]_ and [#ht-envi-write]_.
+
+References
+----------
+.. [#ht-envi-read] https://github.com/EnSpec/HyTools-sandbox/blob/master/hytools/file_io/envi_read.py
+.. [#ht-envi-write] https://github.com/EnSpec/HyTools-sandbox/blob/master/hytools/file_io/envi_write.py
 """
 
 from copy import deepcopy
@@ -126,13 +127,17 @@ envi_fields = [
 
 
 def read_envi_header(file):
-    """ Read ENVI header.
-    Arguments:
-        file: str
-            ENVI header filename.
-    Returns:
-        header: dict
-            ENVI header.
+    """Read ENVI header.
+    
+    Parameters
+    ----------
+    file : str
+        ENVI header filename.
+    
+    Returns
+    -------
+    header : dict
+        ENVI header.
     """
     
     header = empty_envi_header()
@@ -174,10 +179,12 @@ def read_envi_header(file):
 
 
 def check_envi_required_fields(header):
-    """ Check ENVI required fields.
-    Arguments:
-        header: dict
-            ENVI header.
+    """Check ENVI required fields.
+    
+    Parameters
+    ----------
+    header : dict
+        ENVI header.
     """
     
     required_fields = [
@@ -194,10 +201,12 @@ def check_envi_required_fields(header):
 
 
 def empty_envi_header():
-    """ Generate an empty ENVI header.
-    Returns:
-        header: dict
-            Empty ENVI header.
+    """Generate an empty ENVI header.
+    
+    Returns
+    -------
+    header : dict
+        Empty ENVI header.
     """
     
     header = dict()
@@ -208,12 +217,14 @@ def empty_envi_header():
 
 
 def write_envi_header(file, header):
-    """ Write ENVI header.
-    Arguments:
-        file: str
-            ENVI header filename.
-        header: dict
-            ENVI header.
+    """Write ENVI header.
+    
+    Parameters
+    ----------
+    file : str
+        ENVI header filename.
+    header : dict
+        ENVI header.
     """
     
     header = deepcopy(header)

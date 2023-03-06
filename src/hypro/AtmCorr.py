@@ -12,9 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to estimate visibility.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+"""Functions for atmospheric correction."""
 
 import logging
 import os
@@ -27,21 +25,29 @@ logger = logging.getLogger(__name__)
 def atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut,
                   wvc_image, vis_image, vza_image, raa_image, rdn_image,
                   bg_mask):
-    """ Do atmospheric correction for one band.
-    Arguments:
-        atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA: list of floats
-            Atmospheric lookup table water vapor column, visibility, view zenith and relative azimuth angle grids.
-        atm_lut: ndarray
-            Atmospheric lookup table, shape = (RHO, WVC, VIS, VZA, RAA).
-        wvc_image, vis_image, vza_image, raa_image: 2D arrays.
-            Water vapor column, visibility, view zenith and relative azimuth angle images.
-        rdn_image: 2D array
-            Radiance image.
-        bg_mask: 2D bool array
-            Background mask.
-    Returns:
-        rho: 2D array
-            Surface reflectance.
+    """Do atmospheric correction for one band.
+    
+    Parameters
+    ----------
+    atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA : list of float
+        Atmospheric lookup table grid coordinates for water vapor column, visibility,
+        view zenith & relative azimuth angle. These are the parameters values for which
+        the lookup tables have been generated.
+    atm_lut : ndarray
+        Atmospheric lookup table, array with shape ``(RHO, WVC, VIS, VZA, RAA)``.
+    wvc_image, vis_image, vza_image, raa_image : ndarray, 2D
+        Water vapor column, visibility, view zenith and relative azimuth angle images.
+        These are the estimated true values of the atmospheric parameters across the
+        scene to be corrected.
+    rdn_image : ndarray, 2D
+        At-sensor spectral radiance image.
+    bg_mask : ndarray of bool, 2D
+        Background mask.
+    
+    Returns
+    -------
+    rho : ndarray, 2D
+        Estimated surface spectral reflectance image.
     """
     
     from scipy.interpolate import RegularGridInterpolator
@@ -73,10 +79,12 @@ def atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut,
 
 
 def atm_corr_image(flight_dict):
-    """ Do atmospheric corrections on the whole image.
-    Arguments:
-        flight_dict: dict
-            Flight dictionary.
+    """Do atmospheric correction band-by-band for a full spectral data cube.
+    
+    Parameters
+    ----------
+    flight_dict : dict
+        Flight dictionary.
     """
     
     if os.path.exists(flight_dict['refl_file']):

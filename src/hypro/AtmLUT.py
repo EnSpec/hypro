@@ -12,9 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to do atmospheric corrections.
-@author: Nanfeng Liu (nliu58@wisc.edu)
-"""
+"""Functions for working with radiative transfer lookup tables."""
 
 import logging
 import os
@@ -36,10 +34,12 @@ atm_db_RAA = np.array([0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180])
 
 
 def build_atm_lut(flight_dict):
-    """ Make an atmospheric lookup table.
-    Arguments:
-        flight_dict: dict
-            Flight configurations.
+    """Make an atmospheric lookup table.
+    
+    Parameters
+    ----------
+    flight_dict : dict
+        Flight configurations.
     """
     
     import glob
@@ -167,14 +167,16 @@ def build_atm_lut(flight_dict):
 
 
 def resample_atm_lut(resampled_atm_lut_file, raw_atm_lut_file, rdn_header_file):
-    """ Resample atmospheric lookup table radiance to sensor wavelengths.
-    Arguments:
-        resampled_atm_lut_file: str
-            Resampled atmospheric lookup table filename.
-        raw_atm_lut_file: str
-            Raw atmospheric lookup table filename.
-        rdn_header_file: str
-            Radiance header filename.
+    """Resample atmospheric lookup table radiance to sensor wavelengths.
+    
+    Parameters
+    ----------
+    resampled_atm_lut_file : str
+        Resampled atmospheric lookup table filename.
+    raw_atm_lut_file : str
+        Raw atmospheric lookup table filename.
+    rdn_header_file : str
+        Radiance header filename.
     """
     
     if os.path.exists(resampled_atm_lut_file):
@@ -230,12 +232,14 @@ def resample_atm_lut(resampled_atm_lut_file, raw_atm_lut_file, rdn_header_file):
 
 
 def write_binary_metadata(metadata_file, metadata):
-    """ Write the metadata of a binary file.
-    Arguments:
-        metadata_file: str
-            Metadata filename.
-        metadata: dict
-            Metadata.
+    """Write lookup table metadata.
+    
+    Parameters
+    ----------
+    metadata_file : str
+        Metadata filename.
+    metadata : dict
+        Metadata.
     """
     
     fid = open(metadata_file, 'w')
@@ -257,13 +261,17 @@ def write_binary_metadata(metadata_file, metadata):
 
 
 def read_binary_metadata(metadata_file):
-    """ Read the metadata of a binary file.
-    Arguments:
-        metadata_file: str
-            Metadata filename.
-    Returns:
-        metadata: dict
-            Metadata.
+    """Read lookup table metadata.
+    
+    Parameters
+    ----------
+    metadata_file : str
+        Metadata filename.
+    
+    Returns
+    -------
+    metadata : dict
+        Metadata.
     """
     
     fid = open(metadata_file, 'r')
@@ -294,7 +302,20 @@ def read_binary_metadata(metadata_file):
 
 
 def get_interp_range(xs, x):
-    """ Get the interpolation range.
+    """Get the interpolation range.
+    
+    Parameters
+    ----------
+    xs : list
+        Parameter grid coordinates at which the lookup table has been evaluated.
+    x : float
+        Parameter value at which to interpolate the lookup table.
+    
+    Returns
+    -------
+    dict
+        Dictionary with keys corresponding to indices of the nearest grid coordinates,
+        and values corresponding to weightings for linear interpolation between them.
     """
     
     x_index0 = np.where(xs <= x)[0][-1]
@@ -306,10 +327,17 @@ def get_interp_range(xs, x):
 
 
 def combos(indices):
-    """ Return all combinations of indices in a list of index sublists.
-    Arguments:
-        indices: list of int lists
-            List of index lists.
+    """Return all combinations of indices in a list of index sublists.
+    
+    Parameters
+    ----------
+    indices : list of list of int
+        List of index lists.
+    
+    Returns
+    -------
+    list of tuple
+        Cartesian product of the input lists.
     """
     
     import itertools
