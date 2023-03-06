@@ -114,7 +114,7 @@ def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensor
         tmp_image.flush()
         del tmp_image
     
-    mask = ~mask # 1: background pixels; 0: non-background pixels.
+    mask = ~mask  # 1: background pixels; 0: non-background pixels.
     
     # Write the mask to a file.
     fid = open(background_mask_file, 'wb')
@@ -299,7 +299,7 @@ def merge_rdn(merged_image_file, mask_file, sensors):
         if ((v[1] >= 1339.0) & (v[1] <= 1438.0)) | ((v[1] >= 1808.0) & (v[1] <= 1978.0)) | (v[1] >= 2467.0):
             resampled_image = np.zeros(x.shape)
         else:
-            offset = header['header offset'] + 4*band*header['lines']*header['samples']# in bytes
+            offset = header['header offset'] + 4*band*header['lines']*header['samples']  # in bytes
             rdn_image = np.memmap(image_file,
                                   dtype='float32',
                                   mode='r',

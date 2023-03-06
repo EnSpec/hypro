@@ -194,8 +194,8 @@ def get_sun_angles(longitude, latitude, utc_time):
     """
     
     rad = np.pi/180
-    EarthMeanRadius = 6371.01 # in km
-    AstronomicalUnit = 149597890 #in km
+    EarthMeanRadius = 6371.01  # in km
+    AstronomicalUnit = 149597890  # in km
     
     DecimalHours = utc_time.hour + (utc_time.minute + utc_time.second/60.0)/60.0
     Aux1 = int((utc_time.month - 14)/12)

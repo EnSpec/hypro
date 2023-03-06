@@ -49,7 +49,7 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
     from scipy import optimize
     
     # Read IMU and GPS data.
-    imugps = np.loadtxt(imugps_file) # ID, X, Y, Z, R, P, H, Timestamp, Longitude, Latitude, Grid_Convergence, Roll...
+    imugps = np.loadtxt(imugps_file)  # ID, X, Y, Z, R, P, H, Timestamp, Longitude, Latitude, Grid_Convergence, Roll...
     
     # Read sensor model data.
     sensor_model = np.loadtxt(sensor_model_file, skiprows=1)[:, 1:]
@@ -62,7 +62,7 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
     ds = None
     
     # Read GCP data.
-    gcp_data = np.loadtxt(gcp_file, comments=';') # Longitude, Latitude, Image Column, Image Row
+    gcp_data = np.loadtxt(gcp_file, comments=';')  # Longitude, Latitude, Image Column, Image Row
     
     # Convert GCP longitudes and latitudes to map x and y.
     wgs84_crs = define_wgs84_crs()
@@ -221,16 +221,16 @@ def estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_mo
     z = flight_xyz[:, 2] + boresight_offsets[3] if boresight_options[3] else flight_xyz[:, 2]
     
     # Get scan vectors.
-    heading[heading < 0] = heading[heading < 0] + 360 # heading: -180~180 -> 0~360
-    heading = 90 - heading # heading angle -> euler angle
-    pitch = -pitch # pitch angle -> euler angle
+    heading[heading < 0] = heading[heading < 0] + 360  # heading: -180~180 -> 0~360
+    heading = 90 - heading  # heading angle -> euler angle
+    pitch = -pitch  # pitch angle -> euler angle
     
     roll = np.deg2rad(roll)
     pitch = np.deg2rad(pitch)
     heading = np.deg2rad(heading)
     
     L0 = -np.ones((3, 1, n_gcps))
-    L0[0, 0, :] = np.tan(flight_sensor_model[:, 1]) # Along-track vector component
+    L0[0, 0, :] = np.tan(flight_sensor_model[:, 1])  # Along-track vector component
     L0[1, 0, :] = np.tan(flight_sensor_model[:, 0])
     
     R = np.zeros((3, 3, n_gcps))
@@ -256,18 +256,18 @@ def estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_mo
     
     M = np.einsum('ijk,jlk->ilk', H, P)
     M = np.einsum('ijk,jlk->ilk', M, R)
-    L0 = np.einsum('ijk,jlk->ilk', M, L0)[:, 0, :] # shape=(3, n_gcps)
+    L0 = np.einsum('ijk,jlk->ilk', M, L0)[:, 0, :]  # shape=(3, n_gcps)
     
     del roll, pitch, heading, R, P, H, M
     
     # Get start and end points of ray tracing.
     h_min = dem_image.min()
     h_max = dem_image.max()
-    xyz0 = np.ones(flight_xyz.shape) # shape=(3, n_gcps)
+    xyz0 = np.ones(flight_xyz.shape)  # shape=(3, n_gcps)
     xyz0[:, 0] = (h_max - z)*L0[0, :]/L0[2, :] + x
     xyz0[:, 1] = (h_max - z)*L0[1, :]/L0[2, :] + y
     xyz0[:, 2] = h_max
-    xyz1 = np.ones(flight_xyz.shape) # shape=(3, n_gcps)
+    xyz1 = np.ones(flight_xyz.shape)  # shape=(3, n_gcps)
     xyz1[:, 0] = (h_min - z)*L0[0, :]/L0[2, :] + x
     xyz1[:, 1] = (h_min - z)*L0[1, :]/L0[2, :] + y
     xyz1[:, 2] = h_min

@@ -65,7 +65,7 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
                            mode='r',
                            dtype='float32',
                            shape=(header['lines'],
-                                  header['samples'])) # shape=(bands, samples)
+                                  header['samples']))  # shape=(bands, samples)
     samples = header['samples']
     sensor_wave = np.array([float(v) for v in header['waves'].split(',')])
     sensor_fwhm = np.array([float(v) for v in header['fwhms'].split(',')])
@@ -105,17 +105,17 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
         wvc += np.interp(ratio, model['ratio'], model['wvc'])
         del ratio
     wvc /= len(wvc_models)
-    wvc_isnan = np.isnan(wvc) # Look for NaN values
+    wvc_isnan = np.isnan(wvc)  # Look for NaN values
     if np.any(wvc_isnan):
         logger.info('WVC could not be estimated for some columns. '
                     'Missing values will be interpolated.')
-        interpolate_values(wvc, wvc_isnan) # Replace NaNs with interpolated values
+        interpolate_values(wvc, wvc_isnan)  # Replace NaNs with interpolated values
     logger.info('WVC [mm] statistics: min=%.2f, max=%.2f, avg=%.2f, sd=%.2f.' % (wvc.min(), wvc.max(), wvc.mean(), wvc.std()))
     del wvc_models, model
     
     # Interpolate atmospheric lookup table.
     logger.info('Interpolate atmospheric lookup table.')
-    atm_lut_wave, atm_lut_rdn = interp_atm_lut(atm_lut_file, wvc, vis, vza, raa) # shape=(samples, bands)
+    atm_lut_wave, atm_lut_rdn = interp_atm_lut(atm_lut_file, wvc, vis, vza, raa)  # shape=(samples, bands)
     del wvc, vis, vza, raa
     
     # Detect smile effects at atmospheric absorption features.
@@ -171,8 +171,8 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
     
     # Write shifts to a binary file.
     fid = open(sensor_dict['smile_effect_at_atm_features_file'], 'wb')
-    fid.write(shifts[0, :, :].tostring()) # shift in wavelength
-    fid.write(shifts[1, :, :].tostring()) # shift in FWHM
+    fid.write(shifts[0, :, :].tostring())  # shift in wavelength
+    fid.write(shifts[1, :, :].tostring())  # shift in FWHM
     fid.close()
     
     # Write header.
@@ -265,7 +265,7 @@ def interp_atm_lut(atm_lut_file, WVC, VIS, VZA, RAA):
     atm_lut = np.memmap(atm_lut_file,
                         dtype=atm_lut_metadata['dtype'],
                         mode='r',
-                        shape=atm_lut_metadata['shape'])# shape = (RHO, WVC, VIS, VZA, RAA, WAVE)
+                        shape=atm_lut_metadata['shape'])  # shape = (RHO, WVC, VIS, VZA, RAA, WAVE)
     
     # Initialize interpolated radiance.
     interp_rdn = np.zeros((len(WVC), len(atm_lut_WAVE)), dtype='float32')
@@ -331,7 +331,7 @@ def average_rdn(avg_rdn_file, rdn_image_file, sca_image_file, pre_class_image_fi
                                 mode='r',
                                 shape=(pre_class_header['lines'],
                                        pre_class_header['samples']))
-    mask = pre_class_image == 5 # 5: land (clear)
+    mask = pre_class_image == 5  # 5: land (clear)
     pre_class_image.flush()
     del pre_class_header, pre_class_image
     
@@ -346,7 +346,7 @@ def average_rdn(avg_rdn_file, rdn_image_file, sca_image_file, pre_class_image_fi
         tmp_mask = mask & (rdn_image[:, band, :] > 0.0)
         
         # Average radiance.
-        rdn = np.ma.array(rdn_image[:, band, :], mask=~tmp_mask).mean(axis=0) # shape = (samples,1)
+        rdn = np.ma.array(rdn_image[:, band, :], mask=~tmp_mask).mean(axis=0)  # shape = (samples,1)
         
         # Interpolate bad radiance values.
         for bad_sample in np.where(rdn.mask)[0]:

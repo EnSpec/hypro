@@ -56,12 +56,12 @@ def prepare_imugps_Hyspex(processed_imugps_file, raw_imugps_file, boresight_offs
     wgs84_crs = define_wgs84_crs()
     transform = osr.CoordinateTransformation(wgs84_crs, map_crs)
     xyz = np.array(transform.TransformPoints(raw_imugps[:, 1:3]))
-    processed_imugps[:, 1] = xyz[:, 0] # Flight easting
-    processed_imugps[:, 2] = xyz[:, 1] # Flight northing
-    processed_imugps[:, 3] = raw_imugps[:, 3]# Flight altitude
-    processed_imugps[:, 4] = raw_imugps[:, 4]# Roll
-    processed_imugps[:, 5] = raw_imugps[:, 5]# Pitch
-    processed_imugps[:, 6] = raw_imugps[:, 6]# Heading
+    processed_imugps[:, 1] = xyz[:, 0]  # Flight easting
+    processed_imugps[:, 2] = xyz[:, 1]  # Flight northing
+    processed_imugps[:, 3] = raw_imugps[:, 3]  # Flight altitude
+    processed_imugps[:, 4] = raw_imugps[:, 4]  # Roll
+    processed_imugps[:, 5] = raw_imugps[:, 5]  # Pitch
+    processed_imugps[:, 6] = raw_imugps[:, 6]  # Heading
     del transform, xyz
     
     # Boresight offsets.
@@ -74,8 +74,8 @@ def prepare_imugps_Hyspex(processed_imugps_file, raw_imugps_file, boresight_offs
     processed_imugps[:, 11] = grid_convergence
     
     # Longitude and latitude.
-    processed_imugps[:, 12] = raw_imugps[:, 1]# Longitude
-    processed_imugps[:, 13] = raw_imugps[:, 2]# Latitude
+    processed_imugps[:, 12] = raw_imugps[:, 1]  # Longitude
+    processed_imugps[:, 13] = raw_imugps[:, 2]  # Latitude
     
     # Timestamp.
     processed_imugps[:, 14] = raw_imugps[:, 7]

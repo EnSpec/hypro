@@ -50,7 +50,7 @@ def calculate_igm(igm_image_file, imugps_file, sensor_model_file, dem_image_file
     from scipy import interpolate
     
     # Read IMU and GPS data.
-    imugps = np.loadtxt(imugps_file) # ID, X, Y, Z, R, P, H, R_Offset, P_Offset, H_Offset, Grid_Convergence
+    imugps = np.loadtxt(imugps_file)  # ID, X, Y, Z, R, P, H, R_Offset, P_Offset, H_Offset, Grid_Convergence
     
     # Read sensor model data.
     sensor_model = np.loadtxt(sensor_model_file, skiprows=1)[:, 1:]
@@ -71,7 +71,7 @@ def calculate_igm(igm_image_file, imugps_file, sensor_model_file, dem_image_file
         imugps[:, 6] += imugps[:, 9]
     if boresight_options[3]:
         imugps[:, 3] += imugps[:, 10]
-    imugps[:, 6] -= imugps[:, 11] # Heading - grid convergence
+    imugps[:, 6] -= imugps[:, 11]  # Heading - grid convergence
     
     # Get scan vectors.
     L0 = get_scan_vectors(imugps[:, 4:7], sensor_model)
@@ -177,7 +177,7 @@ def calculate_sca(sca_image_file, imugps_file, igm_image_file, sun_angles):
                                  igm_header['samples']))
     
     # Read GPS data.
-    imugps = np.loadtxt(imugps_file) # ID, X, Y, Z, R, P, H, ...
+    imugps = np.loadtxt(imugps_file)  # ID, X, Y, Z, R, P, H, ...
     
     # Calculate sensor angles.
     DX = igm_image[0, :, :] - np.expand_dims(imugps[:, 1], axis=1)
@@ -458,9 +458,9 @@ def get_scan_vectors(imu, sensor_model):
     n_detectors = sensor_model.shape[0]
     
     # Navigational standard angles -> Euler angles
-    heading[heading < 0] = heading[heading < 0] + 360 # heading: -180~180 -> 0~360
-    heading = 90 - heading # heading angle -> euler angle
-    pitch = -pitch # pitch angle -> euler angle
+    heading[heading < 0] = heading[heading < 0] + 360  # heading: -180~180 -> 0~360
+    heading = 90 - heading  # heading angle -> euler angle
+    pitch = -pitch  # pitch angle -> euler angle
     
     # [degree] to [radian]
     roll = np.deg2rad(roll)
@@ -469,7 +469,7 @@ def get_scan_vectors(imu, sensor_model):
     
     # Initialize scan vectors
     L0 = -np.ones((3, n_detectors), dtype='float32')
-    L0[0, :] = np.tan(sensor_model[:, 1]) # Along-track vector component
+    L0[0, :] = np.tan(sensor_model[:, 1])  # Along-track vector component
     L0[1, :] = np.tan(sensor_model[:, 0])
     
     # Initialize rotation matrices
@@ -574,8 +574,8 @@ def ray_tracer_ufunc(xyz0, xyz1, L0, dem, dem_gt, output):
     dem_origin = gt[[0, 3]]
     resolution = gt[[1, 5]]
     
-    for i in range(xyz0.shape[1]): # Iterate over detectors
-        for j in range(xyz0.shape[2]): # Iterate over scanlines
+    for i in range(xyz0.shape[1]):  # Iterate over detectors
+        for j in range(xyz0.shape[2]):  # Iterate over scanlines
             output[:, j, i] = ray_tracing(xyz0[:, i, j], xyz1[:, i, j], L0[:, i, j], dem, dem_origin, resolution)
 
 

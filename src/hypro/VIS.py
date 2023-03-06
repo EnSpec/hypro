@@ -81,7 +81,7 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
     atm_lut = np.memmap(atm_lut_file,
                         dtype=atm_lut_metadata['dtype'],
                         mode='r',
-                        shape=atm_lut_metadata['shape'])# shape = (RHO, WVC, VIS, VZA, RAA, WAVE)
+                        shape=atm_lut_metadata['shape'])  # shape = (RHO, WVC, VIS, VZA, RAA, WAVE)
     
     # Read radiance image.
     rdn_image = np.memmap(rdn_file,

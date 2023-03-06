@@ -27,9 +27,9 @@ from copy import deepcopy
 
 envi_value_types = {'acquisition time': 'str',
                     'band names': 'str_list',
-                    'bands': 'int', # required
+                    'bands': 'int',  # required
                     'bbl': 'float_list',
-                    'byte order': 'int', # required
+                    'byte order': 'int',  # required
                     'class lookup': 'int_list',
                     'class names': 'str_list',
                     'classes': 'int',
@@ -41,25 +41,25 @@ envi_value_types = {'acquisition time': 'str',
                     'data offset values': 'float_list',
                     'data reflectance gain values': 'float_list',
                     'data reflectance offset values': 'float_list',
-                    'data type': 'int', # required
+                    'data type': 'int',  # required
                     'default bands': 'int_list',
                     'default stretch': 'str',
                     'dem band': 'int',
                     'dem file': 'str',
                     'description': 'str',
-                    'file type': 'str', # required
+                    'file type': 'str',  # required
                     'fwhm': 'float_list',
                     'geo points': 'float_list',
                     'header offset': 'int',
-                    'interleave': 'str', # required
-                    'lines': 'int', # required
+                    'interleave': 'str',  # required
+                    'lines': 'int',  # required
                     'map info': 'str_list',
                     'pixel size': 'float_list',
                     'projection info': 'str',
                     'read procedures': 'str_list',
                     'reflectance scale factor': 'float',
                     'rpc info': 'str',
-                    'samples': 'int', # required
+                    'samples': 'int',  # required
                     'security tag': 'str',
                     'sensor type': 'str',
                     'solar irradiance': 'float',

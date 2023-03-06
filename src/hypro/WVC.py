@@ -65,10 +65,10 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
     atm_lut = np.memmap(atm_lut_file,
                         dtype='float32',
                         mode='r',
-                        shape=metadata['shape']) # dimension=[RHO, WVC, VIS, VZA, RAA, WAVE]
+                        shape=metadata['shape'])  # dimension=[RHO, WVC, VIS, VZA, RAA, WAVE]
     
     # Subtract path radiance.
-    atm_lut_rdn = atm_lut[1, :, vza_index, raa_index, :] - atm_lut[0, :, vza_index, raa_index, :] # dimension=[WVC, VIS, WAVE]
+    atm_lut_rdn = atm_lut[1, :, vza_index, raa_index, :] - atm_lut[0, :, vza_index, raa_index, :]  # dimension=[WVC, VIS, WAVE]
     atm_lut.flush()
     del atm_lut
     

@@ -172,6 +172,6 @@ def resample_solar_flux(sensor_waves, sensor_fwhms, file=None):
     
     solar_flux_file = file or BytesIO(pkgutil.get_data(__package__, 'data/solar/irradiance_kurucz1992.dat'))
     solar_flux = np.loadtxt(solar_flux_file)
-    solar_flux = resample_spectra(solar_flux[:, 1], solar_flux[:, 0], sensor_waves, sensor_fwhms)/10.0 # 10.0: mW/(m2 nm) -> mW/(cm2 um)
+    solar_flux = resample_spectra(solar_flux[:, 1], solar_flux[:, 0], sensor_waves, sensor_fwhms)/10.0  # 10.0: mW/(m2 nm) -> mW/(cm2 um)
     
     return solar_flux

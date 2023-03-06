@@ -254,7 +254,7 @@ def plot_avg_rdn(avg_rdn_figure_file, avg_rdn_file):
                         mode='r',
                         dtype='float32',
                         shape=(header['lines'],
-                               header['samples'])) # shape=(bands, samples)
+                               header['samples']))  # shape=(bands, samples)
     wavelength = np.array([float(v) for v in header['waves'].split(',')])
     
     plt.figure(figsize=(10, 6))

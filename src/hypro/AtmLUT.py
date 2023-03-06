@@ -21,15 +21,15 @@ import logging, os, numpy as np
 logger = logging.getLogger(__name__)
 
 # Define atmospheric database parameters. Do not make any change to them.
-atm_db_VZA_grid_size = 5 # view zenith angle grid size, in [deg]
-atm_db_RAA_grid_size = 15 # relative azimuth angle grid size, in [deg]
-atm_db_RHO = np.array([0, 0.5, 1.0]) # surface albedo, unitless
-atm_db_WVC = np.array([4, 10, 15, 20, 25, 30, 35, 40, 45, 50]) # water vapor column, in [mm]
-atm_db_VIS = np.array([5, 10, 20, 40, 80, 120]) # aerosol visibility, in [km]
-atm_db_WAVE = np.arange(4000, 25001)/10 # wavelength, in [nm]
-atm_db_SZA = np.array([0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70]) # Sun zenith angle, in [deg]
-atm_db_VZA = np.array([0, 5, 10, 15, 20, 25, 30, 40]) # view zenith angle, in [deg]
-atm_db_RAA = np.array([0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]) # relative azimuth angle, in [deg]
+atm_db_VZA_grid_size = 5  # view zenith angle grid size, in [deg]
+atm_db_RAA_grid_size = 15  # relative azimuth angle grid size, in [deg]
+atm_db_RHO = np.array([0, 0.5, 1.0])  # surface albedo, unitless
+atm_db_WVC = np.array([4, 10, 15, 20, 25, 30, 35, 40, 45, 50])  # water vapor column, in [mm]
+atm_db_VIS = np.array([5, 10, 20, 40, 80, 120])  # aerosol visibility, in [km]
+atm_db_WAVE = np.arange(4000, 25001)/10  # wavelength, in [nm]
+atm_db_SZA = np.array([0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70])  # Sun zenith angle, in [deg]
+atm_db_VZA = np.array([0, 5, 10, 15, 20, 25, 30, 40])  # view zenith angle, in [deg]
+atm_db_RAA = np.array([0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180])  # relative azimuth angle, in [deg]
 
 
 def build_atm_lut(flight_dict):
@@ -49,9 +49,9 @@ def build_atm_lut(flight_dict):
     # Get sun angles (zenith and azimuth), above-sea-level elevation, above-ground flight altitude.
     sensor_dict = flight_dict['sensors'][list(flight_dict['sensors'].keys())[0]]
     atm_lut_sza, atm_lut_saa = tuple(flight_dict['sun_angles'])
-    atm_lut_elev = get_avg_elev(sensor_dict['dem_image_file'])/1000.0 # 1000.0 converts [m] to [km].
+    atm_lut_elev = get_avg_elev(sensor_dict['dem_image_file'])/1000.0  # 1000.0 converts [m] to [km].
     imugps = np.loadtxt(sensor_dict['processed_imugps_file'])
-    flight_altitude = imugps[:, 3].mean()/1000.0 # 1000.0 converts [m] to [km]
+    flight_altitude = imugps[:, 3].mean()/1000.0  # 1000.0 converts [m] to [km]
     atm_lut_zout = flight_altitude - atm_lut_elev
     del imugps, flight_altitude, sensor_dict
     
@@ -66,8 +66,8 @@ def build_atm_lut(flight_dict):
         atm_db_ELEV.append(int(tmp[1])/1000.0)
         atm_db_ZOUT.append(int(tmp[3])/1000.0)
     del atm_db_folders, folder
-    atm_db_ELEV = sorted(list(set(atm_db_ELEV))) # Remove duplicates, and sort values;
-    atm_db_ZOUT = sorted(list(set(atm_db_ZOUT))) # Remove duplicates, and sort values;
+    atm_db_ELEV = sorted(list(set(atm_db_ELEV)))  # Remove duplicates, and sort values;
+    atm_db_ZOUT = sorted(list(set(atm_db_ZOUT)))  # Remove duplicates, and sort values;
     
     # Get the elevation interpolation range.
     if np.all(np.array(atm_db_ELEV) < atm_lut_elev) or np.all(np.array(atm_db_ELEV) > atm_lut_elev):
@@ -194,7 +194,7 @@ def resample_atm_lut(resampled_atm_lut_file, raw_atm_lut_file, rdn_header_file):
     atm_lut = np.memmap(raw_atm_lut_file,
                         dtype=atm_lut_metadata['dtype'],
                         mode='r',
-                        shape=atm_lut_metadata['shape'])# shape = (RHO, WVC, VIS, VZA, RAA, WAVE)
+                        shape=atm_lut_metadata['shape'])  # shape = (RHO, WVC, VIS, VZA, RAA, WAVE)
     
     # Reshape.
     atm_lut = atm_lut.reshape((len(atm_lut_RHO)*len(atm_lut_WVC)*len(atm_lut_VIS)*len(atm_lut_VZA)*len(atm_lut_RAA), len(atm_lut_WAVE)))

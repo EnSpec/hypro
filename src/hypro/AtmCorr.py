@@ -97,7 +97,7 @@ def atm_corr_image(flight_dict):
     atm_lut = np.memmap(flight_dict['resampled_atm_lut_file'],
                         dtype=atm_lut_metadata['dtype'],
                         mode='r',
-                        shape=atm_lut_metadata['shape'])# shape = (RHO, WVC, VIS, VZA, RAA, WAVE)
+                        shape=atm_lut_metadata['shape'])  # shape = (RHO, WVC, VIS, VZA, RAA, WAVE)
     
     # Read VZA and RAA image.
     sca_header = read_envi_header(os.path.splitext(flight_dict['merged_sca_file'])[0]+'.hdr')
@@ -173,7 +173,7 @@ def atm_corr_image(flight_dict):
         if (rdn_header['wavelength'][band] >= 1340.0 and rdn_header['wavelength'][band] <= 1440.0) or (rdn_header['wavelength'][band] >= 1800.0 and rdn_header['wavelength'][band] <= 1980.0) or rdn_header['wavelength'][band] >= 2460.0:
             fid.write(np.zeros((rdn_header['lines'], rdn_header['samples'])).astype('float32').tostring())
         else:
-            offset = rdn_header['header offset'] + 4*band*rdn_header['lines']*rdn_header['samples']# in bytes
+            offset = rdn_header['header offset'] + 4*band*rdn_header['lines']*rdn_header['samples']  # in bytes
             rdn_image = np.memmap(flight_dict['merged_rdn_file'],
                                   dtype='float32',
                                   mode='r',

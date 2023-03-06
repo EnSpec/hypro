@@ -36,7 +36,7 @@ def get_avg_elev(dem_image_file):
     
     ds = gdal.Open(dem_image_file, gdal.GA_ReadOnly)
     dem_image = ds.GetRasterBand(1).ReadAsArray()
-    avg_elev = dem_image[dem_image > 0].mean() # Negative values are ignored.
+    avg_elev = dem_image[dem_image > 0].mean()  # Negative values are ignored.
     ds = None
     del dem_image
     
@@ -84,7 +84,7 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
     del imugps, half_swath, altitude, buffer
     
     # Process DEM.
-    if type(dem) is str: # If `old_dem` is a file, then clip it to the flight area.
+    if type(dem) is str:  # If `old_dem` is a file, then clip it to the flight area.
         # Read raw DEM.
         ds = gdal.Open(dem, gdal.GA_ReadOnly)
         
