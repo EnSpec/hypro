@@ -48,7 +48,7 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
         dem: str or float
             Input DEM image filename, or user-specified elevation value [m].
         imugps_file: str
-            IMUGPS data filename.
+            IMU & GPS data filename.
         fov: float
             Sensor field of view [deg].
         map_crs: osr object
@@ -68,7 +68,7 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
         (1) The `altitude` here is above the mean sea level, or the Earth
             ellipsoid surface, rather than above the ground surface. Strictly speaking,
             it should be subtracted by the average elevation before calculating `half_swath`.
-        (2) A buffer of 50 m is used to ensure the processed DEM image covers the whole flight area.
+        (2) A buffer of 500 m is used to ensure the processed DEM image covers the whole flight area.
     """
     buffer = 500
     imugps = np.loadtxt(imugps_file)

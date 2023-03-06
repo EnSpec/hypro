@@ -19,7 +19,7 @@
 import logging, os, numpy as np
 logger = logging.getLogger(__name__)
 
-# Define typical water vapor column values of the atmosphere database. Do not make any change to them.
+# Define typical water vapor column values of the atmospheric database. Do not make any change to them.
 atm_db_wvc_lut = {'subarctic_winter': 4.2,
                   'midlatitude_winter': 8.5,
                   'USstandard': 14.2,
@@ -98,9 +98,9 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
                           shape=(sca_header['bands'],
                                  sca_header['lines'],
                                  sca_header['samples']))
-    # vza
+    # VZA
     vza_image = np.copy(sca_image[0,:,:])
-    # raa
+    # RAA
     raa_image = saa-sca_image[1,:,:]
     raa_image[raa_image<0] += 360.0
     raa_image[raa_image>180] = 360.0-raa_image[raa_image>180]
@@ -148,7 +148,7 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
             swir_refl_upper_bounds = [0.10, 0.15, 0.18]
             red_swir_ratio = 0.25
 
-        # Calculate swir refletance.
+        # Calculate SWIR reflectance.
         swir_refl = atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut[...,swir_band],
                                   tmp_wvc_image, tmp_vis_image, vza_image, raa_image, rdn_image[swir_band,:,:],
                                   bg_mask)
@@ -187,7 +187,7 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
         del ddv_mask
 
         ddv_header = empty_envi_header()
-        ddv_header['description'] = 'DDV mask (1: Dark dense vegetaion; 0: non-dark dense vegetation)'
+        ddv_header['description'] = 'DDV mask (1: Dark dense vegetation; 0: non-dark dense vegetation)'
         ddv_header['samples'] = rdn_header['samples']
         ddv_header['lines'] = rdn_header['lines']
         ddv_header['bands'] = 1
@@ -242,7 +242,7 @@ def interp_atm_lut(atm_lut_RHO, atm_lut_WVC, atm_lut_VZA, atm_lut_RAA, atm_lut, 
 
     from AtmLUT import get_interp_range, combos
 
-    # Get water vapor column intepolation range.
+    # Get water vapor column interpolation range.
     rho_dict = get_interp_range(atm_lut_RHO, rho)
     wvc_dict = get_interp_range(atm_lut_WVC, wvc)
     vza_dict = get_interp_range(atm_lut_VZA, vza)

@@ -19,7 +19,7 @@
 import logging, os, numpy as np
 logger = logging.getLogger(__name__)
 
-# Define atmosphere absorption features.
+# Define atmospheric absorption features.
 absorption_features = {429:  [424, 437],
                        486:  [482, 498],
                        517:  [510, 523],
@@ -44,11 +44,11 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
         sensor_dict: dict
             Sensor configurations.
         atm_lut_file: str
-            Raw atmosphere lookup table filename.
+            Raw atmospheric lookup table filename.
     """
 
     if os.path.exists(sensor_dict['smile_effect_at_atm_features_file']) and os.path.exists(sensor_dict['smile_effect_file']):
-        logger.info('Write smile effect at atmosphere aborption features to %s.' %sensor_dict['smile_effect_at_atm_features_file'])
+        logger.info('Write smile effect at atmospheric absorption features to %s.' %sensor_dict['smile_effect_at_atm_features_file'])
         logger.info('Write smile effect to %s.' %sensor_dict['smile_effect_file'])
         return
 
@@ -111,13 +111,13 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
     logger.info('WVC [mm] statistics: min=%.2f, max=%.2f, avg=%.2f, sd=%.2f.' %(wvc.min(), wvc.max(), wvc.mean(), wvc.std()))
     del wvc_models, model
     
-    # Interpolate atmospheric look-up table.
-    logger.info('Interpolate atmospheric look-up table.')
+    # Interpolate atmospheric lookup table.
+    logger.info('Interpolate atmospheric lookup table.')
     atm_lut_wave, atm_lut_rdn = interp_atm_lut(atm_lut_file, wvc, vis, vza, raa) # shape=(samples, bands)
     del wvc, vis, vza, raa
 
-    # Detect smile effects at atmosphere absorption features.
-    logger.info('Detect smile effects at atmosphere absorption features.')
+    # Detect smile effects at atmospheric absorption features.
+    logger.info('Detect smile effects at atmospheric absorption features.')
     shifts = []
     band_indices = []
     n_features = 0
@@ -170,12 +170,12 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
     # Write shifts to a binary file.
     fid = open(sensor_dict['smile_effect_at_atm_features_file'], 'wb')
     fid.write(shifts[0,:,:].tostring()) # shift in wavelength
-    fid.write(shifts[1,:,:].tostring()) # shift in fwhm
+    fid.write(shifts[1,:,:].tostring()) # shift in FWHM
     fid.close()
 
     # Write header.
     header = empty_envi_header()
-    header['description'] = 'Smile effects detected at atmosphere absorption features'
+    header['description'] = 'Smile effects detected at atmospheric absorption features'
     header['file type'] = 'ENVI Standard'
     header['bands'] = 2
     header['lines'] = n_features
@@ -184,11 +184,11 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
     header['byte order'] = 0
     header['data type'] = 4
     header['spectral center wavelengths'] = list(sensor_wave[band_indices])
-    header['spectral bandwiths'] = list(sensor_fwhm[band_indices])
+    header['spectral bandwidths'] = list(sensor_fwhm[band_indices])
     header['band indices'] = band_indices
     write_envi_header(sensor_dict['smile_effect_at_atm_features_file']+'.hdr', header)
     del header
-    logger.info('Write smile effect at atmosphere absorption features to %s.' %sensor_dict['smile_effect_at_atm_features_file'])
+    logger.info('Write smile effect at atmospheric absorption features to %s.' %sensor_dict['smile_effect_at_atm_features_file'])
 
     # Do interpolations.
     fid = open(sensor_dict['smile_effect_file'], 'wb')
@@ -233,23 +233,23 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
     logger.info('Write smile effect to %s.' %sensor_dict['smile_effect_file'])
 
 def interp_atm_lut(atm_lut_file, WVC, VIS, VZA, RAA):
-    """ Interpolate atmosphere look-up-table to different water vapor columns (WVC),
+    """ Interpolate atmospheric lookup table to different water vapor columns (WVC),
         visibilities (VIS), view zenith angles (VZA) and relative azimuth angles (RAA).
     Arguments:
         atm_lut_file: str
-            Atmosphere look-up-table filename.
+            Atmospheric lookup table filename.
         WVC, VIS, VZA, RAA: list of floats
             Water vapor column, visibility, view zenith angles and relative azimuth angles.
     Returns:
         WAVE: array
-            Wavelengths of the atmosphere look-up-table radiance.
+            Wavelengths of the atmospheric lookup table radiance.
         lut_rdn: 2D array
             Interpolated path radiance (albedo=0.0, 0.5, 1.0).
     """
 
     from AtmLUT import read_binary_metadata, get_interp_range, combos
 
-    # Read atmosphere look-up table grids.
+    # Read atmospheric lookup table grids.
     atm_lut_metadata = read_binary_metadata(atm_lut_file+'.meta')
     atm_lut_metadata['shape'] = tuple([int(v) for v in atm_lut_metadata['shape']])
     atm_lut_WVC = np.array([float(v) for v in atm_lut_metadata['WVC']])
@@ -258,7 +258,7 @@ def interp_atm_lut(atm_lut_file, WVC, VIS, VZA, RAA):
     atm_lut_RAA = np.array([float(v) for v in atm_lut_metadata['RAA']])
     atm_lut_WAVE = np.array([float(v) for v in atm_lut_metadata['WAVE']])
 
-    # Read atmosphere look-up table data.
+    # Read atmospheric lookup table data.
     atm_lut = np.memmap(atm_lut_file,
                         dtype=atm_lut_metadata['dtype'],
                         mode='r',
@@ -286,7 +286,7 @@ def interp_atm_lut(atm_lut_file, WVC, VIS, VZA, RAA):
             interp_rdn[i,:] += atm_lut[1,wvc_index,vis_index,vza_index,raa_index,:]*wvc_dict[wvc_index]*vis_dict[vis_index]*vza_dict[vza_index]*raa_dict[raa_index]
         del index_combo, index_combos
 
-    # Clear atmosphere look-up table.
+    # Clear atmospheric lookup table.
     atm_lut.flush()
     del atm_lut
     

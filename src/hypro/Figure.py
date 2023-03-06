@@ -24,7 +24,7 @@ mpl_logger.setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 def plot_angle_geometry(angle_geometry_figure_file, sca_image_file):
-    """ Plot the sun-target-view geometry in a polar coordinate system.
+    """ Plot the Sun-target-view geometry in a polar coordinate system.
     Arguments:
         angle_geometry_figure_file: str
             Angle geometry figure filename.
@@ -38,7 +38,7 @@ def plot_angle_geometry(angle_geometry_figure_file, sca_image_file):
 
     from ENVI import read_envi_header
 
-    # Read sca image data.
+    # Read SCA image data.
     sca_header = read_envi_header(os.path.splitext(sca_image_file)[0]+'.hdr')
     sca_image = np.memmap(sca_image_file,
                           dtype='float32',
@@ -46,14 +46,14 @@ def plot_angle_geometry(angle_geometry_figure_file, sca_image_file):
                           offset=0,
                           shape=(sca_header['bands'], sca_header['lines'], sca_header['samples']))
 
-    # Scatter-plot view geometry.
+    # Scatter plot of view geometry.
     plt.figure(figsize=(10, 10))
     ax = plt.subplot(111, projection='polar')
     ax.scatter(np.deg2rad(sca_image[1,::10,::10].flatten()), sca_image[0,::10,::10].flatten(), color='green', marker='.',s=10)
     sca_image.flush()
     del sca_image
     
-    # Scatter-plot sun geometry.
+    # Scatter plot of sun geometry.
     ax.scatter(np.deg2rad(float(sca_header['sun azimuth'])), float(sca_header['sun zenith']), color='red', marker='*', s=500)
     ax.set_theta_direction(-1)
     ax.set_theta_zero_location('N')
@@ -75,11 +75,11 @@ def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imug
         igm_image_file: str
             IGM image filename.
         imugps_file: str
-            IMUGPS filename.
+            IMU & GPS filename.
     """
 
     if os.path.exists(image_area_figure_file):
-        logger.info('Save the image-area figure to %s.' %image_area_figure_file)
+        logger.info('Save the image area figure to %s.' %image_area_figure_file)
         return
 
     from ENVI import read_envi_header
@@ -102,7 +102,7 @@ def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imug
     igm_image.flush()
     del igm_image
     
-    # Read IMUGPS
+    # Read IMU & GPS
     imugps = np.loadtxt(imugps_file)
 
     # Make a plot
@@ -125,7 +125,7 @@ def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imug
     plt.close()
     del cols, rows, imugps
 
-    logger.info('Save the image-area figure to %s.' %image_area_figure_file)
+    logger.info('Save the image area figure to %s.' %image_area_figure_file)
 
 def linear_percent_stretch(raw_image):
     """ Do linear percent stretch.
@@ -150,10 +150,10 @@ def linear_percent_stretch(raw_image):
     return stretched_image
 
 def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
-    """ Make a RGB quicklook image.
+    """ Make an RGB quicklook image.
     Arguments:
         quicklook_figure_file: str
-            Geo-rectified quicklook figure filename.
+            Georectified quicklook figure filename.
         rdn_image_file: str
             Radiance image filename, in BIL format.
         glt_image_file: str
@@ -303,23 +303,23 @@ def plot_wvc_model(wvc_model_figure_file, wvc_model_file):
     logger.info('Save the WVC model figure to %s.' %wvc_model_file)
 
 def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_atm_features_file):
-    """ Plot smile effects at different atmosphere absorption features.
+    """ Plot smile effects at different atmospheric absorption features.
     Arguments:
         smile_effect_figure_file: str
             Smile effect figure filename.
         smile_effect_at_atm_features_file: str
-            Smile effect at atm features filename.
+            Smile effect at atmospheric features filename.
     """
 
     if os.path.exists(smile_effect_at_atm_features_figure_file):
-        logger.info('Save the smile effect at atmosphere absorption features figure to %s.' %smile_effect_at_atm_features_figure_file)
+        logger.info('Save the smile effect at atmospheric absorption features figure to %s.' %smile_effect_at_atm_features_figure_file)
         return
 
     from ENVI import read_envi_header
 
     header = read_envi_header(os.path.splitext(smile_effect_at_atm_features_file)[0]+'.hdr')
     center_waves = [float(v) for v in header['spectral center wavelengths'].split(',')]
-    fwhms = [float(v) for v in header['spectral bandwiths'].split(',')]
+    fwhms = [float(v) for v in header['spectral bandwidths'].split(',')]
     shifts = np.memmap(smile_effect_at_atm_features_file,
                        dtype='float32',
                        mode='r',
@@ -398,7 +398,7 @@ def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_
     shifts.flush()
     del shifts
     
-    logger.info('Save smile effect at atmosphere absorption features figure to %s.' %smile_effect_at_atm_features_figure_file)
+    logger.info('Save smile effect at atmospheric absorption features figure to %s.' %smile_effect_at_atm_features_figure_file)
 
 def plot_wvc_histogram(wvc_histogram_figure_file, water_vapor_column_image_file):
     """ Plot water vapor column histogram.
