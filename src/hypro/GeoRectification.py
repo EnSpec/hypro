@@ -56,7 +56,7 @@ def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
     fid = open(ortho_sca_image_file, 'wb')
     for band in range(sca_header['bands']):
         ortho_sca_image[:,:] = -1000.0
-        offset = sca_header['header offset']++4*band*sca_header['lines']*sca_header['samples']
+        offset = sca_header['header offset']+4*band*sca_header['lines']*sca_header['samples']
         sca_image = np.memmap(sca_image_file,
                               dtype='float32',
                               mode='r',

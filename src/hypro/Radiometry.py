@@ -210,7 +210,6 @@ def make_radio_cali_file_Hyspex(radio_cali_file, dn_image_file, setting_file):
 
     # Write header.
     radio_cali_header = empty_envi_header()
-    radio_cali_header = empty_envi_header()
     radio_cali_header['description'] = 'Hyspex radiometric calibration coefficients.'
     radio_cali_header['file type'] = 'ENVI Standard'
     radio_cali_header['bands'] = bands

@@ -139,7 +139,6 @@ def linear_percent_stretch(raw_image):
             Percent_stretched image.
     """
 
-    stretched_image = np.zeros(raw_image.shape, dtype='uint8')
     low = np.percentile(raw_image, 2)
     high = np.percentile(raw_image, 98)
     index1 = raw_image<low

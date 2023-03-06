@@ -91,11 +91,6 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
     vza = np.interp(np.arange(samples), nonnan_index, vza[nonnan_index])
     raa = np.interp(np.arange(samples), nonnan_index, raa[nonnan_index])
 
-    #import matplotlib.pyplot as plt
-    #plt.plot(vza, raa, '.-')
-    #plt.show()
-    #raise IOError('xxx')
-
     # Assign visibility.
     vis = [40]*samples
 

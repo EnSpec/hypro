@@ -81,12 +81,6 @@ def atm_corr_image(flight_dict):
 
      # Read radiance image.
     rdn_header = read_envi_header(os.path.splitext(flight_dict['merged_rdn_file'])[0]+'.hdr')
-#    rdn_image = np.memmap(flight_dict['merged_rdn_file'],
-#                          dtype='float32',
-#                          mode='r',
-#                          shape=(rdn_header['bands'],
-#                                 rdn_header['lines'],
-#                                 rdn_header['samples']))
 
     # Read atmospheric lookup table.
     atm_lut_metadata = read_binary_metadata(flight_dict['resampled_atm_lut_file']+'.meta')
