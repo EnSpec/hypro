@@ -231,8 +231,9 @@ def get_sun_angles(longitude, latitude, utc_time):
     
     References
     ----------
-    .. [#blanco-muriel-2001] Manuel Blanco-Muriel, et al. (2001). Computing the solar vector.
-       Solar Energy, 70(5), 431-441.
+    .. [#blanco-muriel-2001] Blanco-Muriel M, Alarcón-Padilla DC, López-Moratalla T
+       & Lara-Coira M (2001). Computing the solar vector. Sol Energy 70(5): 431–41.
+       doi: 10.1016/S0038-092X(00)00156-0
     .. [#psa-sun-position-algorithm] http://www.psa.es/sdg/sunpos.htm
     """
     

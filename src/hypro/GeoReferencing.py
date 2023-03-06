@@ -484,9 +484,9 @@ def get_scan_vectors(imu, sensor_model):
     
     References
     ----------
-    .. [#meyer-1994] Meyer P. (1994). A parametric approach for the geocoding of
+    .. [#meyer-1994] Meyer P (1994). A parametric approach for the geocoding of
        airborne visible/infrared imaging spectrometer (AVIRIS) data in rugged terrain.
-       Remote Sensing of Environment, 49, 118-130.
+       Remote Sens Environ 49(2): 118–30. doi:10.1016/0034-4257(94)90048-5
     """
     
     roll, pitch, heading = imu[:, 0], imu[:, 1], imu[:, 2]
@@ -559,7 +559,7 @@ def get_xyz0_xyz1(xyz, L0, h_min, h_max):
     
     References
     ----------
-    .. [#schlapfer-2016] Schläpfer D. (2016). PARGE User Manual, Version 3.3.
+    .. [#schlapfer-2016] Schläpfer D (2016). PARGE User Manual, Version 3.3.
     """
     
     n_lines = xyz.shape[0]
@@ -661,11 +661,12 @@ def ray_tracing(XYZ0, XYZ1, V, DEM, DEM_X0Y0, DEM_Resolution):
     
     References
     ----------
-    .. [#meyer-1994] Meyer P. (1994). A parametric approach for the geocoding of
+    .. [#meyer-1994] Meyer P (1994). A parametric approach for the geocoding of
        airborne visible/infrared imaging spectrometer (AVIRIS) data in rugged terrain.
-       Remote Sensing of Environment, 49, 118-130.
-    .. [#amanatides-1987] Amanatides J. and Woo A. (1987). A fast voxel traversal
-       algorithm for ray tracing. Eurographics, 3-10.
+       Remote Sens Environ 49(2): 118–30. doi:10.1016/0034-4257(94)90048-5
+    .. [#amanatides-1987] Amanatides J & Woo A (1987). A fast voxel traversal algorithm
+       for ray tracing. Comput Graph Forum 6(EG1987 Proceedings): 3–10.
+       doi:10.2312/egtp.19871000
     .. [#ray-tracing-example] https://www.scratchapixel.com/lessons/advanced-rendering/introduction-acceleration-structure/grid
     """
     
