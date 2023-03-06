@@ -22,22 +22,22 @@ import re
 
 from io import BytesIO
 
-from AtmCorr import atm_corr_image
-from AtmLUT import build_atm_lut, resample_atm_lut
-from Boresight import boresight_calibration
-from Classification import pre_classification
-from DEM import prepare_dem
-from Figure import plot_image_area, plot_angle_geometry, make_quicklook, plot_avg_rdn, plot_wvc_model, plot_smile_effect
-from Geography import get_map_crs, get_sun_angles
-from GeoRectification import orthorectify_rdn, orthorectify_dem, orthorectify_sca
-from GeoReferencing import calculate_igm, calculate_sca, build_glt
-from ImageMerging import merge_dem_sca, merge_rdn
-from IMUGPS import prepare_imugps_Hyspex
-from Radiometry import make_radio_cali_file_Hyspex, dn2rdn_Hyspex, resample_rdn
-from SensorModel import determine_if_rotated, make_sensor_model
-from SmileEffect import average_rdn, detect_smile_effect
-from VIS import estimate_vis
-from WVC import build_wvc_model, estimate_wvc
+from hypro.AtmCorr import atm_corr_image
+from hypro.AtmLUT import build_atm_lut, resample_atm_lut
+from hypro.Boresight import boresight_calibration
+from hypro.Classification import pre_classification
+from hypro.DEM import prepare_dem
+from hypro.Figure import plot_image_area, plot_angle_geometry, make_quicklook, plot_avg_rdn, plot_wvc_model, plot_smile_effect
+from hypro.Geography import get_map_crs, get_sun_angles
+from hypro.GeoRectification import orthorectify_rdn, orthorectify_dem, orthorectify_sca
+from hypro.GeoReferencing import calculate_igm, calculate_sca, build_glt
+from hypro.ImageMerging import merge_dem_sca, merge_rdn
+from hypro.IMUGPS import prepare_imugps_Hyspex
+from hypro.Radiometry import make_radio_cali_file_Hyspex, dn2rdn_Hyspex, resample_rdn
+from hypro.SensorModel import determine_if_rotated, make_sensor_model
+from hypro.SmileEffect import average_rdn, detect_smile_effect
+from hypro.VIS import estimate_vis
+from hypro.WVC import build_wvc_model, estimate_wvc
 
 
 def get_flight_indices(config):
@@ -228,7 +228,7 @@ def get_acquisition_time(dn_header_file, raw_imugps_file):
     """
     
     from datetime import datetime, timedelta
-    from ENVI import read_envi_header
+    from hypro.ENVI import read_envi_header
     
     import numpy as np
     

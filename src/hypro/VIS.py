@@ -54,10 +54,10 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
         logger.info('Write the DDV map to %s.' % ddv_file)
         return
     
-    from AtmCorr import atm_corr_band
-    from AtmLUT import read_binary_metadata
-    from ENVI import read_envi_header, empty_envi_header, write_envi_header
-    from Spectra import get_closest_wave
+    from hypro.AtmCorr import atm_corr_band
+    from hypro.AtmLUT import read_binary_metadata
+    from hypro.ENVI import read_envi_header, empty_envi_header, write_envi_header
+    from hypro.Spectra import get_closest_wave
     
     # Read radiance header.
     rdn_header = read_envi_header(os.path.splitext(rdn_file)[0]+'.hdr')
@@ -246,7 +246,7 @@ def interp_atm_lut(atm_lut_RHO, atm_lut_WVC, atm_lut_VZA, atm_lut_RAA, atm_lut, 
             Interpolated radiance.
     """
     
-    from AtmLUT import get_interp_range, combos
+    from hypro.AtmLUT import get_interp_range, combos
     
     # Get water vapor column interpolation range.
     rho_dict = get_interp_range(atm_lut_RHO, rho)

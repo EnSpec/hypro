@@ -83,8 +83,8 @@ def atm_corr_image(flight_dict):
         logger.info('Write the reflectance image to %s.' % flight_dict['refl_file'])
         return
     
-    from ENVI import read_envi_header, write_envi_header
-    from AtmLUT import read_binary_metadata
+    from hypro.ENVI import read_envi_header, write_envi_header
+    from hypro.AtmLUT import read_binary_metadata
     
     # Read radiance image.
     rdn_header = read_envi_header(os.path.splitext(flight_dict['merged_rdn_file'])[0]+'.hdr')

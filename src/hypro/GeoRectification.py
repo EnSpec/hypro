@@ -39,7 +39,7 @@ def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
         logger.info('Write the georectified SCA image to %s.' % ortho_sca_image_file)
         return
     
-    from ENVI import empty_envi_header, read_envi_header, write_envi_header
+    from hypro.ENVI import empty_envi_header, read_envi_header, write_envi_header
     
     # Read SCA image.
     sca_header = read_envi_header(os.path.splitext(sca_image_file)[0]+'.hdr')
@@ -114,7 +114,7 @@ def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
         logger.info('Write the georectified DEM image to %s.' % ortho_dem_image_file)
         return
     
-    from ENVI import empty_envi_header, read_envi_header, write_envi_header
+    from hypro.ENVI import empty_envi_header, read_envi_header, write_envi_header
     
     # Read IGM image (the third band is DEM).
     igm_header = read_envi_header(igm_image_file+'.hdr')
@@ -185,7 +185,7 @@ def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
         logger.info('Write the georectified radiance image to %s.' % ortho_rdn_image_file)
         return
     
-    from ENVI import empty_envi_header, read_envi_header, write_envi_header
+    from hypro.ENVI import empty_envi_header, read_envi_header, write_envi_header
     
     # Read radiance image.
     rdn_header = read_envi_header(rdn_image_file+'.hdr')

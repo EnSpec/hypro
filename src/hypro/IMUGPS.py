@@ -45,7 +45,7 @@ def prepare_imugps_Hyspex(processed_imugps_file, raw_imugps_file, boresight_offs
         logger.info('Write the IMU and GPS data to %s.' % processed_imugps_file)
         return
     
-    from Geography import define_wgs84_crs, get_grid_convergence
+    from hypro.Geography import define_wgs84_crs, get_grid_convergence
     
     # Load raw IMU/GPS data.
     raw_imugps = np.loadtxt(raw_imugps_file)

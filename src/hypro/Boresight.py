@@ -50,7 +50,7 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
     from osgeo import gdal, osr
     from scipy import optimize
     
-    from Geography import define_wgs84_crs
+    from hypro.Geography import define_wgs84_crs
     
     # Read IMU and GPS data.
     imugps = np.loadtxt(imugps_file)  # ID, X, Y, Z, R, P, H, Timestamp, Longitude, Latitude, Grid_Convergence, Roll...
@@ -213,7 +213,7 @@ def estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_mo
             Estimated GCP x, y and z.
     """
     
-    from GeoReferencing import ray_tracing
+    from hypro.GeoReferencing import ray_tracing
     
     # Initialize.
     n_gcps = flight_xyz.shape[0]

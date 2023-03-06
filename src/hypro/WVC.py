@@ -43,9 +43,9 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
     
     import json
     
-    from AtmLUT import read_binary_metadata, get_interp_range
-    from ENVI import read_envi_header
-    from Spectra import get_closest_wave, resample_spectra
+    from hypro.AtmLUT import read_binary_metadata, get_interp_range
+    from hypro.ENVI import read_envi_header
+    from hypro.Spectra import get_closest_wave, resample_spectra
     
     # Get sensor wavelengths and FWHMs.
     header = read_envi_header(rdn_header_file)
@@ -158,8 +158,8 @@ def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_m
     
     import json
     
-    from ENVI import read_envi_header, empty_envi_header, write_envi_header
-    from Spectra import get_closest_wave, resample_solar_flux
+    from hypro.ENVI import read_envi_header, empty_envi_header, write_envi_header
+    from hypro.Spectra import get_closest_wave, resample_solar_flux
     
     # Read radiance image.
     rdn_header = read_envi_header(rdn_file+'.hdr')
