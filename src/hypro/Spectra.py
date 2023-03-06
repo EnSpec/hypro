@@ -21,10 +21,12 @@
         https://github.com/EnSpec/HyTools-sandbox/blob/master/hytools/preprocess/resampling.py
 """
 
-import numpy as np
-import warnings
 import pkgutil
+import warnings
+
 from io import BytesIO
+
+import numpy as np
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 

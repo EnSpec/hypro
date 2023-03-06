@@ -16,7 +16,10 @@
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
-import logging, os, numpy as np
+import logging
+import os
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -39,8 +42,9 @@ def build_atm_lut(flight_dict):
             Flight configurations.
     """
     
-    from DEM import get_avg_elev
     import glob
+    
+    from DEM import get_avg_elev
     
     if os.path.exists(flight_dict['raw_atm_lut_file']):
         logger.info('Write the raw ALT to %s.' % flight_dict['raw_atm_lut_file'])

@@ -16,13 +16,16 @@
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
-import logging, os, numpy as np
+import logging
+import os
+import warnings
+
+import numpy as np
+
+from numba import guvectorize, jit
 from osgeo import gdal
 
 logger = logging.getLogger(__name__)
-
-from numba import guvectorize, jit
-import warnings
 
 warnings.filterwarnings("ignore")
 
@@ -46,8 +49,9 @@ def calculate_igm(igm_image_file, imugps_file, sensor_model_file, dem_image_file
         logger.info('Write the IGM to %s.' % igm_image_file)
         return
     
-    from ENVI import empty_envi_header, write_envi_header
     from scipy import interpolate
+    
+    from ENVI import empty_envi_header, write_envi_header
     
     # Read IMU and GPS data.
     imugps = np.loadtxt(imugps_file)  # ID, X, Y, Z, R, P, H, R_Offset, P_Offset, H_Offset, Grid_Convergence

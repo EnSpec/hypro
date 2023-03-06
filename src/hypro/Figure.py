@@ -16,7 +16,12 @@
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
-import logging, os, matplotlib.pyplot as plt, numpy as np
+import logging
+import os
+
+import matplotlib.pyplot as plt
+import numpy as np
+
 from osgeo import gdal
 
 mpl_logger = logging.getLogger('matplotlib')

@@ -16,7 +16,10 @@
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
-import logging, os, numpy as np
+import logging
+import os
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -51,10 +54,10 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
         logger.info('Write the DDV map to %s.' % ddv_file)
         return
     
-    from ENVI import read_envi_header, empty_envi_header, write_envi_header
-    from AtmLUT import read_binary_metadata
-    from Spectra import get_closest_wave
     from AtmCorr import atm_corr_band
+    from AtmLUT import read_binary_metadata
+    from ENVI import read_envi_header, empty_envi_header, write_envi_header
+    from Spectra import get_closest_wave
     
     # Read radiance header.
     rdn_header = read_envi_header(os.path.splitext(rdn_file)[0]+'.hdr')

@@ -16,7 +16,11 @@
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
-import logging, os, numpy as np
+import logging
+import os
+
+import numpy as np
+
 from osgeo import gdal
 
 logger = logging.getLogger(__name__)

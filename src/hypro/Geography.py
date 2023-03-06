@@ -16,7 +16,11 @@
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
 
-import os, osgeo, numpy as np
+import os
+
+import numpy as np
+import osgeo
+
 from osgeo import gdal, osr
 
 
