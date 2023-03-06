@@ -40,7 +40,6 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
             Boresight offset options, true or false.
     """
     
-    
     if os.path.exists(boresight_file):
         logger.info('Write boresight data to %s.' %boresight_file)
         return

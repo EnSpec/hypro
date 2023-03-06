@@ -185,7 +185,6 @@ def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensor
     
     logger.info('Write the merged DEM image to %s.' %merged_dem_file)
     
-    
     """
         Merge SCA.
     """
