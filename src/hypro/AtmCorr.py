@@ -75,6 +75,7 @@ def atm_corr_image(flight_dict):
         flight_dict: dict
             Flight dictionary.
     """
+    
     if os.path.exists(flight_dict['refl_file']):
         logger.info('Write the reflectance image to %s.' %flight_dict['refl_file'])
         return

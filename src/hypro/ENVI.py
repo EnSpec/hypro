@@ -175,6 +175,7 @@ def check_envi_required_fields(header):
         header: dict
             ENVI header.
     """
+    
     required_fields = ['byte order',
                        'data type',
                        'interleave',
