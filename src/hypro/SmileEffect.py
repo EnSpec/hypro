@@ -54,9 +54,9 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
         logger.info('Write smile effect to %s.' %sensor_dict['smile_effect_file'])
         return
     
-    from ENVI    import empty_envi_header, read_envi_header, write_envi_header
+    from ENVI import empty_envi_header, read_envi_header, write_envi_header
     from Spectra import get_closest_wave
-    from scipy   import optimize, interpolate
+    from scipy import optimize, interpolate
     import json
     
     # Read averaged radiance.

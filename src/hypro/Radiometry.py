@@ -36,9 +36,9 @@ def make_radio_cali_file_Hyspex(radio_cali_file, dn_image_file, setting_file):
         logger.info('Write the radiometric calibration coefficients to %s.' %radio_cali_file)
         return
     
-    from ENVI     import empty_envi_header, write_envi_header
+    from ENVI import empty_envi_header, write_envi_header
     from Spectra import estimate_fwhms_from_waves
-    from scipy    import constants
+    from scipy import constants
     
     # Read metadata from the raw HySpex image.
     header = dict()
@@ -246,7 +246,7 @@ def dn2rdn_Hyspex(rdn_image_file, dn_image_file, radio_cali_file, acquisition_ti
         logger.info('Write the radiance image to %s.' %rdn_image_file)
         return
     
-    from ENVI  import empty_envi_header, read_envi_header, write_envi_header
+    from ENVI import empty_envi_header, read_envi_header, write_envi_header
     
     # Read calibration coefficients.
     radio_cali_header = read_envi_header(os.path.splitext(radio_cali_file)[0]+'.hdr')
@@ -346,7 +346,7 @@ def resample_rdn(resampled_rdn_image_file, raw_rdn_image_file, smile_effect_file
         logger.info('Write the spectrally resampled radiance image to %s.' %resampled_rdn_image_file)
         return
     
-    from ENVI  import read_envi_header, write_envi_header
+    from ENVI import read_envi_header, write_envi_header
     from scipy import interpolate
     
     # Read the old radiance image.

@@ -38,8 +38,8 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
         logger.info('Write WVC models to %s.' %wvc_model_file)
         return
     
-    from AtmLUT  import read_binary_metadata, get_interp_range
-    from ENVI    import read_envi_header
+    from AtmLUT import read_binary_metadata, get_interp_range
+    from ENVI import read_envi_header
     from Spectra import get_closest_wave, resample_spectra
     import json
     
@@ -152,7 +152,7 @@ def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_m
         logger.info('Save the WVC image to %s.' %(wvc_file))
         return
     
-    from ENVI    import read_envi_header, empty_envi_header, write_envi_header
+    from ENVI import read_envi_header, empty_envi_header, write_envi_header
     from Spectra import get_closest_wave, resample_solar_flux
     import json
     

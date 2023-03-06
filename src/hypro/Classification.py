@@ -44,7 +44,7 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
         logger.info('Write the pre-classification map to %s.' %(pre_class_image_file))
         return
     
-    from ENVI     import empty_envi_header, read_envi_header, write_envi_header
+    from ENVI import empty_envi_header, read_envi_header, write_envi_header
     from Spectra import get_closest_wave, resample_solar_flux
     
     # Read radiance image data.

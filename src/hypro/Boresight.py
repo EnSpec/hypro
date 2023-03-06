@@ -47,7 +47,7 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
     
     from osgeo import gdal, osr
     from Geography import define_wgs84_crs
-    from scipy     import optimize
+    from scipy import optimize
     
     # Read IMU and GPS data.
     imugps = np.loadtxt(imugps_file) # ID, X, Y, Z, R, P, H, Timestamp, Longitude, Latitude, Grid_Convergence, Roll...

@@ -168,7 +168,7 @@ def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
         logger.info('Save the quicklook figure to %s.' %quicklook_figure_file)
         return
     
-    from ENVI    import read_envi_header
+    from ENVI import read_envi_header
     from Spectra import get_closest_wave
     
     # Read radiance image data.
