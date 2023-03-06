@@ -293,6 +293,15 @@ def read_binary_metadata(metadata_file):
 
 def get_interp_range(xs, x):
     """ Get the interpolation range.
+    Arguments:
+        xs: list
+            Parameter grid coordinates. Lookup table has been evaluated for these values.
+        x: float
+            Parameter value at which to interpolate the lookup table.
+    Returns:
+        dict
+            Dictionary with keys corresponding to indices of the nearest grid coordinates,
+            and values corresponding to weightings for linear interpolation between them.
     """
     
     x_index0 = np.where(xs <= x)[0][-1]
@@ -308,6 +317,9 @@ def combos(indices):
     Arguments:
         indices: list of int lists
             List of index lists.
+    Returns:
+        list of tuples
+            Cartesian product of the input lists.
     """
     
     import itertools

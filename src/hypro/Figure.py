@@ -316,7 +316,7 @@ def plot_wvc_model(wvc_model_figure_file, wvc_model_file):
 def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_atm_features_file):
     """ Plot smile effects at different atmospheric absorption features.
     Arguments:
-        smile_effect_figure_file: str
+        smile_effect_at_atm_features_figure_file: str
             Smile effect figure filename.
         smile_effect_at_atm_features_file: str
             Smile effect at atmospheric features filename.

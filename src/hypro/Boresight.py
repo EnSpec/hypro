@@ -29,8 +29,6 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
             Boresight filename.
         gcp_file: str
             Ground control points filename.
-        igm_image_file: str
-            The IGM image filename.
         imugps_file: str
             The IMU & GPS filename.
         sensor_model_file: str

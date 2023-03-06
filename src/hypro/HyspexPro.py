@@ -218,9 +218,9 @@ def get_acquisition_time(dn_header_file, raw_imugps_file):
     Notes:
         (1) This code is adapted from Brendan Heberlein (bheberlein@wisc.edu).
     Arguments:
-        header_file: str
+        dn_header_file: str
             HySpex DN image header filename.
-        imugps_file: str
+        raw_imugps_file: str
             HySpex raw IMU & GPS filename.
     Returns:
         when: datetime object

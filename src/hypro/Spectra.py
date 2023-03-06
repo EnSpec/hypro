@@ -145,7 +145,7 @@ def continuum_removal(spectra, waves):
         waves: list
             Spectral wavelengths.
     Returns:
-        cont_rm_spectra: 1D or 2D array
+        cont_rmd_spectra: 1D or 2D array
             Continuum-removed spectra, dimension: [Bands] or [Bands, Columns].
     """
     

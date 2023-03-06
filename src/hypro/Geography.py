@@ -122,6 +122,8 @@ def get_grid_convergence(lon, lat, map_crs):
             Longitude. West: negative; East: positive.
         lat: list of floats
             Latitude. North: positive; South: negative.
+        map_crs: osr.SpatialReference
+            Map coordinate system
     Returns:
         grid_convergence: array of floats
             Grid convergence in degrees.

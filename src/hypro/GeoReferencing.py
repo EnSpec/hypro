@@ -154,7 +154,7 @@ def calculate_sca(sca_image_file, imugps_file, igm_image_file, sun_angles):
     Arguments:
         sca_image_file: str
             Scan angle filename.
-        imu_gps_file: str
+        imugps_file: str
             IMU/GPS filename.
         igm_image_file: str
             IGM image filename.
@@ -515,6 +515,8 @@ def get_xyz0_xyz1(xyz, L0, h_min, h_max):
             Flight map x, y, z map coordinates, dimension: [N_lines, 3].
         L0: 3D array
             Scan vectors, dimension: [3, N_Detectors, N_Lines].
+        h_min, h_max: float
+            Vertical bounds for ray tracing.
     Returns:
         xyz0, xyz1: 3D array
             Starting and ending points, dimension: [3, N_Detectors, N_Lines].

@@ -140,12 +140,12 @@ def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_m
             Radiance image filename.
         sensors: dict
             Sensors.
-        mask_file: str
-            Mask image filename.
         sun_zenith: float
             Sun zenith angle.
         distance: float
             Earth-to-Sun distance.
+        background_mask_file: str
+            Mask image filename.
         solar_flux_file: str
             Solar flux filename.
     """
