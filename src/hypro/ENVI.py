@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-"""Functions to process ENVI format data.
+"""Functions for working with image data in ENVI format.
 
 Notes
 -----

@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-"""Functions to do image classifications."""
+"""Functions for classification of radiance image data."""
 
 import logging
 import os

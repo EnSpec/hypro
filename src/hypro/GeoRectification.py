@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-"""Functions to do georectification."""
+"""Functions for georectification."""
 
 import logging
 import os

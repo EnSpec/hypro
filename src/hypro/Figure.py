@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-"""Functions to make figures."""
+"""Functions for creating plots & figures."""
 
 import logging
 import os

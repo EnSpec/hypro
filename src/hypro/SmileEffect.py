@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-"""Functions to detect smile effects."""
+"""Functions for spectral smile effect detection."""
 
 import logging
 import os

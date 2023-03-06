@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-"""Functions to do boresight calibration."""
+"""Functions for sensor boresighting."""
 
 import logging
 import os

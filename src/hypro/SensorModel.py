@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-"""Functions to create a sensor model."""
+"""Functions for generating pushbroom sensor models."""
 
 import logging
 import os

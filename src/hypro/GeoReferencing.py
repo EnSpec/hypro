@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-"""Functions to do georeferencing."""
+"""Functions for georeferencing."""
 
 import logging
 import os

@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-"""Functions to process HySpex IMU and GPS data."""
+"""Functions for processing HySpex IMU & GPS data."""
 
 import logging
 import os

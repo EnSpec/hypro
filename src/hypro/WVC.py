@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-"""Functions to estimate water vapor column."""
+"""Functions for estimation of atmospheric water vapor."""
 
 import logging
 import os

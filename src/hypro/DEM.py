@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-"""Functions to process DEM data."""
+"""Functions for processing DEM data."""
 
 import logging
 import os

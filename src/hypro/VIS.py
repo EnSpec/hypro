@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-"""Functions to estimate visibility."""
+"""Functions for visibility estimation."""
 
 import logging
 import os

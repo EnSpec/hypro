@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-"""Functions to do radiometric calibrations."""
+"""Functions for radiometric calibration of raw imaging spectrometer data."""
 
 import logging
 import os

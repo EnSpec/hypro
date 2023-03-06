@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-"""Functions to process map coordinate systems."""
+"""Functions for working with map coordinate systems."""
 
 import os
 

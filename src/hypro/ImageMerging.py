@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-"""Functions to merge images from different sensors."""
+"""Functions for merging images from multiple sensors."""
 
 import logging
 import os
