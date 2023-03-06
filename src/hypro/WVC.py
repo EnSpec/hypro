@@ -93,7 +93,7 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
         right_wave, right_band = get_closest_wave(sensor_waves, wave_3)
         
         # Build the model.
-        if np.abs(left_wave-wave_1) < 20 and np.abs(middle_wave-wave_2) < 20 and np.abs(right_wave-wave_3) < 20:
+        if np.abs(left_wave - wave_1) < 20 and np.abs(middle_wave - wave_2) < 20 and np.abs(right_wave - wave_3) < 20:
             model = dict()
             
             # bands
@@ -103,15 +103,15 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
             model['wavelength'] = [left_wave, middle_wave, right_wave]
             
             # weights
-            left_weight = (right_wave-middle_wave)/(right_wave-left_wave)
-            right_weight = (middle_wave-left_wave)/(right_wave-left_wave)
+            left_weight = (right_wave - middle_wave)/(right_wave - left_wave)
+            right_weight = (middle_wave - left_wave)/(right_wave - left_wave)
             model['weight'] = [left_weight, right_weight]
             
             # ratios and WVCs
             resampled_rdn = resample_spectra(interp_rdn, atm_lut_WAVE,
                                              sensor_waves[model['band']],
                                              sensor_fwhms[model['band']])
-            ratio = resampled_rdn[:,1]/(left_weight*resampled_rdn[:,0]+right_weight*resampled_rdn[:,2])
+            ratio = resampled_rdn[:,1]/(left_weight*resampled_rdn[:,0] + right_weight*resampled_rdn[:,2])
             index = np.argsort(ratio)
             model['ratio'] = list(ratio[index])
             model['wvc'] = list(atm_lut_WVC[index])
@@ -215,7 +215,7 @@ def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_m
                 del band
             
             # Calculate ratios.
-            ratio_image = rdn_image[bands[1],:,:]/(1e-10+rdn_image[bands[0],:,:]*wvc_model['weight'][0]+rdn_image[bands[2],:,:]*wvc_model['weight'][1])
+            ratio_image = rdn_image[bands[1],:,:]/(1e-10 + rdn_image[bands[0],:,:]*wvc_model['weight'][0] + rdn_image[bands[2],:,:]*wvc_model['weight'][1])
             
             # Calculate water vapor columns.
             wvc_image[good_mask_image] += np.interp(ratio_image[good_mask_image], wvc_model['ratio'], wvc_model['wvc']).astype('float32')

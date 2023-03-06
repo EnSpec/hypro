@@ -59,9 +59,9 @@ def gaussian(x, mu, fwhm):
         Numpy array of Gaussian along input range.
     """
     
-    sigma = fwhm/(2*np.sqrt(2*np.log(2)))+1e-10
+    sigma = fwhm/(2*np.sqrt(2*np.log(2))) + 1e-10
     
-    return np.exp(-1*((x-mu)**2/(2*sigma**2)))/(sigma*np.sqrt(2*np.pi))
+    return np.exp(-1*((x - mu)**2/(2*sigma**2)))/(sigma*np.sqrt(2*np.pi))
 
 
 def resample_spectra(spectra, src_waves, dst_waves, dst_fwhms, src_fwhms=None):
@@ -90,27 +90,27 @@ def resample_spectra(spectra, src_waves, dst_waves, dst_fwhms, src_fwhms=None):
     if src_fwhms is None:
         dst_matrix = []
         for dst_wave, dst_fwhm in zip(dst_waves, dst_fwhms):
-            a = gaussian(src_waves-0.5, dst_wave, dst_fwhm)
-            b = gaussian(src_waves+0.5, dst_wave, dst_fwhm)
-            area = (a+b)/2
-            dst_matrix.append(np.divide(area,np.sum(area)+1e-10))
+            a = gaussian(src_waves - 0.5, dst_wave, dst_fwhm)
+            b = gaussian(src_waves + 0.5, dst_wave, dst_fwhm)
+            area = (a + b)/2
+            dst_matrix.append(np.divide(area,np.sum(area) + 1e-10))
         coef = np.array(dst_matrix).T
     else:
         one_NM = np.arange(300, 2600)
         dst_matrix = []
         for dst_wave, dst_fwhm in zip(dst_waves, dst_fwhms):
-            a = gaussian(one_NM-.5, dst_wave, dst_fwhm)
-            b = gaussian(one_NM+.5, dst_wave, dst_fwhm)
-            areas = (a+b)/2
-            dst_matrix.append(np.divide(areas,np.sum(areas)+1e-10))
+            a = gaussian(one_NM - .5, dst_wave, dst_fwhm)
+            b = gaussian(one_NM + .5, dst_wave, dst_fwhm)
+            areas = (a + b)/2
+            dst_matrix.append(np.divide(areas,np.sum(areas) + 1e-10))
         dst_matrix = np.array(dst_matrix)
         
         src_matrix = []
         for src_wave,src_fwhm in zip(src_waves,src_fwhms):
-            a = gaussian(one_NM-.5, src_wave, src_fwhm)
-            b = gaussian(one_NM+.5, src_wave, src_fwhm)
-            areas = (a+b)/2
-            src_matrix.append(np.divide(areas,np.sum(areas)+1e-10))
+            a = gaussian(one_NM - .5, src_wave, src_fwhm)
+            b = gaussian(one_NM + .5, src_wave, src_fwhm)
+            areas = (a + b)/2
+            src_matrix.append(np.divide(areas,np.sum(areas) + 1e-10))
         src_matrix = np.array(src_matrix)
         
         pseudo = np.linalg.pinv(src_matrix)
@@ -132,7 +132,7 @@ def get_closest_wave(waves, center_wave):
         Closest wavelength and its band index.
     """
     
-    band_index = np.argmin(np.abs(np.array(waves)-center_wave))
+    band_index = np.argmin(np.abs(np.array(waves) - center_wave))
     
     return waves[band_index], band_index
 
@@ -150,8 +150,8 @@ def continuum_removal(spectra, waves):
     """
     
     waves = np.array(waves)
-    interp_spectra = (waves-waves[0])*(spectra[-1]-spectra[0])/(waves[-1]-waves[0])+spectra[0]
-    cont_rmd_spectra = spectra/(interp_spectra+1e-10)
+    interp_spectra = (waves - waves[0])*(spectra[-1] - spectra[0])/(waves[-1] - waves[0]) + spectra[0]
+    cont_rmd_spectra = spectra/(interp_spectra + 1e-10)
     
     return cont_rmd_spectra
 

@@ -66,8 +66,8 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
     swir2_wave, swir2_band = get_closest_wave(rdn_header['wavelength'], 2130)
     
     # Determine the sensor type.
-    if_vnir = abs(red_wave-660) < 20 and abs(nir_wave-850) < 20
-    if_swir = abs(swir1_wave-1650) < 20 or abs(swir2_wave-2130) < 20
+    if_vnir = abs(red_wave - 660) < 20 and abs(nir_wave - 850) < 20
+    if_swir = abs(swir1_wave - 1650) < 20 or abs(swir2_wave - 2130) < 20
     
     # Read atmospheric lookup table.
     atm_lut_metadata = read_binary_metadata(atm_lut_file+'.meta')
@@ -103,9 +103,9 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
     # VZA
     vza_image = np.copy(sca_image[0,:,:])
     # RAA
-    raa_image = saa-sca_image[1,:,:]
+    raa_image = saa - sca_image[1,:,:]
     raa_image[raa_image < 0] += 360.0
-    raa_image[raa_image > 180] = 360.0-raa_image[raa_image > 180]
+    raa_image[raa_image > 180] = 360.0 - raa_image[raa_image > 180]
     # clear data
     sca_image.flush()
     del sca_header, saa, sca_image
@@ -132,14 +132,14 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
     nir_refl = atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut[...,nir_band],
                              tmp_wvc_image, tmp_vis_image, vza_image, raa_image, rdn_image[nir_band,:,:],
                              bg_mask)
-    ndvi = (nir_refl-red_refl)/(nir_refl+red_refl+1e-10)
+    ndvi = (nir_refl - red_refl)/(nir_refl + red_refl + 1e-10)
     vis_image = np.zeros((rdn_header['lines'], rdn_header['samples']))
     
     if if_vnir and if_swir:
         logger.info('Both VNIR and SWIR bands are used for estimating visibility.')
         
         # Decide which SWIR band to use.
-        if abs(swir2_wave-2130) < 20:
+        if abs(swir2_wave - 2130) < 20:
             swir_wave = swir2_wave
             swir_band = swir2_band
             swir_refl_upper_bounds = [0.05, 0.10, 0.12]

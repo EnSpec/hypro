@@ -120,7 +120,7 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
         del rdn_image
         
         # Calculate NDSI.
-        ndsi = (green_refl-swir1_refl)/(green_refl+swir1_refl+1e-10)
+        ndsi = (green_refl - swir1_refl)/(green_refl + swir1_refl + 1e-10)
         
         # water
         water = (nir_refl < 0.05) & (swir1_refl < 0.03)

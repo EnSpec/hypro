@@ -285,14 +285,14 @@ def dn2rdn_Hyspex(rdn_image_file, dn_image_file, radio_cali_file, acquisition_ti
         if radio_cali_header['bands'] == 2:
             offset = radio_cali_coeff[1,:,:] # shape=(bands, samples)
         else:
-            background = np.stack([radio_cali_coeff[1,:,:]]*(to_line-from_line))
-            backgroundLast = np.stack([radio_cali_coeff[2,:,:]]*(to_line-from_line))
+            background = np.stack([radio_cali_coeff[1,:,:]]*(to_line - from_line))
+            backgroundLast = np.stack([radio_cali_coeff[2,:,:]]*(to_line - from_line))
             factor = np.arange(from_line, to_line)/dn_header['lines']
-            offset = background+(backgroundLast-background)*factor[:,np.newaxis, np.newaxis] # shape=(to_line-from_line, bands, samples)
+            offset = background + (backgroundLast - background)*factor[:,np.newaxis, np.newaxis] # shape=(to_line-from_line, bands, samples)
             del background, backgroundLast, factor
         
         # Convert DN to radiance.
-        rdn = (dn_image[from_line:to_line,:,:].astype('float32')-offset)*gain # shape=(to_line-from_line, bands, samples)
+        rdn = (dn_image[from_line:to_line,:,:].astype('float32') - offset)*gain # shape=(to_line-from_line, bands, samples)
         
         # Write radiance to the file.
         fid.write(rdn.astype('float32').tostring())

@@ -99,8 +99,8 @@ def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imug
                           mode='r',
                           offset=0,
                           shape=(2, igm_header['lines'], igm_header['samples']))
-    cols = (igm_image[0,:,:]-dem_geotransform[0])/dem_geotransform[1]
-    rows = (igm_image[1,:,:]-dem_geotransform[3])/dem_geotransform[5]
+    cols = (igm_image[0,:,:] - dem_geotransform[0])/dem_geotransform[1]
+    rows = (igm_image[1,:,:] - dem_geotransform[3])/dem_geotransform[5]
     igm_image.flush()
     del igm_image
     
@@ -111,12 +111,12 @@ def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imug
     plt.figure(figsize=(10, 10.0*dem_image.shape[0]/dem_image.shape[1]))
     plt.imshow(dem_image, cmap='gray', vmin=dem_image.min(), vmax=dem_image.max())
     del dem_image
-    plt.plot(cols[:,0],  rows[:,0],  '-', color='lime', lw=2, label='Image Area')
+    plt.plot(cols[:,0], rows[:,0], '-', color='lime', lw=2, label='Image Area')
     plt.plot(cols[:,-1], rows[:,-1], '-', color='lime', lw=2)
-    plt.plot(cols[0,:],  rows[0,:],  '-', color='lime', lw=2)
+    plt.plot(cols[0,:], rows[0,:], '-', color='lime', lw=2)
     plt.plot(cols[-1,:], rows[-1,:], '-', color='lime', lw=2)
-    cols = (imugps[:,1]-dem_geotransform[0])/dem_geotransform[1]
-    rows = (imugps[:,2]-dem_geotransform[3])/dem_geotransform[5]
+    cols = (imugps[:,1] - dem_geotransform[0])/dem_geotransform[1]
+    rows = (imugps[:,2] - dem_geotransform[3])/dem_geotransform[5]
     plt.plot(cols, rows, '--', color='red', lw=2, label='Flight')
     plt.scatter(cols[0], rows[0], c='navy', s=20, label='Start')
     plt.scatter(cols[-1], rows[-1], c='orange', s=20, label='End')
@@ -146,7 +146,7 @@ def linear_percent_stretch(raw_image):
     high = np.percentile(raw_image, 98)
     index1 = raw_image < low
     index2 = raw_image > high
-    stretched_image = np.floor((raw_image-low)/(high-low)*255).astype('uint8')
+    stretched_image = np.floor((raw_image - low)/(high - low)*255).astype('uint8')
     stretched_image[index1] = 0
     stretched_image[index2] = 255
     
@@ -441,8 +441,8 @@ def plot_wvc_histogram(wvc_histogram_figure_file, water_vapor_column_image_file)
     plt.figure(figsize=(10,6))
     plt.bar(wvc_bins[:-1], freq, width=1, color='darkgreen', edgecolor='black', linewidth=1)
     plt.vlines([wvc_image.mean()], 0, freq_max, color='darkred', lw=2, linestyles='solid', label=r'WVC$_{Mean}$')
-    plt.vlines([wvc_image.mean()-2*wvc_image.std()], 0, freq_max, color='darkred', lw=2, linestyles='dotted', label=r'WVC$_{Mean}$-2WVC$_{SD}$')
-    plt.vlines([wvc_image.mean()+2*wvc_image.std()], 0, freq_max, color='darkred', lw=2, linestyles='dashed', label=r'WVC$_{Mean}$+2WVC$_{SD}$')
+    plt.vlines([wvc_image.mean() - 2*wvc_image.std()], 0, freq_max, color='darkred', lw=2, linestyles='dotted', label=r'WVC$_{Mean}$-2WVC$_{SD}$')
+    plt.vlines([wvc_image.mean() + 2*wvc_image.std()], 0, freq_max, color='darkred', lw=2, linestyles='dashed', label=r'WVC$_{Mean}$+2WVC$_{SD}$')
     plt.xticks(ticks=np.arange(0, 51, 5), labels=np.arange(0, 51, 5), fontsize=20)
     plt.yticks(ticks=np.arange(0,101,10), labels=np.arange(0,101,10), fontsize=20)
     plt.xlabel('Water Vapor Column (mm)', fontsize=20)

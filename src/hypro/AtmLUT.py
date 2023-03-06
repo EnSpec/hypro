@@ -295,8 +295,8 @@ def get_interp_range(xs, x):
     
     x_index0 = np.where(xs <= x)[0][-1]
     x_index1 = np.where(xs > x)[0][0]
-    x_delta0 = (xs[x_index1]-x)/(xs[x_index1]-xs[x_index0])
-    x_delta1 = (x-xs[x_index0])/(xs[x_index1]-xs[x_index0])
+    x_delta0 = (xs[x_index1] - x)/(xs[x_index1] - xs[x_index0])
+    x_delta1 = (x - xs[x_index0])/(xs[x_index1] - xs[x_index0])
     
     return {x_index0: x_delta0, x_index1: x_delta1}
 

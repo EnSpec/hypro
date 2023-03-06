@@ -116,7 +116,7 @@ def calculate_igm(igm_image_file, imugps_file, sensor_model_file, dem_image_file
         nonnan_lines.append(line)
     
     for nan_line in nan_lines:
-        index = np.argmin(np.abs(nonnan_lines-nan_line))
+        index = np.argmin(np.abs(nonnan_lines - nan_line))
         nonnan_line = nonnan_lines[index]
         igm_image[:,nan_line,:] = igm_image[:,nonnan_line,:]
         del index, nonnan_line
@@ -180,28 +180,28 @@ def calculate_sca(sca_image_file, imugps_file, igm_image_file, sun_angles):
     imugps = np.loadtxt(imugps_file) # ID, X, Y, Z, R, P, H, ...
     
     # Calculate sensor angles.
-    DX = igm_image[0,:,:]-np.expand_dims(imugps[:,1], axis=1)
-    DY = igm_image[1,:,:]-np.expand_dims(imugps[:,2], axis=1)
-    DZ = igm_image[2,:,:]-np.expand_dims(imugps[:,3], axis=1)
+    DX = igm_image[0,:,:] - np.expand_dims(imugps[:,1], axis=1)
+    DY = igm_image[1,:,:] - np.expand_dims(imugps[:,2], axis=1)
+    DZ = igm_image[2,:,:] - np.expand_dims(imugps[:,3], axis=1)
     
     igm_image.flush()
     del imugps, igm_image
     
-    view_zenith = np.abs(np.arctan(np.sqrt(DX**2+DY**2)/DZ))
+    view_zenith = np.abs(np.arctan(np.sqrt(DX**2 + DY**2)/DZ))
     
     index = view_zenith >= np.deg2rad(40.0)
     if np.any(index):
         view_zenith[index] = np.deg2rad(39.0)
     del index
     
-    view_azimuth = np.arcsin(np.abs(DX)/np.sqrt(DX**2+DY**2))
+    view_azimuth = np.arcsin(np.abs(DX)/np.sqrt(DX**2 + DY**2))
     
     index = (DX > 0) & (DY < 0)
-    view_azimuth[index] = np.pi-view_azimuth[index]
+    view_azimuth[index] = np.pi - view_azimuth[index]
     index = (DX < 0) & (DY < 0)
-    view_azimuth[index] = np.pi+view_azimuth[index]
+    view_azimuth[index] = np.pi + view_azimuth[index]
     index = (DX < 0) & (DY > 0)
-    view_azimuth[index] = 2*np.pi-view_azimuth[index]
+    view_azimuth[index] = 2*np.pi - view_azimuth[index]
     del DX, DY, DZ, index
     
     # Save scan angles.
@@ -277,10 +277,10 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
     X_Max = igm_image[0,:,:].max()
     Y_Min = igm_image[1,:,:].min()
     Y_Max = igm_image[1,:,:].max()
-    X_Min = np.floor(X_Min/pixel_size)*pixel_size-pixel_size
-    X_Max = np.ceil(X_Max/pixel_size)*pixel_size+pixel_size
-    Y_Min = np.floor(Y_Min/pixel_size)*pixel_size-pixel_size
-    Y_Max = np.ceil(Y_Max/pixel_size)*pixel_size+pixel_size
+    X_Min = np.floor(X_Min/pixel_size)*pixel_size - pixel_size
+    X_Max = np.ceil(X_Max/pixel_size)*pixel_size + pixel_size
+    Y_Min = np.floor(Y_Min/pixel_size)*pixel_size - pixel_size
+    Y_Max = np.ceil(Y_Max/pixel_size)*pixel_size + pixel_size
     igm_image.flush()
     del igm_image
     
@@ -458,8 +458,8 @@ def get_scan_vectors(imu, sensor_model):
     n_detectors = sensor_model.shape[0]
     
     # Navigational standard angles -> Euler angles
-    heading[heading < 0] = heading[heading < 0]+360 # heading: -180~180 -> 0~360
-    heading = 90-heading # heading angle -> euler angle
+    heading[heading < 0] = heading[heading < 0] + 360 # heading: -180~180 -> 0~360
+    heading = 90 - heading # heading angle -> euler angle
     pitch = -pitch # pitch angle -> euler angle
     
     # [degree] to [radian]
@@ -526,13 +526,13 @@ def get_xyz0_xyz1(xyz, L0, h_min, h_max):
     z = np.tile(xyz[:,2], (n_detectors, 1))
     
     xyz0 = np.ones((3, n_detectors, n_lines))
-    xyz0[0,:,:] = (h_max-z)*L0[0,:,:]/L0[2,:,:]+x
-    xyz0[1,:,:] = (h_max-z)*L0[1,:,:]/L0[2,:,:]+y
+    xyz0[0,:,:] = (h_max - z)*L0[0,:,:]/L0[2,:,:] + x
+    xyz0[1,:,:] = (h_max - z)*L0[1,:,:]/L0[2,:,:] + y
     xyz0[2,:,:] = h_max
     
     xyz1 = np.ones((3, n_detectors, n_lines))
-    xyz1[0,:,:] = (h_min-z)*L0[0,:,:]/L0[2,:,:]+x
-    xyz1[1,:,:] = (h_min-z)*L0[1,:,:]/L0[2,:,:]+y
+    xyz1[0,:,:] = (h_min - z)*L0[0,:,:]/L0[2,:,:] + x
+    xyz1[1,:,:] = (h_min - z)*L0[1,:,:]/L0[2,:,:] + y
     xyz1[2,:,:] = h_min
     
     del x, y, z
@@ -612,8 +612,8 @@ def ray_tracing(XYZ0, XYZ1, V, DEM, DEM_X0Y0, DEM_Resolution):
     
     cellsize_x, cellsize_y = DEM_Resolution
     y_dim, x_dim = DEM.shape
-    x1, y1 = (XYZ0[0]-DEM_X0Y0[0])/cellsize_x, (XYZ0[1]-DEM_X0Y0[1])/cellsize_y
-    x2, y2 = (XYZ1[0]-DEM_X0Y0[0])/cellsize_x, (XYZ1[1]-DEM_X0Y0[1])/cellsize_y
+    x1, y1 = (XYZ0[0] - DEM_X0Y0[0])/cellsize_x, (XYZ0[1] - DEM_X0Y0[1])/cellsize_y
+    x2, y2 = (XYZ1[0] - DEM_X0Y0[0])/cellsize_x, (XYZ1[1] - DEM_X0Y0[1])/cellsize_y
     
     # Get the integer and fraction parts of x1, y1, x2, y2
     x1_integer, y1_integer = int(np.floor(x1)), int(np.floor(y1))
@@ -625,7 +625,7 @@ def ray_tracing(XYZ0, XYZ1, V, DEM, DEM_X0Y0, DEM_Resolution):
     
     # Initialize tx and ty
     if ray_direction[0] > 0.0:
-        tx = (1.0-x1_fraction)/ray_direction[0]
+        tx = (1.0 - x1_fraction)/ray_direction[0]
         delta_tx = 1/ray_direction[0]
         x_step = 1
     elif ray_direction[0] < 0.0:
@@ -637,7 +637,7 @@ def ray_tracing(XYZ0, XYZ1, V, DEM, DEM_X0Y0, DEM_Resolution):
         delta_tx = np.inf
         x_step = 0
     if ray_direction[1] > 0.0:
-        ty = (1.0-y1_fraction)/ray_direction[1]
+        ty = (1.0 - y1_fraction)/ray_direction[1]
         delta_ty = 1/ray_direction[1]
         y_step = 1
     elif ray_direction[1] < 0.0:
@@ -651,10 +651,10 @@ def ray_tracing(XYZ0, XYZ1, V, DEM, DEM_X0Y0, DEM_Resolution):
     the_x, the_y = x1_integer, y1_integer
     
     while 1:
-        est_X = (DEM[the_y, the_x]-XYZ0[2])*V[0]/V[2]+XYZ0[0]
-        est_Y = (DEM[the_y, the_x]-XYZ0[2])*V[1]/V[2]+XYZ0[1]
-        diff_x = (est_X-DEM_X0Y0[0])/cellsize_x-the_x
-        diff_y = (est_Y-DEM_X0Y0[1])/cellsize_y-the_y
+        est_X = (DEM[the_y, the_x] - XYZ0[2])*V[0]/V[2] + XYZ0[0]
+        est_Y = (DEM[the_y, the_x] - XYZ0[2])*V[1]/V[2] + XYZ0[1]
+        diff_x = (est_X - DEM_X0Y0[0])/cellsize_x - the_x
+        diff_y = (est_Y - DEM_X0Y0[1])/cellsize_y - the_y
         if diff_x >= -0.01 and diff_x < 1.01 and diff_y >= -0.01 and diff_y < 1.01:
             break
         if tx < ty:

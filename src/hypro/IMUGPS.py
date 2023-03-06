@@ -82,10 +82,10 @@ def prepare_imugps_Hyspex(processed_imugps_file, raw_imugps_file, boresight_offs
     
     # Save the new IMU/GPS data.
     header = ['Map coordinate system = %s' % (map_crs.ExportToWkt()),
-              'Index    '+
-              'Map_X    Map_Y    Map_Z    Roll    Pitch    Heading    '+
-              'Roll_Offset    Pitch_Offset    Heading_Offset    Altitude_Offset    Grid_Convergence    '+
-              'Longitude    Latitude    '+
+              'Index    ' +
+              'Map_X    Map_Y    Map_Z    Roll    Pitch    Heading    ' +
+              'Roll_Offset    Pitch_Offset    Heading_Offset    Altitude_Offset    Grid_Convergence    ' +
+              'Longitude    Latitude    ' +
               'Timestamp']
     np.savetxt(processed_imugps_file,
                processed_imugps,

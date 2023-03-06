@@ -101,7 +101,7 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
     wvc_models = json.load(open(sensor_dict['wvc_model_file'], 'r'))
     wvc = np.zeros(samples)
     for model in wvc_models.values():
-        ratio = sensor_rdn[model['band'][1], :]/(sensor_rdn[model['band'][0], :]*model['weight'][0]+sensor_rdn[model['band'][2], :]*model['weight'][1])
+        ratio = sensor_rdn[model['band'][1], :]/(sensor_rdn[model['band'][0], :]*model['weight'][0] + sensor_rdn[model['band'][2], :]*model['weight'][1])
         wvc += np.interp(ratio, model['ratio'], model['wvc'])
         del ratio
     wvc /= len(wvc_models)
@@ -205,7 +205,7 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
         p = np.poly1d(np.polyfit(x, shifts[0,feature,:], 4))
         z[feature, :] = p(x)
     f = interpolate.interp2d(x, y, z, kind='cubic')
-    z_new = f(x_new, y_new)+np.expand_dims(sensor_wave, axis=1)
+    z_new = f(x_new, y_new) + np.expand_dims(sensor_wave, axis=1)
     fid.write(z_new.astype('float32').tostring())
     
     # bandwidth
@@ -214,7 +214,7 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
         p = np.poly1d(np.polyfit(x, shifts[1,feature,:], 5))
         z[feature, :] = p(x)
     f = interpolate.interp2d(x, y, z, kind='cubic')
-    z_new = f(x_new, y_new)+np.expand_dims(sensor_fwhm, axis=1)
+    z_new = f(x_new, y_new) + np.expand_dims(sensor_fwhm, axis=1)
     fid.write(z_new.astype('float32').tostring())
     fid.close()
     del f, x, y, z, z_new
@@ -355,7 +355,7 @@ def average_rdn(avg_rdn_file, rdn_image_file, sca_image_file, pre_class_image_fi
             elif bad_sample == rdn_header['samples']-1:
                 rdn[bad_sample] = rdn[bad_sample-1]
             else:
-                rdn[bad_sample] = (rdn[bad_sample-1]+rdn[bad_sample+1])/2.0
+                rdn[bad_sample] = (rdn[bad_sample-1] + rdn[bad_sample+1])/2.0
         
         # Write average radiance data into the file.
         fid.write(rdn.data.astype('float32'))
@@ -383,7 +383,7 @@ def average_rdn(avg_rdn_file, rdn_image_file, sca_image_file, pre_class_image_fi
     avg_vaa = np.ma.array(sca_image[1,:,:], mask=~mask).mean(axis=0)
     avg_raa = saa-avg_vaa
     avg_raa[avg_raa < 0] += 360.0
-    avg_raa[avg_raa > 180] = 360.0-avg_raa[avg_raa > 180]
+    avg_raa[avg_raa > 180] = 360.0 - avg_raa[avg_raa > 180]
     sca_image.flush()
     del sca_image
     
@@ -453,6 +453,6 @@ def cost_fun(shifts, sensor_wave, sensor_fwhm, sensor_rdn, lut_wave, lut_rdn):
     lut_rdn = continuum_removal(lut_rdn, sensor_wave)
     
     # Calculate cost
-    cost = np.sum((sensor_rdn-lut_rdn)**2)
+    cost = np.sum((sensor_rdn - lut_rdn)**2)
     
     return cost

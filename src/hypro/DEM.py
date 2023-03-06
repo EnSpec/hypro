@@ -77,10 +77,10 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
     imugps = np.loadtxt(imugps_file)
     altitude = imugps[:,3].max()
     half_swath = np.tan(np.deg2rad(fov/2))*altitude
-    x_min = imugps[:,1].min()-half_swath-buffer
-    x_max = imugps[:,1].max()+half_swath+buffer
-    y_min = imugps[:,2].min()-half_swath-buffer
-    y_max = imugps[:,2].max()+half_swath+buffer
+    x_min = imugps[:,1].min() - half_swath - buffer
+    x_max = imugps[:,1].max() + half_swath + buffer
+    y_min = imugps[:,2].min() - half_swath - buffer
+    y_max = imugps[:,2].max() + half_swath + buffer
     del imugps, half_swath, altitude, buffer
     
     # Process DEM.
@@ -91,10 +91,10 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
         # Get image rows and columns.
         geotransform = ds.GetGeoTransform()
         
-        col_0 = int((x_min-geotransform[0])/geotransform[1])
-        col_1 = int((x_max-geotransform[0])/geotransform[1])
-        row_0 = int((y_max-geotransform[3])/geotransform[5])
-        row_1 = int((y_min-geotransform[3])/geotransform[5])
+        col_0 = int((x_min - geotransform[0])/geotransform[1])
+        col_1 = int((x_max - geotransform[0])/geotransform[1])
+        row_0 = int((y_max - geotransform[3])/geotransform[5])
+        row_1 = int((y_min - geotransform[3])/geotransform[5])
         
         if (col_0 > ds.RasterXSize-1) or (row_0 > ds.RasterYSize-1) or (col_1 < 0) or (row_1 < 0):
             logger.error('The input DEM image does not cover the flight area.')
@@ -104,8 +104,8 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
         row_0 = max(row_0, 0)
         col_1 = min(col_1, ds.RasterXSize-1)
         row_1 = min(row_1, ds.RasterYSize-1)
-        cols = int(col_1-col_0)
-        rows = int(row_1-row_0)
+        cols = int(col_1 - col_0)
+        rows = int(row_1 - row_0)
         
         # Read a subset of DEM.
         dem_image = ds.GetRasterBand(1).ReadAsArray(col_0, row_0, cols, rows)
@@ -119,18 +119,18 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
         del dem_image
         
         # Update geotransform
-        geotransform = (geotransform[0]+col_0*geotransform[1],
+        geotransform = (geotransform[0] + col_0*geotransform[1],
                         geotransform[1],
                         0,
-                        geotransform[3]+row_0*geotransform[5],
+                        geotransform[3] + row_0*geotransform[5],
                         0,
                         geotransform[5])
         del col_0, col_1, row_0, row_1
     
     elif type(dem) in [int, float]:
         # Make a flat DEM.
-        rows = int((y_max-y_min)/pixel_size)
-        cols = int((x_max-x_min)/pixel_size)
+        rows = int((y_max - y_min)/pixel_size)
+        cols = int((x_max - x_min)/pixel_size)
         dem_image = np.ones((rows, cols))*dem
         
         # Write clipped DEM image

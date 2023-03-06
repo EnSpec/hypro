@@ -75,24 +75,24 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
     # Interpolate flight IMU and (x, y, z).
     lines = np.arange(imugps.shape[0])
     flight_xyz = np.zeros((gcp_data.shape[0], 3))
-    flight_xyz[:,0] = np.interp(gcp_data[:,3]-1, lines, imugps[:,1])
-    flight_xyz[:,1] = np.interp(gcp_data[:,3]-1, lines, imugps[:,2])
-    flight_xyz[:,2] = np.interp(gcp_data[:,3]-1, lines, imugps[:,3])
+    flight_xyz[:,0] = np.interp(gcp_data[:,3] - 1, lines, imugps[:,1])
+    flight_xyz[:,1] = np.interp(gcp_data[:,3] - 1, lines, imugps[:,2])
+    flight_xyz[:,2] = np.interp(gcp_data[:,3] - 1, lines, imugps[:,3])
     
     flight_imu = np.zeros((gcp_data.shape[0], 3))
-    flight_imu[:,0] = np.interp(gcp_data[:,3]-1, lines, imugps[:,4])
-    flight_imu[:,1] = np.interp(gcp_data[:,3]-1, lines, imugps[:,5])
-    flight_imu[:,2] = np.interp(gcp_data[:,3]-1, lines, imugps[:,6])
+    flight_imu[:,0] = np.interp(gcp_data[:,3] - 1, lines, imugps[:,4])
+    flight_imu[:,1] = np.interp(gcp_data[:,3] - 1, lines, imugps[:,5])
+    flight_imu[:,2] = np.interp(gcp_data[:,3] - 1, lines, imugps[:,6])
     
     # Apply grid convergence.
-    flight_imu[:,2] = flight_imu[:,2]-np.interp(gcp_data[:,3]-1, lines, imugps[:,11])
+    flight_imu[:,2] = flight_imu[:,2] - np.interp(gcp_data[:,3] - 1, lines, imugps[:,11])
     del lines
     
     # Interpolate sensor model.
     samples = np.arange(sensor_model.shape[0])
     flight_sensor_model = np.zeros((gcp_data.shape[0], 2))
-    flight_sensor_model[:,0] = np.interp(gcp_data[:,2]-1, samples, sensor_model[:,0])
-    flight_sensor_model[:,1] = np.interp(gcp_data[:,2]-1, samples, sensor_model[:,1])
+    flight_sensor_model[:,0] = np.interp(gcp_data[:,2] - 1, samples, sensor_model[:,0])
+    flight_sensor_model[:,1] = np.interp(gcp_data[:,2] - 1, samples, sensor_model[:,1])
     del samples
     
     # Optimize.
@@ -131,9 +131,9 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
     boresight_data[:,4] = gcp_xyz[:,1]
     boresight_data[:,5] = est_gcp_xyz[:,0]
     boresight_data[:,6] = est_gcp_xyz[:,1]
-    boresight_data[:,7] = gcp_xyz[:,0]-est_gcp_xyz[:,0]
-    boresight_data[:,8] = gcp_xyz[:,1]-est_gcp_xyz[:,1]
-    boresight_data[:,9] = np.sqrt(boresight_data[:,7]**2+boresight_data[:,8]**2)
+    boresight_data[:,7] = gcp_xyz[:,0] - est_gcp_xyz[:,0]
+    boresight_data[:,8] = gcp_xyz[:,1] - est_gcp_xyz[:,1]
+    boresight_data[:,9] = np.sqrt(boresight_data[:,7]**2 + boresight_data[:,8]**2)
     header = ['Map coordinate system = %s' % (map_crs.ExportToWkt()),
               'Roll offset = %s' % (p.x[0]),
               'Pitch offset = %s' % (p.x[1]),
@@ -180,7 +180,7 @@ def cost_fun(boresight_offsets, flight_xyz, flight_imu, flight_sensor_model, dem
     est_gcp_xyz = estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_model, dem_image, dem_ulxy, dem_pixel_size, boresight_options)
     
     # Calculate cost.
-    cost = np.sum((est_gcp_xyz[:,:2]-gcp_xyz[:,:2])**2)
+    cost = np.sum((est_gcp_xyz[:,:2] - gcp_xyz[:,:2])**2)
     
     return cost
 
@@ -213,16 +213,16 @@ def estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_mo
     
     # Initialize.
     n_gcps = flight_xyz.shape[0]
-    roll = flight_imu[:,0]+boresight_offsets[0] if boresight_options[0] else flight_imu[:,0]
-    pitch = flight_imu[:,1]+boresight_offsets[1] if boresight_options[1] else flight_imu[:,1]
-    heading = flight_imu[:,2]+boresight_offsets[2] if boresight_options[2] else flight_imu[:,2]
+    roll = flight_imu[:,0] + boresight_offsets[0] if boresight_options[0] else flight_imu[:,0]
+    pitch = flight_imu[:,1] + boresight_offsets[1] if boresight_options[1] else flight_imu[:,1]
+    heading = flight_imu[:,2] + boresight_offsets[2] if boresight_options[2] else flight_imu[:,2]
     x = flight_xyz[:,0]
     y = flight_xyz[:,1]
-    z = flight_xyz[:,2]+boresight_offsets[3] if boresight_options[3] else flight_xyz[:,2]
+    z = flight_xyz[:,2] + boresight_offsets[3] if boresight_options[3] else flight_xyz[:,2]
     
     # Get scan vectors.
-    heading[heading < 0] = heading[heading < 0]+360 # heading: -180~180 -> 0~360
-    heading = 90-heading # heading angle -> euler angle
+    heading[heading < 0] = heading[heading < 0] + 360 # heading: -180~180 -> 0~360
+    heading = 90 - heading # heading angle -> euler angle
     pitch = -pitch # pitch angle -> euler angle
     
     roll = np.deg2rad(roll)
@@ -264,12 +264,12 @@ def estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_mo
     h_min = dem_image.min()
     h_max = dem_image.max()
     xyz0 = np.ones(flight_xyz.shape) # shape=(3, n_gcps)
-    xyz0[:,0] = (h_max-z)*L0[0,:]/L0[2,:]+x
-    xyz0[:,1] = (h_max-z)*L0[1,:]/L0[2,:]+y
+    xyz0[:,0] = (h_max - z)*L0[0,:]/L0[2,:] + x
+    xyz0[:,1] = (h_max - z)*L0[1,:]/L0[2,:] + y
     xyz0[:,2] = h_max
     xyz1 = np.ones(flight_xyz.shape) # shape=(3, n_gcps)
-    xyz1[:,0] = (h_min-z)*L0[0,:]/L0[2,:]+x
-    xyz1[:,1] = (h_min-z)*L0[1,:]/L0[2,:]+y
+    xyz1[:,0] = (h_min - z)*L0[0,:]/L0[2,:] + x
+    xyz1[:,1] = (h_min - z)*L0[1,:]/L0[2,:] + y
     xyz1[:,2] = h_min
     del h_min, h_max
     

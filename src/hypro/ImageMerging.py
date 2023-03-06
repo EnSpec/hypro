@@ -50,7 +50,7 @@ def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensor
         tmp_header = read_envi_header(os.path.splitext(sensor_dict['ortho_dem_image_file'])[0]+'.hdr')
         tmp_ulx, tmp_uly = float(tmp_header['map info'][3]), float(tmp_header['map info'][4])
         tmp_pixel_size = float(tmp_header['map info'][5])
-        tmp_lrx, tmp_lry = tmp_ulx+tmp_header['samples']*tmp_pixel_size, tmp_uly-tmp_header['lines']*tmp_pixel_size
+        tmp_lrx, tmp_lry = tmp_ulx + tmp_header['samples']*tmp_pixel_size, tmp_uly - tmp_header['lines']*tmp_pixel_size
         if tmp_ulx > ulx:
             ulx = tmp_ulx
         if tmp_uly < uly:
@@ -63,9 +63,9 @@ def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensor
             pixel_size = tmp_pixel_size
         del tmp_ulx, tmp_uly, tmp_pixel_size, tmp_lrx, tmp_lry
     pixel_size = 2*pixel_size
-    ulx, uly = np.ceil(ulx/pixel_size+1)*pixel_size, np.floor(uly/pixel_size-1)*pixel_size
-    lrx, lry = np.ceil(lrx/pixel_size-1)*pixel_size, np.floor(lry/pixel_size+1)*pixel_size
-    map_info = [tmp_header['map info'][0], 1, 1, ulx, uly, pixel_size, pixel_size]+tmp_header['map info'][7:]
+    ulx, uly = np.ceil(ulx/pixel_size + 1)*pixel_size, np.floor(uly/pixel_size - 1)*pixel_size
+    lrx, lry = np.ceil(lrx/pixel_size - 1)*pixel_size, np.floor(lry/pixel_size + 1)*pixel_size
+    map_info = [tmp_header['map info'][0], 1, 1, ulx, uly, pixel_size, pixel_size] + tmp_header['map info'][7:]
     crs = tmp_header['coordinate system string']
     del tmp_header
     logger.info('The spatial range and pixel size of merged images:')
@@ -266,8 +266,8 @@ def merge_rdn(merged_image_file, mask_file, sensors):
     ulx, uly, pixel_size = float(mask_header['map info'][3]), float(mask_header['map info'][4]), float(mask_header['map info'][5])
     
     # Determine regular map grids.
-    x, y = np.meshgrid(ulx+np.arange(mask_header['samples'])*pixel_size,
-                       uly-np.arange(mask_header['lines'])*pixel_size)
+    x, y = np.meshgrid(ulx + np.arange(mask_header['samples'])*pixel_size,
+                       uly - np.arange(mask_header['lines'])*pixel_size)
     del ulx, uly, pixel_size
     
     # Read radiance header and image.
@@ -299,7 +299,7 @@ def merge_rdn(merged_image_file, mask_file, sensors):
         if ((v[1] >= 1339.0) & (v[1] <= 1438.0)) | ((v[1] >= 1808.0) & (v[1] <= 1978.0)) | (v[1] >= 2467.0):
             resampled_image = np.zeros(x.shape)
         else:
-            offset = header['header offset']+4*band*header['lines']*header['samples']# in bytes
+            offset = header['header offset'] + 4*band*header['lines']*header['samples']# in bytes
             rdn_image = np.memmap(image_file,
                                   dtype='float32',
                                   mode='r',
@@ -373,8 +373,8 @@ def resample_ortho_sca(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     del count
     
     # Resample
-    samples = ((x-raw_ulx)/raw_pixel_size).astype('int32')
-    lines = ((raw_uly-y)/raw_pixel_size).astype('int32')
+    samples = ((x - raw_ulx)/raw_pixel_size).astype('int32')
+    lines = ((raw_uly - y)/raw_pixel_size).astype('int32')
     resampled_image = avg_image[lines, samples]
     del avg_image, samples, lines
     
@@ -410,8 +410,8 @@ def resample_ortho_dem(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     del count
     
     # Resample
-    samples = ((x-raw_ulx)/raw_pixel_size).astype('int32')
-    lines = ((raw_uly-y)/raw_pixel_size).astype('int32')
+    samples = ((x - raw_ulx)/raw_pixel_size).astype('int32')
+    lines = ((raw_uly - y)/raw_pixel_size).astype('int32')
     resampled_image = avg_image[lines, samples]
     del avg_image, samples, lines
     
@@ -446,8 +446,8 @@ def resample_ortho_rdn(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     del count
     
     # Resample.
-    samples = ((x-raw_ulx)/raw_pixel_size).astype('int32')
-    lines = ((raw_uly-y)/raw_pixel_size).astype('int32')
+    samples = ((x - raw_ulx)/raw_pixel_size).astype('int32')
+    lines = ((raw_uly - y)/raw_pixel_size).astype('int32')
     resampled_image = avg_image[lines, samples]
     del avg_image, samples, lines, raw_image
     
