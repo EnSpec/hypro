@@ -251,11 +251,11 @@ def dn2rdn_Hyspex(rdn_image_file, dn_image_file, radio_cali_file, acquisition_ti
     # Read calibration coefficients.
     radio_cali_header = read_envi_header(os.path.splitext(radio_cali_file)[0]+'.hdr')
     radio_cali_coeff = np.memmap(radio_cali_file,
-                                dtype='float64',
-                                mode='r',
-                                shape=(radio_cali_header['bands'],
-                                       radio_cali_header['lines'],
-                                       radio_cali_header['samples']))
+                                 dtype='float64',
+                                 mode='r',
+                                 shape=(radio_cali_header['bands'],
+                                        radio_cali_header['lines'],
+                                        radio_cali_header['samples']))
     wavelengths = np.array([float(v) for v in radio_cali_header['waves'].split(',')])
     fwhms = np.array([float(v) for v in radio_cali_header['fwhms'].split(',')])
     

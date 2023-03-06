@@ -200,9 +200,9 @@ def get_sun_angles(longitude, latitude, utc_time):
     DecimalHours = utc_time.hour + (utc_time.minute + utc_time.second/60.0)/60.0
     Aux1 = int((utc_time.month - 14)/12)
     Aux2 = int(1461*(utc_time.year + 4800 + Aux1)/4 +
-                 367*(utc_time.month - 2 - 12*Aux1)/12 -
-                 3*(utc_time.year + 4900 + Aux1)/100/4 +
-                 utc_time.day - 32075)
+               367*(utc_time.month - 2 - 12*Aux1)/12 -
+               3*(utc_time.year + 4900 + Aux1)/100/4 +
+               utc_time.day - 32075)
     JulianDate = Aux2 - 0.5 + DecimalHours/24.0
     ElapsedJulianDays = JulianDate - 2451545.0
     

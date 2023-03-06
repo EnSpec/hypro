@@ -121,10 +121,10 @@ def atm_corr_image(flight_dict):
     # Read wvc and vis image.
     wvc_header = read_envi_header(os.path.splitext(flight_dict['wvc_file'])[0]+'.hdr')
     tmp_wvc_image = np.memmap(flight_dict['wvc_file'],
-                          mode='r',
-                          dtype='float32',
-                          shape=(wvc_header['lines'],
-                                 wvc_header['samples']))
+                              mode='r',
+                              dtype='float32',
+                              shape=(wvc_header['lines'],
+                                     wvc_header['samples']))
     wvc_image = np.copy(tmp_wvc_image)
     
     vis_header = read_envi_header(os.path.splitext(flight_dict['vis_file'])[0]+'.hdr')

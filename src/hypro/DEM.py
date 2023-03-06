@@ -157,8 +157,8 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
     dem_header['data type'] = 4
     dem_header['coordinate system string'] = map_crs.ExportToWkt()
     dem_header['map info'] = [map_crs.GetAttrValue('projcs').replace(',', ''),
-                  1, 1, geotransform[0], geotransform[3], geotransform[1], geotransform[1],
-                  ' ', ' ', map_crs.GetAttrValue('datum').replace(',', ''), map_crs.GetAttrValue('unit')]
+                              1, 1, geotransform[0], geotransform[3], geotransform[1], geotransform[1],
+                              ' ', ' ', map_crs.GetAttrValue('datum').replace(',', ''), map_crs.GetAttrValue('unit')]
     if map_crs.GetAttrValue('PROJECTION').lower() == 'transverse_mercator':
         dem_header['map info'][7] = map_crs.GetUTMZone()
         if y_min > 0.0:

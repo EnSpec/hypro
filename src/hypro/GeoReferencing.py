@@ -294,9 +294,9 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
         igm_vrt.write('\t\t\t<SourceFilename relativeToVRT="1">%s</SourceFilename>\n' % igm_image_file.replace('&', '&amp;'))
         igm_vrt.write('\t\t\t<SourceBand>%s</SourceBand>\n' % (band+1))
         igm_vrt.write('\t\t\t<SourceProperties RasterXSize="%s" RasterYSize="%s" DataType="%s" BlockXSize="%s" BlockYSize="%s" />\n' % (igm_header['samples'],
-                                                                                                                                       igm_header['lines'],
-                                                                                                                                       "Float64",
-                                                                                                                                       igm_header['samples'], 1))
+                                                                                                                                        igm_header['lines'],
+                                                                                                                                        "Float64",
+                                                                                                                                        igm_header['samples'], 1))
         igm_vrt.write('\t\t\t<SrcRect xOff="0" yOff="0" xSize="%s" ySize="%s" />\n' % (igm_header['samples'], igm_header['lines']))
         igm_vrt.write('\t\t\t<DstRect xOff="0" yOff="0" xSize="%s" ySize="%s" />\n' % (igm_header['samples'], igm_header['lines']))
         igm_vrt.write("\t\t</SimpleSource>\n")
@@ -350,9 +350,9 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
         index_vrt.write('\t\t\t<SourceFilename relativeToVRT="1">%s</SourceFilename>\n' % index_image_file.replace('&', '&amp;'))
         index_vrt.write('\t\t\t<SourceBand>%s</SourceBand>\n' % (band+1))
         index_vrt.write('\t\t\t<SourceProperties RasterXSize="%s" RasterYSize="%s" DataType="%s" BlockXSize="%s" BlockYSize="%s" />\n' % (index_header['samples'],
-                                                                                                                                       index_header['lines'],
-                                                                                                                                       "Int32",
-                                                                                                                                       index_header['samples'], 1))
+                                                                                                                                          index_header['lines'],
+                                                                                                                                          "Int32",
+                                                                                                                                          index_header['samples'], 1))
         index_vrt.write('\t\t\t<SrcRect xOff="0" yOff="0" xSize="%s" ySize="%s" />\n' % (index_header['samples'], index_header['lines']))
         index_vrt.write('\t\t\t<DstRect xOff="0" yOff="0" xSize="%s" ySize="%s" />\n' % (index_header['samples'], index_header['lines']))
         index_vrt.write("\t\t</SimpleSource>\n")
@@ -402,8 +402,8 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
     glt_header['band names'] = ['Image Row', 'Image Column']
     glt_header['coordinate system string'] = map_crs.ExportToWkt()
     glt_header['map info'] = [map_crs.GetAttrValue('projcs').replace(',', ''),
-              1, 1, X_Min, Y_Max, pixel_size, pixel_size, ' ', ' ',
-              map_crs.GetAttrValue('datum'), map_crs.GetAttrValue('unit')]
+                              1, 1, X_Min, Y_Max, pixel_size, pixel_size, ' ', ' ',
+                              map_crs.GetAttrValue('datum'), map_crs.GetAttrValue('unit')]
     if map_crs.GetAttrValue('PROJECTION').lower() == 'transverse_mercator':
         glt_header['map info'][7] = map_crs.GetUTMZone()
         if Y_Max > 0.0:

@@ -352,10 +352,10 @@ def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distanc
     if background_mask_file is not None:
         bg_mask_header = read_envi_header(os.path.splitext(background_mask_file)[0]+'.hdr')
         bg_mask_image = np.memmap(background_mask_file,
-                                    mode='r',
-                                    dtype='bool',
-                                    shape=(bg_mask_header['lines'],
-                                           bg_mask_header['samples']))
+                                  mode='r',
+                                  dtype='bool',
+                                  shape=(bg_mask_header['lines'],
+                                         bg_mask_header['samples']))
         pre_class_image[bg_mask_image] = 0
         bg_mask_image.flush()
         del bg_mask_image
