@@ -11,12 +11,16 @@
 #
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
+
 """
 Functions to create a sensor model.
 @author: Nanfeng Liu (nliu58@wisc.edu)
 """
+
 import logging, os, numpy as np
+
 logger = logging.getLogger(__name__)
+
 
 def make_sensor_model(sensor_model_file, fov, ifov, samples, if_rotated):
     """ Generate a sensor model.
@@ -55,6 +59,7 @@ def make_sensor_model(sensor_model_file, fov, ifov, samples, if_rotated):
     del sensor_model, xs
     
     logger.info('Write the sensor model to %s.' %sensor_model_file)
+
 
 def determine_if_rotated(imu_gps_file):
     """ Determine if the sensor is 180 degree rotated.

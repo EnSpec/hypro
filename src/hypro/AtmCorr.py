@@ -17,7 +17,9 @@
 """
 
 import logging, os, numpy as np
+
 logger = logging.getLogger(__name__)
+
 
 def atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut,
                   wvc_image, vis_image, vza_image, raa_image, rdn_image,
@@ -65,6 +67,7 @@ def atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut,
     del L0, S, F, interp_rdn_000, interp_rdn_050, interp_rdn_100
     
     return rho
+
 
 def atm_corr_image(flight_dict):
     """ Do atmospheric corrections on the whole image.
@@ -196,4 +199,3 @@ def atm_corr_image(flight_dict):
     rdn_header['description'] = 'Reflectance [0-1]'
     write_envi_header(os.path.splitext(flight_dict['refl_file'])[0]+'.hdr', rdn_header)
     logger.info('Write the reflectance image to %s.' %flight_dict['refl_file'])
-

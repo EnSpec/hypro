@@ -17,6 +17,7 @@
 """
 
 import logging, os, numpy as np
+
 logger = logging.getLogger(__name__)
 
 # Define atmospheric database parameters. Do not make any change to them.
@@ -29,6 +30,7 @@ atm_db_WAVE =  np.arange(4000, 25001)/10 # wavelength, in [nm]
 atm_db_SZA = np.array([0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70]) # Sun zenith angle, in [deg]
 atm_db_VZA = np.array([0, 5, 10, 15, 20, 25, 30, 40]) # view zenith angle, in [deg]
 atm_db_RAA = np.array([0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]) # relative azimuth angle, in [deg]
+
 
 def build_atm_lut(flight_dict):
     """ Make an atmospheric lookup table.
@@ -159,6 +161,7 @@ def build_atm_lut(flight_dict):
     
     logger.info('Write the raw ALT to %s.' %flight_dict['raw_atm_lut_file'])
 
+
 def resample_atm_lut(resampled_atm_lut_file, raw_atm_lut_file, rdn_header_file):
     """ Resample atmospheric lookup table radiance to sensor wavelengths.
     Arguments:
@@ -221,6 +224,7 @@ def resample_atm_lut(resampled_atm_lut_file, raw_atm_lut_file, rdn_header_file):
     
     logger.info('Write the resampled ALT to %s.' %resampled_atm_lut_file)
 
+
 def write_binary_metadata(metadata_file, metadata):
     """ Write the metadata of a binary file.
     Arguments:
@@ -246,6 +250,7 @@ def write_binary_metadata(metadata_file, metadata):
             value = str(metadata[key])
         fid.write('%s = %s\n' %(key, value))
     fid.close()
+
 
 def read_binary_metadata(metadata_file):
     """ Read the metadata of a binary file.
@@ -283,6 +288,7 @@ def read_binary_metadata(metadata_file):
     
     return metadata
 
+
 def get_interp_range(xs, x):
     """ Get the interpolation range.
     """
@@ -293,6 +299,7 @@ def get_interp_range(xs, x):
     x_delta1 = (x-xs[x_index0])/(xs[x_index1]-xs[x_index0])
     
     return {x_index0: x_delta0, x_index1: x_delta1}
+
 
 def combos(indices):
     """ Return all combinations of indices in a list of index sublists.

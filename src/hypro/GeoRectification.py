@@ -17,7 +17,9 @@
 """
 
 import logging, os, numpy as np
+
 logger = logging.getLogger(__name__)
+
 
 def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
     """ Do orthorectification on SCA.
@@ -93,6 +95,7 @@ def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
     
     logger.info('Write the georectified SCA image to %s.' %ortho_sca_image_file)
 
+
 def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
     """ Do orthorectification on DEM.
     Arguments:
@@ -162,6 +165,7 @@ def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
     del glt_header, ortho_dem_header
     
     logger.info('Write the georectified DEM image to %s.' %ortho_dem_image_file)
+
 
 def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
     """ Do orthorectification on radiance.

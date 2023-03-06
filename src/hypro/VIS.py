@@ -17,6 +17,7 @@
 """
 
 import logging, os, numpy as np
+
 logger = logging.getLogger(__name__)
 
 # Define typical water vapor column values of the atmospheric database. Do not make any change to them.
@@ -26,6 +27,7 @@ atm_db_wvc_lut = {'subarctic_winter': 4.2,
                   'subarctic_summer': 20.8,
                   'midlatitude_summer': 29.2,
                   'tropical': 41.1}
+
 
 def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, background_mask_file):
     """ Estimate visibility.
@@ -227,6 +229,7 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
     
     # Clear data
     del ndvi, red_refl, nir_refl, rdn_header
+
 
 def interp_atm_lut(atm_lut_RHO, atm_lut_WVC, atm_lut_VZA, atm_lut_RAA, atm_lut, rho, wvc, vza, raa):
     """ Interpolate the atmospheric lookup table for visibility estimation.

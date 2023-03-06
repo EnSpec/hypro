@@ -17,7 +17,9 @@
 """
 
 import logging, os, numpy as np
+
 logger = logging.getLogger(__name__)
+
 
 def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distance, background_mask_file=None, solar_flux_file=None):
     """ Pre-classify the image.

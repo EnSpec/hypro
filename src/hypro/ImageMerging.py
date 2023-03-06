@@ -17,7 +17,10 @@
 """
 
 import logging, os, numpy as np
+
 logger = logging.getLogger(__name__)
+
+
 def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensors):
     """ Merge DEM and SCA images.
     Arguments:
@@ -234,6 +237,7 @@ def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensor
     del raw_header, header
     logger.info('Write the merged SCA image to %s.' %merged_sca_file)
 
+
 def merge_rdn(merged_image_file, mask_file, sensors):
     """ Merge radiance images.
     Arguments:
@@ -340,6 +344,7 @@ def merge_rdn(merged_image_file, mask_file, sensors):
     
     logger.info('Write the merged radiance image to %s.' %merged_image_file)
 
+
 def resample_ortho_sca(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     """ Resample georectified scan angle image to new map grids.
     Arguments:
@@ -376,6 +381,7 @@ def resample_ortho_sca(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     
     return resampled_image
 
+
 def resample_ortho_dem(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     """ Resample DEM image to new map grids.
     Arguments:
@@ -411,6 +417,7 @@ def resample_ortho_dem(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     del avg_image, samples, lines
     
     return resampled_image
+
 
 def resample_ortho_rdn(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     """ Resample radiance image to new map grids.

@@ -23,6 +23,7 @@ mpl_logger = logging.getLogger('matplotlib')
 mpl_logger.setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
+
 def plot_angle_geometry(angle_geometry_figure_file, sca_image_file):
     """ Plot the Sun-target-view geometry in a polar coordinate system.
     Arguments:
@@ -64,6 +65,7 @@ def plot_angle_geometry(angle_geometry_figure_file, sca_image_file):
     del sca_header, ax
     
     logger.info('Save the angle geometry figure to %s.' %angle_geometry_figure_file)
+
 
 def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imugps_file):
     """ Plot image area (DEM is used as the background).
@@ -127,6 +129,7 @@ def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imug
     
     logger.info('Save the image area figure to %s.' %image_area_figure_file)
 
+
 def linear_percent_stretch(raw_image):
     """ Do linear percent stretch.
     References:
@@ -148,6 +151,7 @@ def linear_percent_stretch(raw_image):
     stretched_image[index2] = 255
     
     return stretched_image
+
 
 def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
     """ Make an RGB quicklook image.
@@ -229,6 +233,7 @@ def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
     
     logger.info('Save the quicklook figure to %s.' %quicklook_figure_file)
 
+
 def plot_avg_rdn(avg_rdn_figure_file, avg_rdn_file):
     """ Plot average radiance to a figure.
     Arguments:
@@ -243,6 +248,7 @@ def plot_avg_rdn(avg_rdn_figure_file, avg_rdn_file):
         return
     
     from ENVI import read_envi_header
+    
     header = read_envi_header(os.path.splitext(avg_rdn_file)[0]+'.hdr')
     avg_rdn = np.memmap(avg_rdn_file,
                         mode='r',
@@ -264,6 +270,7 @@ def plot_avg_rdn(avg_rdn_figure_file, avg_rdn_file):
     del avg_rdn
     
     logger.info('Save the average radiance spectra figure to %s.' %avg_rdn_figure_file)
+
 
 def plot_wvc_model(wvc_model_figure_file, wvc_model_file):
     """ Plot the WVC model to a figure.
@@ -301,6 +308,7 @@ def plot_wvc_model(wvc_model_figure_file, wvc_model_file):
     plt.close()
     
     logger.info('Save the WVC model figure to %s.' %wvc_model_file)
+
 
 def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_atm_features_file):
     """ Plot smile effects at different atmospheric absorption features.
@@ -399,6 +407,7 @@ def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_
     del shifts
     
     logger.info('Save smile effect at atmospheric absorption features figure to %s.' %smile_effect_at_atm_features_figure_file)
+
 
 def plot_wvc_histogram(wvc_histogram_figure_file, water_vapor_column_image_file):
     """ Plot water vapor column histogram.

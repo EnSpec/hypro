@@ -32,6 +32,7 @@ from ImageMerging     import merge_dem_sca, merge_rdn
 from VIS              import estimate_vis
 from AtmCorr          import atm_corr_image
 
+
 def get_flight_indices(config):
     """ Get HySpex flight indices.
     Arguments:
@@ -54,6 +55,7 @@ def get_flight_indices(config):
     
     return flight_indices
 
+
 def create_flight_log(output_dir, log_file_basename):
     """ Create a HySpex flight processing log.
     Arguments:
@@ -75,6 +77,7 @@ def create_flight_log(output_dir, log_file_basename):
     flight_log = logging.getLogger()
     
     return flight_log
+
 
 def initialize_flight_dict(config, flight_index):
     """ Initialize a HySpex flight dictionary.
@@ -161,6 +164,7 @@ def initialize_flight_dict(config, flight_index):
     
     return flight_dict
 
+
 def search_file(in_dir, keyword):
     """ Search a specific file with the keyword.
     Arguments:
@@ -182,6 +186,7 @@ def search_file(in_dir, keyword):
     else:
         return file[0]
 
+
 def get_center_lon_lat(raw_imugps_file):
     """ Get HySpex image center longitude and latitude.
     Arguments:
@@ -199,6 +204,7 @@ def get_center_lon_lat(raw_imugps_file):
     del imugps
     
     return [lon, lat]
+
 
 def get_acquisition_time(dn_header_file, raw_imugps_file):
     """ Get HySpex image acquisition time.
@@ -229,6 +235,7 @@ def get_acquisition_time(dn_header_file, raw_imugps_file):
     
     return when
 
+
 def get_sun_earth_distance(when):
     """ Get Sun-Earth distance of a day.
     Arguments:
@@ -247,6 +254,7 @@ def get_sun_earth_distance(when):
     d = d[doy-1]
     
     return d
+
 
 def HyspexPro(config_file):
     # Load configurations.

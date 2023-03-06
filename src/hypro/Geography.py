@@ -19,11 +19,13 @@
 import os, osgeo, numpy as np
 from osgeo import gdal, osr
 
+
 def set_axis_mapping(crs):
     """ Set CRS axis mapping to (x,y) order. """
     if int(osgeo.__version__[0]) >= 3:
         # By default, GDAL 3 respects axis ordering specified by the CRS
         crs.SetAxisMappingStrategy(osr.OAMS_TRADITIONAL_GIS_ORDER)
+
 
 def get_utm_zone(lon):
     """ Calculate UTM zone.
@@ -39,6 +41,7 @@ def get_utm_zone(lon):
     
     return zone
 
+
 def is_northern(lat):
     """ Determine if it is northern hemisphere.
     Arguments:
@@ -52,6 +55,7 @@ def is_northern(lat):
         return 0
     else:
         return 1
+
 
 def define_utm_crs(lon, lat):
     """ Define a UTM map coordinate system.
@@ -73,6 +77,7 @@ def define_utm_crs(lon, lat):
     
     return crs
 
+
 def define_wgs84_crs():
     """ Define a WGS84 map coordinate system.
     Returns:
@@ -85,6 +90,7 @@ def define_wgs84_crs():
     set_axis_mapping(crs)
     
     return crs
+
 
 def get_raster_crs(file):
     """ Get the map coordinate system of a raster image.
@@ -105,6 +111,7 @@ def get_raster_crs(file):
     set_axis_mapping(crs)
     
     return crs
+
 
 def get_grid_convergence(lon, lat, map_crs):
     """ Get grid convergence angles.
@@ -142,6 +149,7 @@ def get_grid_convergence(lon, lat, map_crs):
     
     return grid_convergence
 
+
 def get_map_crs(dem, longitude, latitude):
     """ Get map coordinate system.
     Notes:
@@ -164,6 +172,7 @@ def get_map_crs(dem, longitude, latitude):
         map_crs = get_raster_crs(dem)
     
     return map_crs
+
 
 def get_sun_angles(longitude, latitude, utc_time):
     """ Calculate the Sun's position.

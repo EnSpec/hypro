@@ -17,7 +17,9 @@
 """
 
 import logging, os, numpy as np
+
 logger = logging.getLogger(__name__)
+
 
 def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
     """ Build water vapor models.
@@ -125,6 +127,7 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
     with open(wvc_model_file, 'w') as fid:
         json.dump(wvc_model, fid, indent=4)
     logger.info('Write WVC models to %s.' %wvc_model_file)
+
 
 def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_mask_file, solar_flux_file=None):
     """ Estimate water vapor column.

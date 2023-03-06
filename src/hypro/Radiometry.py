@@ -17,7 +17,9 @@
 """
 
 import logging, os, numpy as np
+
 logger = logging.getLogger(__name__)
+
 
 def make_radio_cali_file_Hyspex(radio_cali_file, dn_image_file, setting_file):
     """ Make a HySpex radiometric calibration file.
@@ -226,6 +228,7 @@ def make_radio_cali_file_Hyspex(radio_cali_file, dn_image_file, setting_file):
     
     logger.info('Write the radiometric calibration coefficients to %s.' %radio_cali_file)
 
+
 def dn2rdn_Hyspex(rdn_image_file, dn_image_file, radio_cali_file, acquisition_time):
     """ Do HySpex radiometric calibration.
     Arguments:
@@ -327,6 +330,7 @@ def dn2rdn_Hyspex(rdn_image_file, dn_image_file, radio_cali_file, acquisition_ti
     
     logger.info('Write the radiance image to %s.' %rdn_image_file)
 
+
 def resample_rdn(resampled_rdn_image_file, raw_rdn_image_file, smile_effect_file):
     """ Resample radiance spectra.
     Arguments:
@@ -401,6 +405,7 @@ def resample_rdn(resampled_rdn_image_file, raw_rdn_image_file, smile_effect_file
     del raw_rdn_header
     
     logger.info('Write the spectrally resampled radiance image to %s.' %resampled_rdn_image_file)
+
 
 def get_hyspex_setting(setting_file):
     """ Read HySpex setting data.
