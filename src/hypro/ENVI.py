@@ -129,7 +129,7 @@ def read_envi_header(file):
         header: dict
             ENVI header.
     """
-
+    
     header = empty_envi_header()
     fid = open(file, 'r')
     trans_tab = str.maketrans(dict.fromkeys('\n{}'))
@@ -164,7 +164,7 @@ def read_envi_header(file):
     if header['header offset'] is None:
         header['header offset'] = 0
     check_envi_required_fields(header)
-
+    
     return header
 
 def check_envi_required_fields(header):
@@ -189,11 +189,11 @@ def empty_envi_header():
         header: dict
             Empty ENVI header.
     """
-
+    
     header = dict()
     for key in envi_fields:
         header[key] = None
-
+    
     return header
 
 def write_envi_header(file, header):
@@ -204,7 +204,7 @@ def write_envi_header(file, header):
         header: dict
             ENVI header.
     """
-
+    
     header = deepcopy(header)
     fid = open(file, 'w')
     fid.write('ENVI\n')
@@ -235,7 +235,7 @@ def write_envi_header(file, header):
             value = str(header[field])
         fid.write('%s = %s\n' %(field, value))
         header.pop(field)
-
+    
     for field in header.keys():
         if header[field] is None:
             continue
@@ -250,5 +250,5 @@ def write_envi_header(file, header):
         else:
             value = str(header[field])
         fid.write('%s = %s\n' %(field, value))
-
+    
     fid.close()

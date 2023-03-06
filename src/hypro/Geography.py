@@ -34,9 +34,9 @@ def get_utm_zone(lon):
         zone: int
             UTM zone number.
     """
-
+    
     zone = int(1+(lon+180.0)/6.0)
-
+    
     return zone
 
 def is_northern(lat):
@@ -47,7 +47,7 @@ def is_northern(lat):
     Returns:
         1: northern, 0: southern.
     """
-
+    
     if lat < 0.0:
         return 0
     else:
@@ -64,13 +64,13 @@ def define_utm_crs(lon, lat):
         crs: osr.SpatialReference object
             UTM map coordinate system.
     """
-
+    
     crs = osr.SpatialReference()
     crs.SetWellKnownGeogCS("WGS84")
     zone = get_utm_zone(lon)
     crs.SetUTM(int(zone), int(is_northern(lat)))
     set_axis_mapping(crs)
-
+    
     return crs
 
 def define_wgs84_crs():
@@ -79,11 +79,11 @@ def define_wgs84_crs():
         crs: osr.SpatialReference object
             WGS84 map coordinate system.
     """
-
+    
     crs = osr.SpatialReference()
     crs.SetWellKnownGeogCS("WGS84")
     set_axis_mapping(crs)
-
+    
     return crs
 
 def get_raster_crs(file):
@@ -95,15 +95,15 @@ def get_raster_crs(file):
         crs: osr object
             Map coordinate system.
     """
-
+    
     ds = gdal.Open(file, gdal.GA_ReadOnly)
     prj = ds.GetProjection()
     ds = None
-
+    
     crs = osr.SpatialReference()
     crs.ImportFromWkt(prj)
     set_axis_mapping(crs)
-
+    
     return crs
 
 def get_grid_convergence(lon, lat, map_crs):
@@ -117,7 +117,7 @@ def get_grid_convergence(lon, lat, map_crs):
         grid_convergence: array of floats
             Grid convergence in degrees.
     """
-
+    
     lon, lat = np.array(lon), np.array(lat)
     if map_crs.GetAttrValue('PROJECTION').lower() == 'transverse_mercator':
         lon0 = map_crs.GetProjParm('central_meridian')
@@ -139,7 +139,7 @@ def get_grid_convergence(lon, lat, map_crs):
         grid_convergence = np.abs(np.rad2deg(np.arcsin(dx/np.sqrt(dx**2+dy**2))))
         index = dx*dy>0
         grid_convergence[index] = -grid_convergence[index]
-
+    
     return grid_convergence
 
 def get_map_crs(dem, longitude, latitude):
@@ -157,12 +157,12 @@ def get_map_crs(dem, longitude, latitude):
         map_crs: osr object
             Map coordinate system.
     """
-
+    
     if isinstance(dem, (int, float)) or not os.path.isfile(dem):
         map_crs = define_utm_crs(longitude, latitude)
     else:
         map_crs = get_raster_crs(dem)
-
+    
     return map_crs
 
 def get_sun_angles(longitude, latitude, utc_time):
@@ -183,11 +183,11 @@ def get_sun_angles(longitude, latitude, utc_time):
         AzimuthAngle: float
             Sun azimuth angle, in degrees.
     """
-
+    
     rad = np.pi/180
     EarthMeanRadius = 6371.01 # in km
     AstronomicalUnit = 149597890 #in km
-
+    
     DecimalHours = utc_time.hour+(utc_time.minute+utc_time.second/60.0)/60.0
     Aux1 = int((utc_time.month-14)/12)
     Aux2 = int(1461*(utc_time.year+4800+Aux1)/4 +
@@ -196,7 +196,7 @@ def get_sun_angles(longitude, latitude, utc_time):
                  utc_time.day-32075)
     JulianDate = Aux2-0.5+DecimalHours/24.0
     ElapsedJulianDays = JulianDate-2451545.0
-
+    
     Omega = 2.1429-0.0010394594*ElapsedJulianDays
     MeanLongitude = 4.8950630+ 0.017202791698*ElapsedJulianDays
     MeanAnomaly = 6.2400600+ 0.0172019699*ElapsedJulianDays
@@ -209,7 +209,7 @@ def get_sun_angles(longitude, latitude, utc_time):
     if RightAscension < 0.0:
         RightAscension = RightAscension + np.pi*2
     Declination = np.arcsin(np.sin(EclipticObliquity)*Sin_EclipticLongitude)
-
+    
     GreenwichMeanSiderealTime = 6.6974243242+0.0657098283*ElapsedJulianDays+DecimalHours
     LocalMeanSiderealTime = (GreenwichMeanSiderealTime*15+longitude)*rad
     HourAngle = LocalMeanSiderealTime-RightAscension
@@ -226,5 +226,5 @@ def get_sun_angles(longitude, latitude, utc_time):
     Parallax = (EarthMeanRadius/AstronomicalUnit)*np.sin(ZenithAngle)
     ZenithAngle = (ZenithAngle+Parallax)/rad
     AzimuthAngle = Azimuth/rad
-
+    
     return [ZenithAngle, AzimuthAngle]

@@ -31,13 +31,13 @@ def plot_angle_geometry(angle_geometry_figure_file, sca_image_file):
         sca_image_file: str
             Scan angle image filename.
     """
-
+    
     if os.path.exists(angle_geometry_figure_file):
         logger.info('Save the angle geometry figure to %s.' %angle_geometry_figure_file)
         return
-
+    
     from ENVI import read_envi_header
-
+    
     # Read SCA image data.
     sca_header = read_envi_header(os.path.splitext(sca_image_file)[0]+'.hdr')
     sca_image = np.memmap(sca_image_file,
@@ -45,7 +45,7 @@ def plot_angle_geometry(angle_geometry_figure_file, sca_image_file):
                           mode='r',
                           offset=0,
                           shape=(sca_header['bands'], sca_header['lines'], sca_header['samples']))
-
+    
     # Scatter plot of view geometry.
     plt.figure(figsize=(10, 10))
     ax = plt.subplot(111, projection='polar')
@@ -62,7 +62,7 @@ def plot_angle_geometry(angle_geometry_figure_file, sca_image_file):
     plt.savefig(angle_geometry_figure_file, dpi=1000)
     plt.close()
     del sca_header, ax
-
+    
     logger.info('Save the angle geometry figure to %s.' %angle_geometry_figure_file)
 
 def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imugps_file):
@@ -77,19 +77,19 @@ def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imug
         imugps_file: str
             IMU & GPS filename.
     """
-
+    
     if os.path.exists(image_area_figure_file):
         logger.info('Save the image area figure to %s.' %image_area_figure_file)
         return
-
+    
     from ENVI import read_envi_header
-
+    
     # Read DEM.
     ds = gdal.Open(dem_image_file, gdal.GA_ReadOnly)
     dem_image = ds.GetRasterBand(1).ReadAsArray()
     dem_geotransform = ds.GetGeoTransform()
     ds = None
-
+    
     # Read IGM.
     igm_header = read_envi_header(os.path.splitext(igm_image_file)[0]+'.hdr')
     igm_image = np.memmap(igm_image_file,
@@ -104,7 +104,7 @@ def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imug
     
     # Read IMU & GPS
     imugps = np.loadtxt(imugps_file)
-
+    
     # Make a plot
     plt.figure(figsize=(10, 10.0*dem_image.shape[0]/dem_image.shape[1]))
     plt.imshow(dem_image, cmap='gray', vmin=dem_image.min(), vmax=dem_image.max())
@@ -124,7 +124,7 @@ def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imug
     plt.savefig(image_area_figure_file, bbox_inches='tight')
     plt.close()
     del cols, rows, imugps
-
+    
     logger.info('Save the image area figure to %s.' %image_area_figure_file)
 
 def linear_percent_stretch(raw_image):
@@ -138,7 +138,7 @@ def linear_percent_stretch(raw_image):
         stretched_image: 2D array
             Percent_stretched image.
     """
-
+    
     low = np.percentile(raw_image, 2)
     high = np.percentile(raw_image, 98)
     index1 = raw_image<low
@@ -146,7 +146,7 @@ def linear_percent_stretch(raw_image):
     stretched_image = np.floor((raw_image-low)/(high-low)*255).astype('uint8')
     stretched_image[index1] = 0
     stretched_image[index2] = 255
-
+    
     return stretched_image
 
 def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
@@ -159,14 +159,14 @@ def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
         glt_image_file: str
             GLT image filename.
     """
-
+    
     if os.path.exists(quicklook_figure_file):
         logger.info('Save the quicklook figure to %s.' %quicklook_figure_file)
         return
-
+    
     from ENVI    import read_envi_header
     from Spectra import get_closest_wave
-
+    
     # Read radiance image data.
     rdn_header = read_envi_header(os.path.splitext(rdn_image_file)[0]+'.hdr')
     rdn_image = np.memmap(rdn_image_file,
@@ -175,7 +175,7 @@ def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
                           shape=(rdn_header['lines'],
                                  rdn_header['bands'],
                                  rdn_header['samples']))
-
+    
     # Get RGB bands.
     if rdn_header['default bands'] is not None:
         rgb_bands = rdn_header['default bands']
@@ -191,7 +191,7 @@ def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
                 _, band = get_closest_wave(rdn_header['wavelength'], rgb_wave)
                 rgb_bands.append(band)
         del band, wave
-
+    
     # Read GLT image.
     glt_header = read_envi_header(os.path.splitext(glt_image_file)[0]+'.hdr')
     glt_image = np.memmap(glt_image_file,
@@ -200,7 +200,7 @@ def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
                           shape=(2,
                                  glt_header['lines'],
                                  glt_header['samples']))
-
+    
     # Write RGB image.
     driver = gdal.GetDriverByName('GTiff')
     ds = driver.Create(quicklook_figure_file,
@@ -226,7 +226,7 @@ def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
     del glt_image, rdn_image
     ds = None
     del I, J, glt_header, rdn_header, image
-
+    
     logger.info('Save the quicklook figure to %s.' %quicklook_figure_file)
 
 def plot_avg_rdn(avg_rdn_figure_file, avg_rdn_file):
@@ -237,11 +237,11 @@ def plot_avg_rdn(avg_rdn_figure_file, avg_rdn_file):
         avg_rdn_file: str
             Average radiance filename.
     """
-
+    
     if os.path.exists(avg_rdn_figure_file):
         logger.info('Save the average radiance spectra figure to %s.' %avg_rdn_figure_file)
         return
-
+    
     from ENVI import read_envi_header
     header = read_envi_header(os.path.splitext(avg_rdn_file)[0]+'.hdr')
     avg_rdn = np.memmap(avg_rdn_file,
@@ -250,7 +250,7 @@ def plot_avg_rdn(avg_rdn_figure_file, avg_rdn_file):
                         shape=(header['lines'],
                                header['samples'])) # shape=(bands, samples)
     wavelength = np.array([float(v) for v in header['waves'].split(',')])
-
+    
     plt.figure(figsize=(10, 6))
     plt.plot(wavelength, avg_rdn, lw=1)
     plt.xlim(np.floor(wavelength.min()), np.ceil(wavelength.max()))
@@ -273,23 +273,23 @@ def plot_wvc_model(wvc_model_figure_file, wvc_model_file):
         wvc_model_file: str
             Water vapor column model filename.
     """
-
+    
     if os.path.exists(wvc_model_figure_file):
         logger.info('Save the WVC model figure to %s.' %wvc_model_file)
         return
-
+    
     import json
-
+    
     # Read the WVC model.
     wvc_models = json.load(open(wvc_model_file, 'r'))
     colors = ['red', 'green', 'blue']
-
+    
     # Plot the model.
     plt.figure(figsize=(10, 6))
     for i, model_name in enumerate(wvc_models.keys()):
         model = wvc_models[model_name]
         plt.plot(np.array(model['ratio'])*100, model['wvc'], '.-', ms=20, lw=2, color=colors[i], label=model_name)
-
+    
     plt.xlim(0, 100)
     plt.ylim(0, 55)
     plt.xticks([0, 20, 40, 60, 80, 100], [0, 20, 40, 60, 80, 100], fontsize=20)
@@ -299,7 +299,7 @@ def plot_wvc_model(wvc_model_figure_file, wvc_model_file):
     plt.legend(fontsize=20)
     plt.savefig(wvc_model_figure_file, dpi=1000)
     plt.close()
-
+    
     logger.info('Save the WVC model figure to %s.' %wvc_model_file)
 
 def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_atm_features_file):
@@ -310,13 +310,13 @@ def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_
         smile_effect_at_atm_features_file: str
             Smile effect at atmospheric features filename.
     """
-
+    
     if os.path.exists(smile_effect_at_atm_features_figure_file):
         logger.info('Save the smile effect at atmospheric absorption features figure to %s.' %smile_effect_at_atm_features_figure_file)
         return
-
+    
     from ENVI import read_envi_header
-
+    
     header = read_envi_header(os.path.splitext(smile_effect_at_atm_features_file)[0]+'.hdr')
     center_waves = [float(v) for v in header['spectral center wavelengths'].split(',')]
     fwhms = [float(v) for v in header['spectral bandwidths'].split(',')]
@@ -407,20 +407,20 @@ def plot_wvc_histogram(wvc_histogram_figure_file, water_vapor_column_image_file)
     water_vapor_column_image_file: str
         Water vapor column image filename.
     """
-
+    
     if os.path.exists(wvc_histogram_figure_file):
         logger.info('Save water vapor column histogram figure to %s.' %wvc_histogram_figure_file)
         return
-
+    
     from ENVI import read_envi_header
-
+    
     # Read water vapor column image
     wvc_header = read_envi_header(os.path.splitext(water_vapor_column_image_file)[0]+'.hdr')
     wvc_image = np.memmap(water_vapor_column_image_file,
                           dtype='float32',
                           mode='r',
                           shape=(wvc_header['lines'], wvc_header['samples']))
-
+    
     # Plot water vapor column histogram
     wvc_bins = np.arange(0, 51, 1)
     freq = []

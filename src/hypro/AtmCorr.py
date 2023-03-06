@@ -38,32 +38,32 @@ def atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut,
         rho: 2D array
             Surface reflectance.
     """
-
+    
     from scipy.interpolate import RegularGridInterpolator
-
+    
     # Interpolate the lookup table.
     pts = np.array([wvc_image[~bg_mask], vis_image[~bg_mask], vza_image[~bg_mask], raa_image[~bg_mask]]).T
-
+    
     interp_fun = RegularGridInterpolator((atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA), atm_lut[0,...])
     interp_rdn_000 = interp_fun(pts)
     interp_fun = RegularGridInterpolator((atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA), atm_lut[1,...])
     interp_rdn_050 = interp_fun(pts)-interp_rdn_000
-
+    
     interp_fun = RegularGridInterpolator((atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA), atm_lut[2,...])
     interp_rdn_100 = interp_fun(pts)-interp_rdn_000
-
+    
     del interp_fun, pts
-
+    
     # Do atmospheric corrections.
     L0 = interp_rdn_000
     S = (interp_rdn_100-2*interp_rdn_050)/(interp_rdn_100-interp_rdn_050+1e-10)
     F = interp_rdn_100*(1-S)
     rho = np.zeros(rdn_image.shape)
     rho[~bg_mask] = (rdn_image[~bg_mask]-L0)/(F+S*(rdn_image[~bg_mask]-L0))
-
+    
     # Clear data.
     del L0, S, F, interp_rdn_000, interp_rdn_050, interp_rdn_100
-
+    
     return rho
 
 def atm_corr_image(flight_dict):
@@ -75,13 +75,13 @@ def atm_corr_image(flight_dict):
     if os.path.exists(flight_dict['refl_file']):
         logger.info('Write the reflectance image to %s.' %flight_dict['refl_file'])
         return
-
+    
     from ENVI    import read_envi_header, write_envi_header
     from AtmLUT  import read_binary_metadata
-
+    
     # Read radiance image.
     rdn_header = read_envi_header(os.path.splitext(flight_dict['merged_rdn_file'])[0]+'.hdr')
-
+    
     # Read atmospheric lookup table.
     atm_lut_metadata = read_binary_metadata(flight_dict['resampled_atm_lut_file']+'.meta')
     atm_lut_metadata['shape'] = tuple([int(v) for v in atm_lut_metadata['shape']])
@@ -89,12 +89,12 @@ def atm_corr_image(flight_dict):
     atm_lut_VIS = np.array([float(v) for v in atm_lut_metadata['VIS']])
     atm_lut_VZA = np.array([float(v) for v in atm_lut_metadata['VZA']])
     atm_lut_RAA = np.array([float(v) for v in atm_lut_metadata['RAA']])
-
+    
     atm_lut = np.memmap(flight_dict['resampled_atm_lut_file'],
                         dtype=atm_lut_metadata['dtype'],
                         mode='r',
                         shape=atm_lut_metadata['shape'])# shape = (RHO, WVC, VIS, VZA, RAA, WAVE)
-
+    
     # Read VZA and RAA image.
     sca_header = read_envi_header(os.path.splitext(flight_dict['merged_sca_file'])[0]+'.hdr')
     saa = float(sca_header['sun azimuth'])
@@ -122,7 +122,7 @@ def atm_corr_image(flight_dict):
                           shape=(wvc_header['lines'],
                                  wvc_header['samples']))
     wvc_image = np.copy(tmp_wvc_image)
-
+    
     vis_header = read_envi_header(os.path.splitext(flight_dict['vis_file'])[0]+'.hdr')
     tmp_vis_image = np.memmap(flight_dict['vis_file'],
                               dtype='float32',
@@ -142,24 +142,24 @@ def atm_corr_image(flight_dict):
                         mode='r',
                         shape=(bg_header['lines'],
                                bg_header['samples']))
-
+    
     wvc_image[wvc_image>=atm_lut_WVC.max()] = atm_lut_WVC.max()-0.1
     vis_image[vis_image>=atm_lut_VIS.max()] = atm_lut_VIS.max()-0.1
     vza_image[vza_image>=atm_lut_VZA.max()] = atm_lut_VZA.max()-0.1
     raa_image[raa_image>=atm_lut_RAA.max()] = atm_lut_RAA.max()-0.1
-
+    
     # remove outliers in wvc and vis.
     avg_wvc = wvc_image[~bg_mask].mean()
     std_wvc = wvc_image[~bg_mask].std()
     index = (np.abs(wvc_image-avg_wvc)>2*std_wvc)&(~bg_mask)
     wvc_image[index] = avg_wvc
-
+    
     avg_vis = vis_image[~bg_mask].mean()
     std_vis = vis_image[~bg_mask].std()
     index = (np.abs(vis_image-avg_vis)>2*std_vis)&(~bg_mask)
     vis_image[index] = avg_vis
     del index
-
+    
     fid = open(flight_dict['refl_file'], 'wb')
     # Do atmospheric correction.
     info = 'Bands = '
@@ -182,11 +182,11 @@ def atm_corr_image(flight_dict):
             fid.write(refl.astype('float32').tostring())
             rdn_image.flush()
             del refl, rdn_image
-            
+    
     fid.close()
     info += '%d, Done!' %band
     logger.info(info)
-
+    
     # Clear data
     del wvc_image, vis_image, vza_image, raa_image
     atm_lut.flush()

@@ -29,16 +29,16 @@ def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
         glt_image_file: str
             Geographic lookup table image filename.
     """
-
+    
     if os.path.exists(ortho_sca_image_file):
         logger.info('Write the georectified SCA image to %s.' %ortho_sca_image_file)
         return
-
+    
     from ENVI import empty_envi_header, read_envi_header, write_envi_header
-
+    
     # Read SCA image.
     sca_header = read_envi_header(os.path.splitext(sca_image_file)[0]+'.hdr')
-
+    
     # Read GLT image.
     glt_header = read_envi_header(os.path.splitext(glt_image_file)[0]+'.hdr')
     glt_image = np.memmap(glt_image_file,
@@ -47,11 +47,11 @@ def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
                           shape=(glt_header['bands'],
                                  glt_header['lines'],
                                  glt_header['samples']))
-
+    
     # Get spatial indices.
     I, J = np.where((glt_image[0,:,:]>=0)&(glt_image[1,:,:]>=0))
     ortho_sca_image = np.zeros((glt_header['lines'], glt_header['samples']), dtype='float32')
-
+    
     # Orthorectify SCA.
     fid = open(ortho_sca_image_file, 'wb')
     for band in range(sca_header['bands']):
@@ -90,7 +90,7 @@ def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
     ortho_sca_header['coordinate system string'] = glt_header['coordinate system string']
     write_envi_header(ortho_sca_image_file+'.hdr', ortho_sca_header)
     del glt_header, sca_header, ortho_sca_header
-
+    
     logger.info('Write the georectified SCA image to %s.' %ortho_sca_image_file)
 
 def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
@@ -103,13 +103,13 @@ def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
         glt_image_file: str
             Geographic lookup table image filename.
     """
-
+    
     if os.path.exists(ortho_dem_image_file):
         logger.info('Write the georectified DEM image to %s.' %ortho_dem_image_file)
         return
-
+    
     from ENVI import empty_envi_header, read_envi_header, write_envi_header
-
+    
     # Read IGM image (the third band is DEM).
     igm_header = read_envi_header(igm_image_file+'.hdr')
     igm_image = np.memmap(igm_image_file,
@@ -119,7 +119,7 @@ def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
                                  igm_header['lines'],
                                  igm_header['samples']))
     del igm_header
-
+    
     # Read GLT image.
     glt_header = read_envi_header(glt_image_file+'.hdr')
     glt_image = np.memmap(glt_image_file,
@@ -128,11 +128,11 @@ def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
                           shape=(glt_header['bands'],
                                  glt_header['lines'],
                                  glt_header['samples']))
-
+    
     # Get spatial indices.
     I, J = np.where((glt_image[0,:,:]>=0)&(glt_image[1,:,:]>=0))
     ortho_dem_image = np.zeros((glt_header['lines'], glt_header['samples']), dtype='float32')
-
+    
     # Orthorectify DEM.
     fid = open(ortho_dem_image_file, 'wb')
     ortho_dem_image[:,:] = -1000.0
@@ -160,7 +160,7 @@ def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
     ortho_dem_header['coordinate system string'] = glt_header['coordinate system string']
     write_envi_header(ortho_dem_image_file+'.hdr', ortho_dem_header)
     del glt_header, ortho_dem_header
-
+    
     logger.info('Write the georectified DEM image to %s.' %ortho_dem_image_file)
 
 def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
@@ -173,13 +173,13 @@ def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
         glt_image_file: str
             Geographic lookup table image filename.
     """
-
+    
     if os.path.exists(ortho_rdn_image_file):
         logger.info('Write the georectified radiance image to %s.' %ortho_rdn_image_file)
         return
-
+    
     from ENVI import empty_envi_header, read_envi_header, write_envi_header
-
+    
     # Read radiance image.
     rdn_header = read_envi_header(rdn_image_file+'.hdr')
     rdn_image = np.memmap(rdn_image_file,
@@ -188,7 +188,7 @@ def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
                           shape=(rdn_header['lines'],
                                  rdn_header['bands'],
                                  rdn_header['samples']))
-
+    
     # Read GLT image.
     glt_header = read_envi_header(glt_image_file+'.hdr')
     glt_image = np.memmap(glt_image_file,
@@ -198,11 +198,11 @@ def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
                           shape=(glt_header['bands'],
                                  glt_header['lines'],
                                  glt_header['samples']))
-
+    
     # Get spatial indices.
     I, J = np.where((glt_image[0,:,:]>=0)&(glt_image[1,:,:]>=0))
     ortho_image = np.zeros((glt_header['lines'], glt_header['samples']), dtype='float32')
-
+    
     # Orthorectify radiance.
     fid = open(ortho_rdn_image_file, 'wb')
     info = 'Band (max=%d): ' %rdn_header['bands']
@@ -240,5 +240,5 @@ def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
     ortho_rdn_header['coordinate system string'] = glt_header['coordinate system string']
     write_envi_header(ortho_rdn_image_file+'.hdr', ortho_rdn_header)
     del glt_header, rdn_header, ortho_rdn_header
-
+    
     logger.info('Write the georectified radiance image to %s.' %ortho_rdn_image_file)

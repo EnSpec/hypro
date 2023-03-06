@@ -31,13 +31,13 @@ def get_avg_elev(dem_image_file):
         avg_elev: float
             Average elevation.
     """
-
+    
     ds = gdal.Open(dem_image_file, gdal.GA_ReadOnly)
     dem_image = ds.GetRasterBand(1).ReadAsArray()
     avg_elev = dem_image[dem_image>0].mean() # Negative values are ignored.
     ds = None
     del dem_image
-
+    
     return avg_elev
 
 def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
@@ -56,13 +56,13 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
         pixel_size: float
             Image pixel size [deg].
     """
-
+    
     if os.path.exists(dem_image_file):
         logger.info('Write the DEM to %s.' %dem_image_file)
         return
-
+    
     from ENVI import empty_envi_header, write_envi_header
-
+    
     # Estimate the spatial range of the flight area.
     """ Notes:
         (1) The `altitude` here is above the mean sea level, or the Earth
@@ -92,7 +92,7 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
         col_1 = int((x_max-geotransform[0])/geotransform[1])
         row_0 = int((y_max-geotransform[3])/geotransform[5])
         row_1 = int((y_min-geotransform[3])/geotransform[5])
-
+        
         if (col_0>ds.RasterXSize-1) or (row_0>ds.RasterYSize-1) or (col_1<0) or (row_1<0):
             logger.error('The input DEM image does not cover the flight area.')
             raise IOError('The input DEM image does not cover the flight area.')
@@ -103,18 +103,18 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
         row_1 = min(row_1, ds.RasterYSize-1)
         cols  = int(col_1-col_0)
         rows  = int(row_1-row_0)
-
+        
         # Read a subset of DEM.
         dem_image = ds.GetRasterBand(1).ReadAsArray(col_0, row_0, cols, rows)
         dem_image = dem_image.astype('float32')
-
+        
         # Write clipped DEM image.
         fid = open(dem_image_file, 'wb')
         fid.write(dem_image.tostring())
         fid.close()
         ds = None
         del dem_image
-
+        
         # Update geotransform
         geotransform = (geotransform[0]+col_0*geotransform[1],
                         geotransform[1],
@@ -123,24 +123,24 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
                         0,
                         geotransform[5])
         del col_0, col_1, row_0, row_1
-
+    
     elif type(dem) in [int, float]:
         # Make a flat DEM.
         rows = int((y_max-y_min)/pixel_size)
         cols = int((x_max-x_min)/pixel_size)
         dem_image = np.ones((rows, cols))*dem
-
+        
         # Write clipped DEM image
         fid = open(dem_image_file, 'wb')
         fid.write(dem_image.astype('float32').tostring())
         fid.close()
         del dem_image
-
+        
         # Update geotransform
         geotransform = (x_min, pixel_size, 0, y_max, 0, -pixel_size)
     else:
         logger.error('Cannot process DEM due to the wrong input.')
-
+    
     # Write clipped DEM header
     dem_header = empty_envi_header()
     dem_header['description'] = 'DEM, in [m]'
@@ -164,5 +164,5 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
             dem_header['map info'][8] = 'South'
     write_envi_header(os.path.splitext(dem_image_file)[0]+'.hdr', dem_header)
     del dem_header
-
+    
     logger.info('Write the DEM to %s.' %dem_image_file)

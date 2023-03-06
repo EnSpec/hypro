@@ -43,30 +43,30 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
         background_mask_file:
             Background mask filename.
     """
-
+    
     if os.path.exists(ddv_file) and os.path.exists(vis_file):
         logger.info('Write the visibility map to %s.' %vis_file)
         logger.info('Write the DDV map to %s.' %ddv_file)
         return
-
+    
     from ENVI    import read_envi_header, empty_envi_header, write_envi_header
     from AtmLUT  import read_binary_metadata
     from Spectra import get_closest_wave
     from AtmCorr import atm_corr_band
-
+    
     # Read radiance header.
     rdn_header = read_envi_header(os.path.splitext(rdn_file)[0]+'.hdr')
-
+    
     # Find VNIR and SWIR sensor wavelengths.
     red_wave, red_band = get_closest_wave(rdn_header['wavelength'], 660)
     nir_wave, nir_band = get_closest_wave(rdn_header['wavelength'], 850)
     swir1_wave, swir1_band = get_closest_wave(rdn_header['wavelength'], 1650)
     swir2_wave, swir2_band = get_closest_wave(rdn_header['wavelength'], 2130)
-
+    
     # Determine the sensor type.
     if_vnir =  abs(red_wave-660)<20 and abs(nir_wave-850)<20
     if_swir =  abs(swir1_wave-1650)<20 or abs(swir2_wave-2130)<20
-
+    
     # Read atmospheric lookup table.
     atm_lut_metadata = read_binary_metadata(atm_lut_file+'.meta')
     atm_lut_metadata['shape'] = tuple([int(v) for v in atm_lut_metadata['shape']])
@@ -75,12 +75,12 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
     atm_lut_VIS = np.array([float(v) for v in atm_lut_metadata['VIS']])
     atm_lut_VZA = np.array([float(v) for v in atm_lut_metadata['VZA']])
     atm_lut_RAA = np.array([float(v) for v in atm_lut_metadata['RAA']])
-
+    
     atm_lut = np.memmap(atm_lut_file,
                         dtype=atm_lut_metadata['dtype'],
                         mode='r',
                         shape=atm_lut_metadata['shape'])# shape = (RHO, WVC, VIS, VZA, RAA, WAVE)
-
+    
     # Read radiance image.
     rdn_image = np.memmap(rdn_file,
                           dtype='float32',
@@ -88,7 +88,7 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
                           shape=(rdn_header['bands'],
                                  rdn_header['lines'],
                                  rdn_header['samples']))
-
+    
     # Read VZA and RAA image.
     sca_header = read_envi_header(os.path.splitext(sca_file)[0]+'.hdr')
     saa = float(sca_header['sun azimuth'])
@@ -107,13 +107,13 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
     # clear data
     sca_image.flush()
     del sca_header, saa, sca_image
-
+    
     # Set visibility and water vapor column values.
     metadata = read_binary_metadata(atm_lut_file+'.meta')
     tmp_wvc_image = np.ones(vza_image.shape)*atm_db_wvc_lut[metadata['atm_mode']]
     tmp_vis_image = np.ones(vza_image.shape)*23
     del metadata
-
+    
     # Read background mask.
     bg_header = read_envi_header(os.path.splitext(background_mask_file)[0]+'.hdr')
     bg_mask = np.memmap(background_mask_file,
@@ -121,7 +121,7 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
                         mode='r',
                         shape=(bg_header['lines'],
                                bg_header['samples']))
-
+    
     # Calculate NDVI.
     red_refl = atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut[...,red_band],
                              tmp_wvc_image, tmp_vis_image, vza_image, raa_image, rdn_image[red_band,:,:],
@@ -132,10 +132,10 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
                              bg_mask)
     ndvi = (nir_refl-red_refl)/(nir_refl+red_refl+1e-10)
     vis_image = np.zeros((rdn_header['lines'], rdn_header['samples']))
-
+    
     if if_vnir and if_swir:
         logger.info('Both VNIR and SWIR bands are used for estimating visibility.')
-
+        
         # Decide which SWIR band to use.
         if abs(swir2_wave-2130)<20:
             swir_wave = swir2_wave
@@ -147,12 +147,12 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
             swir_band = swir1_band
             swir_refl_upper_bounds = [0.10, 0.15, 0.18]
             red_swir_ratio = 0.25
-
+        
         # Calculate SWIR reflectance.
         swir_refl = atm_corr_band(atm_lut_WVC, atm_lut_VIS, atm_lut_VZA, atm_lut_RAA, atm_lut[...,swir_band],
                                   tmp_wvc_image, tmp_vis_image, vza_image, raa_image, rdn_image[swir_band,:,:],
                                   bg_mask)
-
+        
         # Get DDV mask.
         for swir_refl_upper_bound in swir_refl_upper_bounds:
             ddv_mask = (ndvi>0.10)&(swir_refl<swir_refl_upper_bound)&(swir_refl>0.01)
@@ -164,7 +164,7 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
                 break
         # Estimate Visibility.
         rows, columns = np.where(ddv_mask)
-
+        
         # Estimate red reflectance.
         red_refl[rows, columns] = red_swir_ratio*swir_refl[rows, columns]
         del swir_refl
@@ -175,17 +175,17 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
         rdn_image.flush()
         del rdn_image
         logger.info('Visibility [km] statistics: min=%.2f, max=%.2f, avg=%.2f, sd=%.2f.' %(vis_image[ddv_mask].min(), vis_image[ddv_mask].max(), vis_image[ddv_mask].mean(), vis_image[ddv_mask].std()))
-
+        
         # Fill gaps with average values.
         vis_image[~ddv_mask] = vis_image[ddv_mask].mean()
         vis_image[bg_mask] = -1000.0
-
+        
         # Write the DDV data.
         fid = open(ddv_file, 'wb')
         fid.write(ddv_mask.tostring())
         fid.close()
         del ddv_mask
-
+        
         ddv_header = empty_envi_header()
         ddv_header['description'] = 'DDV mask (1: Dark dense vegetation; 0: non-dark dense vegetation)'
         ddv_header['samples'] = rdn_header['samples']
@@ -198,7 +198,7 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
         ddv_header['map info'] = rdn_header['map info']
         ddv_header['coordinate system string'] = rdn_header['coordinate system string']
         write_envi_header(os.path.splitext(ddv_file)[0]+'.hdr', ddv_header)
-
+        
         logger.info('Write the DDV mask to %s.' %ddv_file)
     else:
         logger.info('Cannot find appropriate bands for estimating visibility; a constant visibility (23 km) is used.')
@@ -209,7 +209,7 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
     fid.write(vis_image.astype('float32').tostring())
     fid.close()
     del vis_image
-
+    
     vis_header = empty_envi_header()
     vis_header['description'] = 'Visibility [km]'
     vis_header['samples'] = rdn_header['samples']
@@ -224,7 +224,7 @@ def estimate_vis(vis_file, ddv_file, atm_lut_file, rdn_file, sca_file, backgroun
     vis_header['coordinate system string'] = rdn_header['coordinate system string']
     write_envi_header(os.path.splitext(vis_file)[0]+'.hdr', vis_header)
     logger.info('Write the visibility image to %s.' %vis_file)
-
+    
     # Clear data
     del ndvi, red_refl, nir_refl, rdn_header
 
@@ -239,20 +239,20 @@ def interp_atm_lut(atm_lut_RHO, atm_lut_WVC, atm_lut_VZA, atm_lut_RAA, atm_lut, 
         interp_rdn: 1D array
             Interpolated radiance.
     """
-
+    
     from AtmLUT import get_interp_range, combos
-
+    
     # Get water vapor column interpolation range.
     rho_dict = get_interp_range(atm_lut_RHO, rho)
     wvc_dict = get_interp_range(atm_lut_WVC, wvc)
     vza_dict = get_interp_range(atm_lut_VZA, vza)
     raa_dict = get_interp_range(atm_lut_RAA, raa)
-
+    
     # Update interpolated radiance.
     interp_rdn = np.zeros(atm_lut.shape[2])
     index_combos = combos([list(rho_dict.keys()), list(wvc_dict.keys()), list(vza_dict.keys()), list(raa_dict.keys())])
     for index_combo in index_combos:
         rho_index, wvc_index, vza_index, raa_index = index_combo
         interp_rdn += atm_lut[rho_index, wvc_index,:,vza_index,raa_index]*rho_dict[rho_index]*wvc_dict[wvc_index]*vza_dict[vza_index]*raa_dict[raa_index]
-
+    
     return interp_rdn

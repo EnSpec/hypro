@@ -36,9 +36,9 @@ def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensor
         logger.info('Write the merged DEM image to %s.' %merged_dem_file)
         logger.info('Write the merged SCA image to %s.' %merged_sca_file)
         return
-
+    
     from ENVI import empty_envi_header, read_envi_header, write_envi_header
-
+    
     """
         Get spatial extent and pixel size.
     """
@@ -69,7 +69,7 @@ def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensor
     logger.info('Map x = %.2f - %.2f' %(ulx, lrx))
     logger.info('Map y = %.2f - %.2f' %(lry, uly))
     logger.info('Pixel size = %.2f' %pixel_size)
-
+    
     """
         Determine regular map grids.
     """
@@ -105,19 +105,19 @@ def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensor
         tmp_pixel_size = float(tmp_header['map info'][5])
         resampled_image = resample_ortho_sca(np.copy(tmp_image[0,:,:]), tmp_ulx, tmp_uly, tmp_pixel_size, x, y)
         mask = mask&(resampled_image>0.0)
-
+        
         # Clear data.
         del tmp_header, tmp_ulx, tmp_uly, tmp_pixel_size, resampled_image
         tmp_image.flush()
         del tmp_image
-        
+    
     mask = ~mask # 1: background pixels; 0: non-background pixels.
-
+    
     # Write the mask to a file.
     fid = open(background_mask_file, 'wb')
     fid.write(mask.tostring())
     fid.close()
-
+    
     # Write the mask header to a file.
     header = empty_envi_header()
     header['description'] = 'Background mask (0: non-background; 1: background)'
@@ -133,9 +133,9 @@ def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensor
     header['coordinate system string'] = crs
     write_envi_header(os.path.splitext(background_mask_file)[0]+'.hdr', header)
     del header
-
+    
     logger.info('Write the background mask to %s.' %background_mask_file)
-
+    
     """
         Merge DEM.
     """
@@ -154,7 +154,7 @@ def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensor
                                          float(raw_header['map info'][5]),
                                          x, y)
     resampled_image[mask] = -1000.0
-
+    
     # Write the merged DEM to a file.
     fid = open(merged_dem_file, 'wb')
     fid.write(resampled_image.astype('float32').tostring())
@@ -179,10 +179,10 @@ def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensor
     header['coordinate system string'] = crs
     write_envi_header(os.path.splitext(merged_dem_file)[0]+'.hdr', header)
     del header
-
+    
     logger.info('Write the merged DEM image to %s.' %merged_dem_file)
-
-
+    
+    
     """
         Merge SCA.
     """
@@ -196,7 +196,7 @@ def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensor
                           shape=(raw_header['bands'],
                                  raw_header['lines'],
                                  raw_header['samples']))
-
+    
     # Write data.
     fid = open(merged_sca_file, 'wb')
     for band in range(raw_header['bands']):
@@ -244,13 +244,13 @@ def merge_rdn(merged_image_file, mask_file, sensors):
         sensors: dict
             Sensor dictionaries.
     """
-
+    
     if os.path.exists(merged_image_file):
         logger.info('Write the merged radiance image to %s.' %merged_image_file)
         return
-
+    
     from ENVI import empty_envi_header, read_envi_header, write_envi_header
-
+    
     # Read mask.
     mask_header = read_envi_header(os.path.splitext(mask_file)[0]+'.hdr')
     mask_image = np.memmap(mask_file,
@@ -258,15 +258,15 @@ def merge_rdn(merged_image_file, mask_file, sensors):
                            dtype='bool',
                            shape=(mask_header['lines'],
                                   mask_header['samples']))
-
+    
     # Get the map upper-left coordinates and pixel sizes of VNIR and SWIR images.
     ulx, uly, pixel_size = float(mask_header['map info'][3]), float(mask_header['map info'][4]), float(mask_header['map info'][5])
-
+    
     # Determine regular map grids.
     x, y = np.meshgrid(ulx+np.arange(mask_header['samples'])*pixel_size,
                        uly-np.arange(mask_header['lines'])*pixel_size)
     del ulx, uly, pixel_size
-
+    
     # Read radiance header and image.
     header_dict = dict()
     image_file_dict = dict()
@@ -310,7 +310,7 @@ def merge_rdn(merged_image_file, mask_file, sensors):
             resampled_image[mask_image] = 0.0
             rdn_image.flush()
             del rdn_image
-            
+        
         fid.write(resampled_image.astype('float32').tostring())
         del resampled_image
     fid.close()
@@ -337,9 +337,9 @@ def merge_rdn(merged_image_file, mask_file, sensors):
     header['coordinate system string'] = mask_header['coordinate system string']
     write_envi_header(os.path.splitext(merged_image_file)[0]+'.hdr', header)
     del header, tmp_header
-
-    logger.info('Write the merged radiance image to %s.' %merged_image_file)
     
+    logger.info('Write the merged radiance image to %s.' %merged_image_file)
+
 def resample_ortho_sca(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     """ Resample georectified scan angle image to new map grids.
     Arguments:
@@ -355,9 +355,9 @@ def resample_ortho_sca(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
         resampled_image: 2D array
             Resampled georectified scan angle image.
     """
-
+    
     from scipy import ndimage
-
+    
     # Average reflectance
     weights = np.ones((2,2))
     count = raw_image>=0.0
@@ -367,13 +367,13 @@ def resample_ortho_sca(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     avg_image[count>0] /= count[count>0]
     avg_image[count==0] = -1000.0
     del count
-
+    
     # Resample
     samples = ((x-raw_ulx)/raw_pixel_size).astype('int32')
     lines = ((raw_uly-y)/raw_pixel_size).astype('int32')
     resampled_image = avg_image[lines, samples]
     del avg_image, samples, lines
-
+    
     return resampled_image
 
 def resample_ortho_dem(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
@@ -391,9 +391,9 @@ def resample_ortho_dem(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
         resampled_image: 2D array
             Resampled georectified DEM image.
     """
-
+    
     from scipy import ndimage
-
+    
     # Average reflectance
     weights = np.ones((2,2))
     count = raw_image>0.0
@@ -403,13 +403,13 @@ def resample_ortho_dem(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     avg_image[count>0] /= count[count>0]
     avg_image[count==0] = -1000.0
     del count
-
+    
     # Resample
     samples = ((x-raw_ulx)/raw_pixel_size).astype('int32')
     lines = ((raw_uly-y)/raw_pixel_size).astype('int32')
     resampled_image = avg_image[lines, samples]
     del avg_image, samples, lines
-
+    
     return resampled_image
 
 def resample_ortho_rdn(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
@@ -427,9 +427,9 @@ def resample_ortho_rdn(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
         resampled_image: 2D array
             Resampled reflectance image.
     """
-
+    
     from scipy import ndimage
-
+    
     # Average radiance.
     weights = np.ones((2,2))
     count = raw_image>0.0
@@ -438,7 +438,7 @@ def resample_ortho_rdn(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
     count = ndimage.convolve(count.astype('int8'), weights)
     avg_image[count>0] /= count[count>0]
     del count
-
+    
     # Resample.
     samples = ((x-raw_ulx)/raw_pixel_size).astype('int32')
     lines = ((raw_uly-y)/raw_pixel_size).astype('int32')
