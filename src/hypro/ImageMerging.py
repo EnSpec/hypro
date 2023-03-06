@@ -350,7 +350,7 @@ def merge_rdn(merged_image_file, mask_file, sensors):
 
 
 def resample_ortho_sca(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
-    """Resample georectified scan angle image to new map grids.
+    """Resample orthorectified scan angle image to new map grids.
     
     Parameters
     ----------
@@ -432,7 +432,7 @@ def resample_ortho_dem(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
 
 
 def resample_ortho_rdn(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
-    """Resample radiance image to new map grids.
+    """Resample orthorectified radiance image to new map grids.
     
     Parameters
     ----------

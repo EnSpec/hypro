@@ -187,7 +187,7 @@ def initialize_flight_dict(config, flight_index):
 
 
 def search_file(in_dir, keyword):
-    """Search a specific file with the keyword.
+    """Search for a specific file whose name contains the given keyword.
     
     Parameters
     ----------
@@ -213,7 +213,7 @@ def search_file(in_dir, keyword):
 
 
 def get_center_lon_lat(raw_imugps_file):
-    """Get HySpex image center longitude and latitude.
+    """Get approximate image center longitude & latitude.
     
     Parameters
     ----------
@@ -236,7 +236,7 @@ def get_center_lon_lat(raw_imugps_file):
 
 
 def get_acquisition_time(dn_header_file, raw_imugps_file):
-    """Get HySpex image acquisition time.
+    """Get image acquisition time.
     
     Parameters
     ----------
@@ -272,7 +272,7 @@ def get_acquisition_time(dn_header_file, raw_imugps_file):
 
 
 def get_sun_earth_distance(when):
-    """Get Sun-Earth distance of a day.
+    """Get Sun-Earth distance by day of year.
     
     Parameters
     ----------

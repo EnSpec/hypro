@@ -232,7 +232,7 @@ def resample_atm_lut(resampled_atm_lut_file, raw_atm_lut_file, rdn_header_file):
 
 
 def write_binary_metadata(metadata_file, metadata):
-    """Write the metadata of a binary file.
+    """Write lookup table metadata.
     
     Parameters
     ----------
@@ -261,7 +261,7 @@ def write_binary_metadata(metadata_file, metadata):
 
 
 def read_binary_metadata(metadata_file):
-    """Read the metadata of a binary file.
+    """Read lookup table metadata.
     
     Parameters
     ----------
@@ -307,7 +307,7 @@ def get_interp_range(xs, x):
     Parameters
     ----------
     xs : list
-        Parameter grid coordinates. Lookup table has been evaluated for these values.
+        Parameter grid coordinates at which the lookup table has been evaluated.
     x : float
         Parameter value at which to interpolate the lookup table.
     

@@ -34,7 +34,7 @@ def prepare_imugps_Hyspex(processed_imugps_file, raw_imugps_file, boresight_offs
     raw_imugps_file : str
         Raw IMU & GPS filename.
     boresight_offsets : list of float
-        Boresight offsets, [roll_offset, pitch_offset, heading_offset, altitude_offset].
+        Boresight offsets, given as ``[roll, pitch, heading, altitude]``.
     boresight_options : list of bool
         Boresight offset options, true or false.
     map_crs : osr.SpatialReference

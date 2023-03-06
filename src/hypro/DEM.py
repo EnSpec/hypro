@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_avg_elev(dem_image_file):
-    """Get the average elevation of a DEM image.
+    """Calculate the average surface elevation.
     
     Parameters
     ----------
@@ -59,7 +59,7 @@ def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
     dem_image_file : str
         Processed DEM image filename.
     dem : str or float
-        Input DEM image filename, or user-specified elevation value, units=[m].
+        Input DEM image filename or user-specified elevation value, units=[m].
     imugps_file : str
         IMU & GPS data filename.
     fov : float

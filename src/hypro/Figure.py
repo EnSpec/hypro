@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 
 def plot_angle_geometry(angle_geometry_figure_file, sca_image_file):
-    """Plot the Sun-target-view geometry in a polar coordinate system.
+    """Plot the Sun-target-view geometry in polar coordinates.
     
     Parameters
     ----------
@@ -73,7 +73,7 @@ def plot_angle_geometry(angle_geometry_figure_file, sca_image_file):
 
 
 def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imugps_file):
-    """Plot image area (DEM is used as the background).
+    """Plot the image data footprint area over elevation height map.
     
     Parameters
     ----------
@@ -138,7 +138,7 @@ def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imug
 
 
 def linear_percent_stretch(raw_image):
-    """Do linear percent stretch.
+    """Apply linear contrast stretch to image data for display.
     
     Parameters
     ----------
@@ -149,6 +149,15 @@ def linear_percent_stretch(raw_image):
     -------
     stretched_image : ndarray, 2D
         Percent_stretched image.
+    
+    Notes
+    -----
+    The input data will be transformed so that the dynamic range of the image
+    is distributed across the full range of values available for display, improving
+    the contrast of the rendered image. The data will be clipped to the 2nd – 98th
+    percentile range and an affine transformation applied so that values at or below
+    the 2nd percentile are mapped to 0, and values at or above the 98th percentile
+    above are mapped to 255. For more information, see [#envi-contrast-stretch]_.
     
     References
     ----------
@@ -167,7 +176,7 @@ def linear_percent_stretch(raw_image):
 
 
 def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
-    """Make an RGB quicklook image.
+    """Generate a 3-band 'quicklook' image.
     
     Parameters
     ----------
@@ -250,7 +259,7 @@ def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
 
 
 def plot_avg_rdn(avg_rdn_figure_file, avg_rdn_file):
-    """Plot average radiance to a figure.
+    """Plot column-averaged radiance spectra.
     
     Parameters
     ----------
@@ -290,7 +299,7 @@ def plot_avg_rdn(avg_rdn_figure_file, avg_rdn_file):
 
 
 def plot_wvc_model(wvc_model_figure_file, wvc_model_file):
-    """Plot the WVC model to a figure.
+    """Plot water vapor column estimation model.
     
     Parameters
     ----------
@@ -330,7 +339,7 @@ def plot_wvc_model(wvc_model_figure_file, wvc_model_file):
 
 
 def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_atm_features_file):
-    """Plot smile effects at different atmospheric absorption features.
+    """Plot estimated smile effect shifts at different atmospheric absorption features.
     
     Parameters
     ----------
@@ -431,7 +440,7 @@ def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_
 
 
 def plot_wvc_histogram(wvc_histogram_figure_file, water_vapor_column_image_file):
-    """Plot water vapor column histogram.
+    """Plot a histogram of water vapor column values.
     
     Parameters
     ----------

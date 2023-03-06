@@ -147,7 +147,7 @@ def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_m
     sun_zenith : float
         Sun zenith angle.
     distance : float
-        Earth-to-Sun distance, units=[AU].
+        Sun-Earth distance, units=[AU].
     background_mask_file : str
         Mask image filename.
     solar_flux_file : str

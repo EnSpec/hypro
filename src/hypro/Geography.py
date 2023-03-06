@@ -49,7 +49,7 @@ def get_utm_zone(lon):
 
 
 def is_northern(lat):
-    """Determine if it is northern hemisphere.
+    """Determine whether the given latitude falls in the northern hemisphere.
     
     Parameters
     ----------
@@ -69,7 +69,7 @@ def is_northern(lat):
 
 
 def define_utm_crs(lon, lat):
-    """Define a UTM map coordinate system.
+    """Create a UTM map coordinate system suitable for a given longitude & latitude.
     
     Parameters
     ----------
@@ -94,7 +94,7 @@ def define_utm_crs(lon, lat):
 
 
 def define_wgs84_crs():
-    """Define a WGS84 map coordinate system.
+    """Create an instance of the WGS84 geographic coordinate system.
     
     Returns
     -------
@@ -110,7 +110,7 @@ def define_wgs84_crs():
 
 
 def get_raster_crs(file):
-    """Get the map coordinate system of a raster image.
+    """Get the coordinate reference system of a raster image.
     
     Parameters
     ----------
@@ -135,7 +135,7 @@ def get_raster_crs(file):
 
 
 def get_grid_convergence(lon, lat, map_crs):
-    """Get grid convergence angles.
+    """Get map grid convergence angles at a given longitude & latitude.
     
     Parameters
     ----------

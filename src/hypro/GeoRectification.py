@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
-    """Do orthorectification on SCA.
+    """Orthorectify sensor scan angles.
     
     Parameters
     ----------
@@ -100,7 +100,7 @@ def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
 
 
 def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
-    """Do orthorectification on DEM.
+    """Orthorectify DEM.
     
     Parameters
     ----------
@@ -173,7 +173,7 @@ def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
 
 
 def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
-    """Do orthorectification on radiance.
+    """Orthorectify at-sensor radiance.
     
     Parameters
     ----------

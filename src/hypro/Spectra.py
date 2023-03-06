@@ -55,7 +55,7 @@ def estimate_fwhms_from_waves(waves):
 
 
 def gaussian(x, mu, fwhm):
-    """Return a Gaussian distribution.
+    """Generate a Gaussian response function.
     
     Parameters
     ----------
@@ -69,7 +69,7 @@ def gaussian(x, mu, fwhm):
     Returns
     -------
     array
-        Numpy array of Gaussian along input range.
+        Gaussian curve evaluated over the input wavelengths.
     """
     
     sigma = fwhm/(2*np.sqrt(2*np.log(2))) + 1e-10
@@ -102,7 +102,9 @@ def resample_spectra(spectra, src_waves, dst_waves, dst_fwhms, src_fwhms=None):
     -----
     Given a set of source wavelengths, destination wavelengths and FWHMs, this function
     calculates the relative contribution or each input wavelength to the output wavelength.
-    It assumes that output response functions follow a Gaussian distribution.
+    The output spectra are calculated as linear combinations of the input spectral bands
+    using weights derived from response functions evaluated at a fine (1 nm) spectral
+    sampling. It is assumed that all response functions follow a Gaussian distribution.
     """
     
     if src_fwhms is None:
@@ -140,11 +142,11 @@ def resample_spectra(spectra, src_waves, dst_waves, dst_fwhms, src_fwhms=None):
 
 
 def get_closest_wave(waves, center_wave):
-    """Get the band index whose wavelength is closest to ``center_wave``.
+    """Get the central wavelength & index of the sensor band closest to ``center_wave``.
     
     Parameters
     ----------
-    waves : ndarray
+    waves : ndarray, 1D
         Wavelength array.
     center_wave : float
         Center wavelength.
@@ -161,14 +163,14 @@ def get_closest_wave(waves, center_wave):
 
 
 def continuum_removal(spectra, waves):
-    """Continuum remove spectra.
+    """Remove continuum curve from spectral data.
     
     Parameters
     ----------
     spectra : ndarray, 1D or 2D
         Raw spectral data, array with shape ``(bands,)`` or ``(bands, columns)``.
     waves : list
-        Spectral wavelengths.
+        Central response wavelengths for each spectral band.
     
     Returns
     -------
@@ -191,14 +193,14 @@ def resample_solar_flux(sensor_waves, sensor_fwhms, file=None):
     sensor_waves : ndarray
         Sensor wavelengths.
     sensor_fwhms : ndarray
-        Sensor FWHMs.
+        Sensor bandwidths (full widths at half maximum response).
     file : str
         Solar flux filename.
     
     Returns
     -------
     solar_flux : ndarray
-        Resampled solar flux.
+        Resampled solar irradiant flux spectrum.
     """
     
     solar_flux_file = file or BytesIO(pkgutil.get_data(__package__, 'data/solar/irradiance_kurucz1992.dat'))

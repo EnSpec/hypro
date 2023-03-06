@@ -30,9 +30,9 @@ def make_sensor_model(sensor_model_file, fov, ifov, samples, if_rotated):
     sensor_model_file : str
         The sensor model filename.
     fov : float
-        Sensor fov [deg].
+        Total cross-track angular field of view (FoV) of the sensor, units=[deg].
     ifov : float
-        Sensor instantaneous fov [mrad].
+        Along-track instantaneous FoV of the sensor, units=[mrad].
     samples : int
         Image columns.
     if_rotated : bool

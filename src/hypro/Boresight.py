@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_file, dem_image_file, boresight_options):
-    """Do boresight calibration.
+    """Estimate sensor boresight offsets.
     
     Parameters
     ----------
@@ -156,18 +156,20 @@ def boresight_calibration(boresight_file, gcp_file, imugps_file, sensor_model_fi
 
 
 def cost_fun(boresight_offsets, flight_xyz, flight_imu, flight_sensor_model, dem_image, dem_ulxy, dem_pixel_size, gcp_xyz, boresight_options):
-    """Cost function for boresight calibration.
+    """Cost function for sensor boresighting.
     
     Parameters
     ----------
     boresight_offsets : list of float
         Boresight offsets.
     flight_xyz : ndarray, 2D
-        Flight x, y, z data, array with shape ``(n_gcps, 3)``
+        Imaging platform positions in map coordinates (x, y, & z), array with shape
+        ``(n_gcps, 3)``.
     flight_imu : ndarray, 2D
-        Flight roll, pitch, heading data, array with shape ``(n_gcps, 3)``
+        Imaging platform navigational attitudes (roll, pitch & heading), array with
+        shape ``(n_gcps, 3)``.
     flight_sensor_model : ndarray, 2D
-        Flight sensor model data, array with shape ``(n_gcps, 2)``
+        Flight sensor model data, array with shape ``(n_gcps, 2)``.
     dem_image : ndarray, 2D
         DEM data.
     dem_ulxy : list of float
@@ -178,6 +180,11 @@ def cost_fun(boresight_offsets, flight_xyz, flight_imu, flight_sensor_model, dem
         GPC map coordinates, array with shape ``(n_gcps, 3)``.
     boresight_options : list of bool
         Boresight offset options, true or false.
+    
+    Notes
+    -----
+    Returns the sum of spatial errors in the (x, y) plane (i.e. absolute horizontal
+    distances between known & predicted control point locations) over all GCPs.
     """
     
     # Estimate GCP map coordinates.
@@ -197,11 +204,13 @@ def estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_mo
     boresight_offsets : list of float
         Boresight offsets.
     flight_xyz : ndarray, 2D
-        Flight x, y, z data, array with shape ``(n_gcps, 3)``
+        Imaging platform positions in map coordinates (x, y & z), array with shape
+        ``(n_gcps, 3)``.
     flight_imu : ndarray, 2D
-        Flight roll, pitch, heading data, array with shape ``(n_gcps, 3)``
+        Imaging platform navigational attitudes (roll, pitch & heading), array with
+        shape ``(n_gcps, 3)``.
     flight_sensor_model : ndarray, 2D
-        Flight sensor model data, array with shape ``(n_gcps, 2)``
+        Flight sensor model data, array with shape ``(n_gcps, 2)``.
     dem_image : ndarray, 2D
         DEM data.
     dem_ulxy : list of float
@@ -214,7 +223,8 @@ def estimate_gcp_xyz(boresight_offsets, flight_xyz, flight_imu, flight_sensor_mo
     Returns
     -------
     gcp_xyz : ndarray, 2D
-        Estimated GCP x, y and z; array with shape ``(n_gcps, 3)``.
+        Estimated GCP coordinates in map space (x, y & z), array with shape
+        ``(n_gcps, 3)``.
     """
     
     from hypro.GeoReferencing import ray_tracing
