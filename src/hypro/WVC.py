@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to estimate water vapor column. """
+"""Functions to estimate water vapor column."""
 
 import logging
 import os
@@ -23,16 +23,18 @@ logger = logging.getLogger(__name__)
 
 
 def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
-    """ Build water vapor models.
-    Arguments:
-        wvc_model_file: str
-            Water vapor column model filename.
-        atm_lut_file: str
-            Atmospheric lookup table file.
-        rdn_header_file: str
-            Radiance header filename.
-        vis: float
-            Visibility in [km].
+    """Build water vapor models.
+    
+    Parameters
+    ----------
+    wvc_model_file : str
+        Water vapor column model filename.
+    atm_lut_file : str
+        Atmospheric lookup table file.
+    rdn_header_file : str
+        Radiance header filename.
+    vis : float
+        Visibility in [km].
     """
     
     if os.path.exists(wvc_model_file):
@@ -132,22 +134,24 @@ def build_wvc_model(wvc_model_file, atm_lut_file, rdn_header_file, vis=40):
 
 
 def estimate_wvc(wvc_file, rdn_file, sensors, sun_zenith, distance, background_mask_file, solar_flux_file=None):
-    """ Estimate water vapor column.
-    Arguments:
-        wvc_file: str
-            Water vapor column image filename.
-        rdn_file: str
-            Radiance image filename.
-        sensors: dict
-            Sensors.
-        sun_zenith: float
-            Sun zenith angle.
-        distance: float
-            Earth-to-Sun distance.
-        background_mask_file: str
-            Mask image filename.
-        solar_flux_file: str
-            Solar flux filename.
+    """Estimate water vapor column.
+    
+    Parameters
+    ----------
+    wvc_file : str
+        Water vapor column image filename.
+    rdn_file : str
+        Radiance image filename.
+    sensors : dict
+        Sensors.
+    sun_zenith : float
+        Sun zenith angle.
+    distance : float
+        Earth-to-Sun distance.
+    background_mask_file : str
+        Mask image filename.
+    solar_flux_file : str
+        Solar flux filename.
     """
     
     if os.path.exists(wvc_file):

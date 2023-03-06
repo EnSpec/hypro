@@ -12,11 +12,12 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to do spectral resampling and smoothing.
+"""Functions to do spectral resampling and smoothing.
 
-Notes:
-    (1) The code here is adapted from HyTools:
-        https://github.com/EnSpec/HyTools-sandbox/blob/master/hytools/preprocess/resampling.py
+Notes
+-----
+(1) The code here is adapted from HyTools:
+    https://github.com/EnSpec/HyTools-sandbox/blob/master/hytools/preprocess/resampling.py
 """
 
 import pkgutil
@@ -30,13 +31,17 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 
 
 def estimate_fwhms_from_waves(waves):
-    """ Estimate FWHM from wavelengths.
-    Arguments:
-        waves: array
-            Wavelengths, in nm.
-    Returns:
-        fwhms: array
-            Full widths at half maximum, in nm.
+    """Estimate FWHM from wavelengths.
+    
+    Parameters
+    ----------
+    waves : array
+        Wavelengths, in nm.
+    
+    Returns
+    -------
+    fwhms : array
+        Full widths at half maximum, in nm.
     """
     
     gap = 0.5*np.diff(waves)
@@ -47,15 +52,19 @@ def estimate_fwhms_from_waves(waves):
 
 
 def gaussian(x, mu, fwhm):
-    """ Return a Gaussian distribution.
-    Arguments:
-        x: array
-            Wavelengths along which to generate Gaussian.
-        mu: float
-            Center wavelength.
-        fwhm: float
-            Full width at half maximum.
-    Returns:
+    """Return a Gaussian distribution.
+    
+    Parameters
+    ----------
+    x : array
+        Wavelengths along which to generate Gaussian.
+    mu : float
+        Center wavelength.
+    fwhm : float
+        Full width at half maximum.
+    
+    Returns
+    -------
         Numpy array of Gaussian along input range.
     """
     
@@ -65,26 +74,32 @@ def gaussian(x, mu, fwhm):
 
 
 def resample_spectra(spectra, src_waves, dst_waves, dst_fwhms, src_fwhms=None):
-    """ Resample spectral data to new band central wavelengths & bandwidths.
-    Notes:
-        (1) Given a set of source wavelengths, destination wavelengths and FWHMs, this
-            function calculates the relative contribution or each input wavelength to
-            the output wavelength. It assumes that output response functions follow
-            a Gaussian distribution.
-    Arguments:
-        spectra: array
-            Spectra to be resampled.
-        src_waves: array
-            List of source wavelength centers.
-        dst_waves: array
-            List of destination wavelength centers.
-        dst_fwhms: array
-            List of destination full widths at half maximum.
-        src_fwhms: array
-            List of source full widths at half maximum.
-    Returns:
-        resampled_spectra: array
-            Resampled spectral data.
+    """Resample spectral data to new band central wavelengths & bandwidths.
+    
+    Parameters
+    ----------
+    spectra : array
+        Spectra to be resampled.
+    src_waves : array
+        List of source wavelength centers.
+    dst_waves : array
+        List of destination wavelength centers.
+    dst_fwhms : array
+        List of destination full widths at half maximum.
+    src_fwhms : array
+        List of source full widths at half maximum.
+    
+    Returns
+    -------
+    resampled_spectra : array
+        Resampled spectral data.
+    
+    Notes
+    -----
+    (1) Given a set of source wavelengths, destination wavelengths and FWHMs, this
+        function calculates the relative contribution or each input wavelength to
+        the output wavelength. It assumes that output response functions follow
+        a Gaussian distribution.
     """
     
     if src_fwhms is None:
@@ -122,13 +137,17 @@ def resample_spectra(spectra, src_waves, dst_waves, dst_fwhms, src_fwhms=None):
 
 
 def get_closest_wave(waves, center_wave):
-    """ Get the band index whose wavelength is closest to `center_wave`.
-    Arguments:
-        waves: array
-            Wavelength array.
-        center_wave: float
-            Center wavelength.
-    Returns:
+    """Get the band index whose wavelength is closest to `center_wave`.
+    
+    Parameters
+    ----------
+    waves : array
+        Wavelength array.
+    center_wave : float
+        Center wavelength.
+    
+    Returns
+    -------
         Closest wavelength and its band index.
     """
     
@@ -139,14 +158,18 @@ def get_closest_wave(waves, center_wave):
 
 def continuum_removal(spectra, waves):
     """Continuum remove spectra.
-    Arguments:
-        spectra: 1D or 2D array
-            Raw spectral data, dimension: [Bands] or [Bands, Columns].
-        waves: list
-            Spectral wavelengths.
-    Returns:
-        cont_rmd_spectra: 1D or 2D array
-            Continuum-removed spectra, dimension: [Bands] or [Bands, Columns].
+    
+    Parameters
+    ----------
+    spectra : 1D or 2D array
+        Raw spectral data, dimension: [Bands] or [Bands, Columns].
+    waves : list
+        Spectral wavelengths.
+    
+    Returns
+    -------
+    cont_rmd_spectra : 1D or 2D array
+        Continuum-removed spectra, dimension: [Bands] or [Bands, Columns].
     """
     
     waves = np.array(waves)
@@ -157,17 +180,21 @@ def continuum_removal(spectra, waves):
 
 
 def resample_solar_flux(sensor_waves, sensor_fwhms, file=None):
-    """ Resample solar flux to sensor wavelengths.
-    Arguments:
-        sensor_waves: array
-            Sensor wavelengths.
-        sensor_fwhms: array
-            Sensor FWHMs.
-        file: str
-            Solar flux filename.
-    Returns:
-        solar_flux: array
-            Resampled solar flux.
+    """Resample solar flux to sensor wavelengths.
+    
+    Parameters
+    ----------
+    sensor_waves : array
+        Sensor wavelengths.
+    sensor_fwhms : array
+        Sensor FWHMs.
+    file : str
+        Solar flux filename.
+    
+    Returns
+    -------
+    solar_flux : array
+        Resampled solar flux.
     """
     
     solar_flux_file = file or BytesIO(pkgutil.get_data(__package__, 'data/solar/irradiance_kurucz1992.dat'))

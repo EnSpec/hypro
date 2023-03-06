@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to do image classifications. """
+"""Functions to do image classifications."""
 
 import logging
 import os
@@ -23,22 +23,26 @@ logger = logging.getLogger(__name__)
 
 
 def pre_classification(pre_class_image_file, rdn_image_file, sun_zenith, distance, background_mask_file=None, solar_flux_file=None):
-    """ Pre-classify the image.
-    Notes:
-        (1) The classification algorithm used here is from ATCOR.
-    Arguments:
-        pre_class_image_file: str
-            Pre-classification image filename.
-        rdn_image_file: str
-            Radiance image filename, either BIL or BSQ.
-        sun_zenith: float
-            Sun zenith angle in degrees.
-        distance: float
-            Sun-Earth distance.
-        background_mask_file: str
-            Background mask filename.
-        solar_flux_file: str
-            Solar flux filename.
+    """Pre-classify the image.
+    
+    Parameters
+    ----------
+    pre_class_image_file : str
+        Pre-classification image filename.
+    rdn_image_file : str
+        Radiance image filename, either BIL or BSQ.
+    sun_zenith : float
+        Sun zenith angle in degrees.
+    distance : float
+        Sun-Earth distance.
+    background_mask_file : str
+        Background mask filename.
+    solar_flux_file : str
+        Solar flux filename.
+    
+    Notes
+    -----
+    (1) The classification algorithm used here is from ATCOR.
     """
     
     if os.path.exists(pre_class_image_file):

@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to merge images from different sensors. """
+"""Functions to merge images from different sensors."""
 
 import logging
 import os
@@ -23,16 +23,18 @@ logger = logging.getLogger(__name__)
 
 
 def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensors):
-    """ Merge DEM and SCA images.
-    Arguments:
-        background_mask_file: str
-            Background mask filename.
-        merged_dem_file: str
-            Merged DEM file.
-        merged_sca_file: str
-            Merged SCA file.
-        sensors: dict
-            Sensor dictionaries.
+    """Merge DEM and SCA images.
+    
+    Parameters
+    ----------
+    background_mask_file : str
+        Background mask filename.
+    merged_dem_file : str
+        Merged DEM file.
+    merged_sca_file : str
+        Merged SCA file.
+    sensors : dict
+        Sensor dictionaries.
     """
     
     if os.path.exists(background_mask_file) and os.path.exists(merged_dem_file) and os.path.exists(merged_sca_file):
@@ -239,14 +241,16 @@ def merge_dem_sca(background_mask_file, merged_dem_file, merged_sca_file, sensor
 
 
 def merge_rdn(merged_image_file, mask_file, sensors):
-    """ Merge radiance images.
-    Arguments:
-        merged_image_file: str
-            Merged radiance image filename.
-        mask_file: str
-            Background mask filename.
-        sensors: dict
-            Sensor dictionaries.
+    """Merge radiance images.
+    
+    Parameters
+    ----------
+    merged_image_file : str
+        Merged radiance image filename.
+    mask_file : str
+        Background mask filename.
+    sensors : dict
+        Sensor dictionaries.
     """
     
     if os.path.exists(merged_image_file):
@@ -346,19 +350,23 @@ def merge_rdn(merged_image_file, mask_file, sensors):
 
 
 def resample_ortho_sca(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
-    """ Resample georectified scan angle image to new map grids.
-    Arguments:
-        raw_image: 2D array
-            Raw georectified scan angle image data.
-        raw_ulx, raw_uly: float
-            Map coordinates of the upper-left corner of the raw image.
-        raw_pixel_size: float
-            Pixel size of the raw image.
-        x, y: 2D array
-            New map grids.
-    Returns:
-        resampled_image: 2D array
-            Resampled georectified scan angle image.
+    """Resample georectified scan angle image to new map grids.
+    
+    Parameters
+    ----------
+    raw_image : 2D array
+        Raw georectified scan angle image data.
+    raw_ulx, raw_uly : float
+        Map coordinates of the upper-left corner of the raw image.
+    raw_pixel_size : float
+        Pixel size of the raw image.
+    x, y : 2D array
+        New map grids.
+    
+    Returns
+    -------
+    resampled_image : 2D array
+        Resampled georectified scan angle image.
     """
     
     from scipy import ndimage
@@ -383,19 +391,23 @@ def resample_ortho_sca(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
 
 
 def resample_ortho_dem(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
-    """ Resample DEM image to new map grids.
-    Arguments:
-        raw_image: 2D array
-            Raw orthorectified DEM image data.
-        raw_ulx, raw_uly: float
-            Map coordinates of the upper-left corner of the raw image.
-        raw_pixel_size: float
-            Pixel size of the raw image.
-        x, y: 2D array
-            New map grids.
-    Returns:
-        resampled_image: 2D array
-            Resampled georectified DEM image.
+    """Resample DEM image to new map grids.
+    
+    Parameters
+    ----------
+    raw_image : 2D array
+        Raw orthorectified DEM image data.
+    raw_ulx, raw_uly : float
+        Map coordinates of the upper-left corner of the raw image.
+    raw_pixel_size : float
+        Pixel size of the raw image.
+    x, y : 2D array
+        New map grids.
+    
+    Returns
+    -------
+    resampled_image : 2D array
+        Resampled georectified DEM image.
     """
     
     from scipy import ndimage
@@ -420,19 +432,23 @@ def resample_ortho_dem(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
 
 
 def resample_ortho_rdn(raw_image, raw_ulx, raw_uly, raw_pixel_size, x, y):
-    """ Resample radiance image to new map grids.
-    Arguments:
-        raw_image: 2D array
-            Radiance image data.
-        raw_ulx, raw_uly: float
-            Map coordinates of the upper-left corner of the raw image.
-        raw_pixel_size: float
-            Pixel size of the raw image.
-        x, y: 2D array
-            New map grids.
-    Returns:
-        resampled_image: 2D array
-            Resampled reflectance image.
+    """Resample radiance image to new map grids.
+    
+    Parameters
+    ----------
+    raw_image : 2D array
+        Radiance image data.
+    raw_ulx, raw_uly : float
+        Map coordinates of the upper-left corner of the raw image.
+    raw_pixel_size : float
+        Pixel size of the raw image.
+    x, y : 2D array
+        New map grids.
+    
+    Returns
+    -------
+    resampled_image : 2D array
+        Resampled reflectance image.
     """
     
     from scipy import ndimage

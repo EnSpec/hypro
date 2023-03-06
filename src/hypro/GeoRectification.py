@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to do georectification. """
+"""Functions to do georectification."""
 
 import logging
 import os
@@ -23,14 +23,16 @@ logger = logging.getLogger(__name__)
 
 
 def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
-    """ Do orthorectification on SCA.
-    Arguments:
-        ortho_sca_image_file: str
-            Orthorectified SCA image filename.
-        sca_image_file: str
-            SCA image filename.
-        glt_image_file: str
-            Geographic lookup table image filename.
+    """Do orthorectification on SCA.
+    
+    Parameters
+    ----------
+    ortho_sca_image_file : str
+        Orthorectified SCA image filename.
+    sca_image_file : str
+        SCA image filename.
+    glt_image_file : str
+        Geographic lookup table image filename.
     """
     
     if os.path.exists(ortho_sca_image_file):
@@ -98,14 +100,16 @@ def orthorectify_sca(ortho_sca_image_file, sca_image_file, glt_image_file):
 
 
 def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
-    """ Do orthorectification on DEM.
-    Arguments:
-        ortho_dem_image_file: str
-            Orthorectified DEM image filename.
-        igm_image_file: str
-            IGM image filename.
-        glt_image_file: str
-            Geographic lookup table image filename.
+    """Do orthorectification on DEM.
+    
+    Parameters
+    ----------
+    ortho_dem_image_file : str
+        Orthorectified DEM image filename.
+    igm_image_file : str
+        IGM image filename.
+    glt_image_file : str
+        Geographic lookup table image filename.
     """
     
     if os.path.exists(ortho_dem_image_file):
@@ -169,14 +173,16 @@ def orthorectify_dem(ortho_dem_image_file, igm_image_file, glt_image_file):
 
 
 def orthorectify_rdn(ortho_rdn_image_file, rdn_image_file, glt_image_file):
-    """ Do orthorectification on radiance.
-    Arguments:
-        ortho_rdn_image_file: str
-            Orthorectified radiance filename.
-        rdn_image_file: str
-            Radiance image filename.
-        glt_image_file: str
-            Geographic lookup table image filename.
+    """Do orthorectification on radiance.
+    
+    Parameters
+    ----------
+    ortho_rdn_image_file : str
+        Orthorectified radiance filename.
+    rdn_image_file : str
+        Radiance image filename.
+    glt_image_file : str
+        Geographic lookup table image filename.
     """
     
     if os.path.exists(ortho_rdn_image_file):

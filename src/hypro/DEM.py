@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to process DEM data. """
+"""Functions to process DEM data."""
 
 import logging
 import os
@@ -25,15 +25,21 @@ logger = logging.getLogger(__name__)
 
 
 def get_avg_elev(dem_image_file):
-    """ Get the average elevation of a DEM image.
-    Notes:
-        Pixels with a negative elevation are excluded from averaging.
-    Arguments:
-        dem_image_file: str
-            DEM image filename.
-    Returns:
-        avg_elev: float
-            Average elevation.
+    """Get the average elevation of a DEM image.
+    
+    Parameters
+    ----------
+    dem_image_file : str
+        DEM image filename.
+    
+    Returns
+    -------
+    avg_elev : float
+        Average elevation.
+    
+    Notes
+    -----
+    Pixels with a negative elevation are excluded from averaging.
     """
     
     ds = gdal.Open(dem_image_file, gdal.GA_ReadOnly)
@@ -46,20 +52,22 @@ def get_avg_elev(dem_image_file):
 
 
 def prepare_dem(dem_image_file, dem, imugps_file, fov, map_crs, pixel_size):
-    """ Prepare DEM data.
-    Arguments:
-        dem_image_file: str
-            Processed DEM image filename.
-        dem: str or float
-            Input DEM image filename, or user-specified elevation value [m].
-        imugps_file: str
-            IMU & GPS data filename.
-        fov: float
-            Sensor field of view [deg].
-        map_crs: osr object
-            Map coordinate system.
-        pixel_size: float
-            Image pixel size [deg].
+    """Prepare DEM data.
+    
+    Parameters
+    ----------
+    dem_image_file : str
+        Processed DEM image filename.
+    dem : str or float
+        Input DEM image filename, or user-specified elevation value [m].
+    imugps_file : str
+        IMU & GPS data filename.
+    fov : float
+        Sensor field of view [deg].
+    map_crs : osr object
+        Map coordinate system.
+    pixel_size : float
+        Image pixel size [deg].
     """
     
     if os.path.exists(dem_image_file):

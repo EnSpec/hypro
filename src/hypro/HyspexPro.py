@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Hyperspectral image processing workflows. """
+"""Hyperspectral image processing workflows."""
 
 import argparse
 import glob
@@ -43,13 +43,17 @@ from hypro.WVC import build_wvc_model, estimate_wvc
 
 
 def get_flight_indices(config):
-    """ Get HySpex flight indices.
-    Arguments:
-        config: dict
-            Configurations.
-    Returns:
-        flight_indices: list of strs
-            Flight indices.
+    """Get HySpex flight indices.
+    
+    Parameters
+    ----------
+    config : dict
+        Configurations.
+    
+    Returns
+    -------
+    flight_indices : list of strs
+        Flight indices.
     """
     
     sensor_name = config['Sensors'][list(config['Sensors'].keys())[0]]['id']
@@ -66,15 +70,19 @@ def get_flight_indices(config):
 
 
 def create_flight_log(output_dir, log_file_basename):
-    """ Create a HySpex flight processing log.
-    Arguments:
-        output_dir: str
-            Output directory.
-        log_file_basename: str
-            Log file basename.
-    Returns:
-        flight_log: logging object
-            Flight log.
+    """Create a HySpex flight processing log.
+    
+    Parameters
+    ----------
+    output_dir : str
+        Output directory.
+    log_file_basename : str
+        Log file basename.
+    
+    Returns
+    -------
+    flight_log : logging object
+        Flight log.
     """
     
     log_file = os.path.join(output_dir, '%s.log' % log_file_basename)
@@ -89,15 +97,19 @@ def create_flight_log(output_dir, log_file_basename):
 
 
 def initialize_flight_dict(config, flight_index):
-    """ Initialize a HySpex flight dictionary.
-    Arguments:
-        config: dict
-            User-defined configurations.
-        flight_index: str
-            Flight index.
-    Returns:
-        flight_dict: dict
-            Flight dictionary.
+    """Initialize a HySpex flight dictionary.
+    
+    Parameters
+    ----------
+    config : dict
+        User-defined configurations.
+    flight_index : str
+        Flight index.
+    
+    Returns
+    -------
+    flight_dict : dict
+        Flight dictionary.
     """
     
     # flight dictionary
@@ -175,15 +187,19 @@ def initialize_flight_dict(config, flight_index):
 
 
 def search_file(in_dir, keyword):
-    """ Search a specific file with the keyword.
-    Arguments:
-        in_dir: str
-            HySpex data input directory.
-        keyword: str
-            Searching keyword.
-    Returns:
-        file: str
-            Found filename.
+    """Search a specific file with the keyword.
+    
+    Parameters
+    ----------
+    in_dir : str
+        HySpex data input directory.
+    keyword : str
+        Searching keyword.
+    
+    Returns
+    -------
+    file : str
+        Found filename.
     """
     
     file = glob.glob(os.path.join(in_dir, keyword))
@@ -197,13 +213,17 @@ def search_file(in_dir, keyword):
 
 
 def get_center_lon_lat(raw_imugps_file):
-    """ Get HySpex image center longitude and latitude.
-    Arguments:
-        raw_imugps_file: str
-            HySpex raw IMU & GPS filename.
-    Returns:
-        [lon, lat]: list of floats
-            Image center longitude and latitude.
+    """Get HySpex image center longitude and latitude.
+    
+    Parameters
+    ----------
+    raw_imugps_file : str
+        HySpex raw IMU & GPS filename.
+    
+    Returns
+    -------
+    [lon, lat] : list of floats
+        Image center longitude and latitude.
     """
     
     import numpy as np
@@ -216,17 +236,23 @@ def get_center_lon_lat(raw_imugps_file):
 
 
 def get_acquisition_time(dn_header_file, raw_imugps_file):
-    """ Get HySpex image acquisition time.
-    Notes:
-        (1) This code is adapted from Brendan Heberlein (bheberlein@wisc.edu).
-    Arguments:
-        dn_header_file: str
-            HySpex DN image header filename.
-        raw_imugps_file: str
-            HySpex raw IMU & GPS filename.
-    Returns:
-        when: datetime object
-            Image acquisition time.
+    """Get HySpex image acquisition time.
+    
+    Parameters
+    ----------
+    dn_header_file : str
+        HySpex DN image header filename.
+    raw_imugps_file : str
+        HySpex raw IMU & GPS filename.
+    
+    Returns
+    -------
+    when : datetime object
+        Image acquisition time.
+    
+    Notes
+    -----
+    (1) This code is adapted from Brendan Heberlein (bheberlein@wisc.edu).
     """
     
     from datetime import datetime, timedelta
@@ -246,13 +272,17 @@ def get_acquisition_time(dn_header_file, raw_imugps_file):
 
 
 def get_sun_earth_distance(when):
-    """ Get Sun-Earth distance of a day.
-    Arguments:
-        when: datetime object
-            Date and time.
-    Returns:
-        d: float
-            Sun-Earth distance.
+    """Get Sun-Earth distance of a day.
+    
+    Parameters
+    ----------
+    when : datetime object
+        Date and time.
+    
+    Returns
+    -------
+    d : float
+        Sun-Earth distance.
     """
     
     import numpy as np
@@ -266,10 +296,12 @@ def get_sun_earth_distance(when):
 
 
 def HyspexPro(config_file):
-    """ Batch processing of raw DN images to surface reflectance.
-    Arguments:
-        config_file
-            JSON file containing processing configuration parameters.
+    """Batch processing of raw DN images to surface reflectance.
+    
+    Parameters
+    ----------
+    config_file
+        JSON file containing processing configuration parameters.
     """
     
     # Load configurations.

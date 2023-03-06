@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to make figures. """
+"""Functions to make figures."""
 
 import logging
 import os
@@ -28,12 +28,14 @@ logger = logging.getLogger(__name__)
 
 
 def plot_angle_geometry(angle_geometry_figure_file, sca_image_file):
-    """ Plot the Sun-target-view geometry in a polar coordinate system.
-    Arguments:
-        angle_geometry_figure_file: str
-            Angle geometry figure filename.
-        sca_image_file: str
-            Scan angle image filename.
+    """Plot the Sun-target-view geometry in a polar coordinate system.
+    
+    Parameters
+    ----------
+    angle_geometry_figure_file : str
+        Angle geometry figure filename.
+    sca_image_file : str
+        Scan angle image filename.
     """
     
     if os.path.exists(angle_geometry_figure_file):
@@ -71,16 +73,18 @@ def plot_angle_geometry(angle_geometry_figure_file, sca_image_file):
 
 
 def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imugps_file):
-    """ Plot image area (DEM is used as the background).
-    Arguments:
-        image_area_figure_file: str
-            Image area figure filename.
-        dem_image_file: str
-            DEM image filename.
-        igm_image_file: str
-            IGM image filename.
-        imugps_file: str
-            IMU & GPS filename.
+    """Plot image area (DEM is used as the background).
+    
+    Parameters
+    ----------
+    image_area_figure_file : str
+        Image area figure filename.
+    dem_image_file : str
+        DEM image filename.
+    igm_image_file : str
+        IGM image filename.
+    imugps_file : str
+        IMU & GPS filename.
     """
     
     if os.path.exists(image_area_figure_file):
@@ -134,15 +138,21 @@ def plot_image_area(image_area_figure_file, dem_image_file, igm_image_file, imug
 
 
 def linear_percent_stretch(raw_image):
-    """ Do linear percent stretch.
-    References:
-        (1) https://www.harrisgeospatial.com/docs/BackgroundStretchTypes.html
-    Arguments:
-        raw_image: 2D array
-            Raw image data.
-    Returns:
-        stretched_image: 2D array
-            Percent_stretched image.
+    """Do linear percent stretch.
+    
+    Parameters
+    ----------
+    raw_image : 2D array
+        Raw image data.
+    
+    Returns
+    -------
+    stretched_image : 2D array
+        Percent_stretched image.
+    
+    References
+    ----------
+    (1) https://www.harrisgeospatial.com/docs/BackgroundStretchTypes.html
     """
     
     low = np.percentile(raw_image, 2)
@@ -157,14 +167,16 @@ def linear_percent_stretch(raw_image):
 
 
 def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
-    """ Make an RGB quicklook image.
-    Arguments:
-        quicklook_figure_file: str
-            Georectified quicklook figure filename.
-        rdn_image_file: str
-            Radiance image filename, in BIL format.
-        glt_image_file: str
-            GLT image filename.
+    """Make an RGB quicklook image.
+    
+    Parameters
+    ----------
+    quicklook_figure_file : str
+        Georectified quicklook figure filename.
+    rdn_image_file : str
+        Radiance image filename, in BIL format.
+    glt_image_file : str
+        GLT image filename.
     """
     
     if os.path.exists(quicklook_figure_file):
@@ -238,12 +250,14 @@ def make_quicklook(quicklook_figure_file, rdn_image_file, glt_image_file):
 
 
 def plot_avg_rdn(avg_rdn_figure_file, avg_rdn_file):
-    """ Plot average radiance to a figure.
-    Arguments:
-        avg_rdn_figure_file: str
-            Average radiance figure filename.
-        avg_rdn_file: str
-            Average radiance filename.
+    """Plot average radiance to a figure.
+    
+    Parameters
+    ----------
+    avg_rdn_figure_file : str
+        Average radiance figure filename.
+    avg_rdn_file : str
+        Average radiance filename.
     """
     
     if os.path.exists(avg_rdn_figure_file):
@@ -276,12 +290,14 @@ def plot_avg_rdn(avg_rdn_figure_file, avg_rdn_file):
 
 
 def plot_wvc_model(wvc_model_figure_file, wvc_model_file):
-    """ Plot the WVC model to a figure.
-    Arguments:
-        wvc_model_figure_file: str
-            Water vapor column model figure filename.
-        wvc_model_file: str
-            Water vapor column model filename.
+    """Plot the WVC model to a figure.
+    
+    Parameters
+    ----------
+    wvc_model_figure_file : str
+        Water vapor column model figure filename.
+    wvc_model_file : str
+        Water vapor column model filename.
     """
     
     if os.path.exists(wvc_model_figure_file):
@@ -314,12 +330,14 @@ def plot_wvc_model(wvc_model_figure_file, wvc_model_file):
 
 
 def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_atm_features_file):
-    """ Plot smile effects at different atmospheric absorption features.
-    Arguments:
-        smile_effect_at_atm_features_figure_file: str
-            Smile effect figure filename.
-        smile_effect_at_atm_features_file: str
-            Smile effect at atmospheric features filename.
+    """Plot smile effects at different atmospheric absorption features.
+    
+    Parameters
+    ----------
+    smile_effect_at_atm_features_figure_file : str
+        Smile effect figure filename.
+    smile_effect_at_atm_features_file : str
+        Smile effect at atmospheric features filename.
     """
     
     if os.path.exists(smile_effect_at_atm_features_figure_file):
@@ -413,10 +431,13 @@ def plot_smile_effect(smile_effect_at_atm_features_figure_file, smile_effect_at_
 
 
 def plot_wvc_histogram(wvc_histogram_figure_file, water_vapor_column_image_file):
-    """ Plot water vapor column histogram.
-    wvc_histogram_figure_file: str
+    """Plot water vapor column histogram.
+    
+    Parameters
+    ----------
+    wvc_histogram_figure_file : str
         Water vapor column histogram figure filename.
-    water_vapor_column_image_file: str
+    water_vapor_column_image_file : str
         Water vapor column image filename.
     """
     

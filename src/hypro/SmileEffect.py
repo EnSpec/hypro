@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to detect smile effects. """
+"""Functions to detect smile effects."""
 
 import logging
 import os
@@ -42,12 +42,14 @@ absorption_features = {429: [424, 437],
 
 
 def detect_smile_effect(sensor_dict, atm_lut_file):
-    """ Detect smile effect.
-    Arguments:
-        sensor_dict: dict
-            Sensor configurations.
-        atm_lut_file: str
-            Raw atmospheric lookup table filename.
+    """Detect smile effect.
+    
+    Parameters
+    ----------
+    sensor_dict : dict
+        Sensor configurations.
+    atm_lut_file : str
+        Raw atmospheric lookup table filename.
     """
     
     if os.path.exists(sensor_dict['smile_effect_at_atm_features_file']) and os.path.exists(sensor_dict['smile_effect_file']):
@@ -239,18 +241,22 @@ def detect_smile_effect(sensor_dict, atm_lut_file):
 
 
 def interp_atm_lut(atm_lut_file, WVC, VIS, VZA, RAA):
-    """ Interpolate atmospheric lookup table to different water vapor columns (WVC),
+    """Interpolate atmospheric lookup table to different water vapor columns (WVC),
         visibilities (VIS), view zenith angles (VZA) and relative azimuth angles (RAA).
-    Arguments:
-        atm_lut_file: str
-            Atmospheric lookup table filename.
-        WVC, VIS, VZA, RAA: list of floats
-            Water vapor column, visibility, view zenith angles and relative azimuth angles.
-    Returns:
-        WAVE: array
-            Wavelengths of the atmospheric lookup table radiance.
-        lut_rdn: 2D array
-            Interpolated path radiance (albedo=0.0, 0.5, 1.0).
+    
+    Parameters
+    ----------
+    atm_lut_file : str
+        Atmospheric lookup table filename.
+    WVC, VIS, VZA, RAA : list of floats
+        Water vapor column, visibility, view zenith angles and relative azimuth angles.
+    
+    Returns
+    -------
+    WAVE : array
+        Wavelengths of the atmospheric lookup table radiance.
+    lut_rdn : 2D array
+        Interpolated path radiance (albedo=0.0, 0.5, 1.0).
     """
     
     from hypro.AtmLUT import read_binary_metadata, get_interp_range, combos
@@ -300,16 +306,18 @@ def interp_atm_lut(atm_lut_file, WVC, VIS, VZA, RAA):
 
 
 def average_rdn(avg_rdn_file, rdn_image_file, sca_image_file, pre_class_image_file):
-    """ Average radiance along each column.
-    Arguments:
-        avg_rdn_file: str
-            Average radiance data filename.
-        rdn_image_file: 3D array
-            Radiance image filename, in BIL format.
-        sca_image_file: 3D array
-            Scan angle image filename, in BSQ format.
-        pre_class_image_file: str
-            Pre-classification image filename.
+    """Average radiance along each column.
+    
+    Parameters
+    ----------
+    avg_rdn_file : str
+        Average radiance data filename.
+    rdn_image_file : 3D array
+        Radiance image filename, in BIL format.
+    sca_image_file : 3D array
+        Scan angle image filename, in BSQ format.
+    pre_class_image_file : str
+        Pre-classification image filename.
     """
     
     if os.path.exists(avg_rdn_file):
@@ -410,12 +418,14 @@ def average_rdn(avg_rdn_file, rdn_image_file, sca_image_file, pre_class_image_fi
 
 
 def interpolate_values(A, map):
-    """ Replace array elements with interpolated values. Input array is modified in-place.
-    Arguments:
-        A: 1D array
-            Input array to be modified.
-        map: 1D array
-            Boolean map indicating which elements should be replaced
+    """Replace array elements with interpolated values. Input array is modified in-place.
+    
+    Parameters
+    ----------
+    A : 1D array
+        Input array to be modified.
+    map : 1D array
+        Boolean map indicating which elements should be replaced
     """
     
     def indices(x): return x.nonzero()[0]
@@ -423,23 +433,27 @@ def interpolate_values(A, map):
 
 
 def cost_fun(shifts, sensor_wave, sensor_fwhm, sensor_rdn, lut_wave, lut_rdn):
-    """ Cost function.
-    Arguments:
-        shifts: list of float
-            Shift in wavelength and FWHM.
-        sensor_wave: 1D array
-            Sensor wavelengths.
-        sensor_fwhm: 1D array
-            Sensor FWHMs.
-        sensor_rdn: 1D array
-            Sensor radiance.
-        lut_wave: 1D array
-            LUT wavelengths.
-        lut_rdn: 1D array
-            LUT at-sensor radiance.
-    Returns:
-        cost: float
-            Squared error.
+    """Cost function.
+    
+    Parameters
+    ----------
+    shifts : list of float
+        Shift in wavelength and FWHM.
+    sensor_wave : 1D array
+        Sensor wavelengths.
+    sensor_fwhm : 1D array
+        Sensor FWHMs.
+    sensor_rdn : 1D array
+        Sensor radiance.
+    lut_wave : 1D array
+        LUT wavelengths.
+    lut_rdn : 1D array
+        LUT at-sensor radiance.
+    
+    Returns
+    -------
+    cost : float
+        Squared error.
     """
     
     from hypro.Spectra import continuum_removal, resample_spectra

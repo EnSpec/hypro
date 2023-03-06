@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to do georeferencing. """
+"""Functions to do georeferencing."""
 
 import logging
 import os
@@ -29,18 +29,20 @@ warnings.filterwarnings("ignore")
 
 
 def calculate_igm(igm_image_file, imugps_file, sensor_model_file, dem_image_file, boresight_options):
-    """ Create an input geometry (IGM) image.
-    Arguments:
-        igm_image_file: str
-            The IGM image filename.
-        imugps_file: str
-            The IMU & GPS filename.
-        sensor_model_file: str
-            The sensor model filename.
-        dem_image_file: str
-            The DEM image filename.
-        boresight_options: list of boolean
-            Boresight offset options, true or false.
+    """Create an input geometry (IGM) image.
+    
+    Parameters
+    ----------
+    igm_image_file : str
+        The IGM image filename.
+    imugps_file : str
+        The IMU & GPS filename.
+    sensor_model_file : str
+        The sensor model filename.
+    dem_image_file : str
+        The DEM image filename.
+    boresight_options : list of boolean
+        Boresight offset options, true or false.
     """
     
     if os.path.exists(igm_image_file):
@@ -150,16 +152,18 @@ def calculate_igm(igm_image_file, imugps_file, sensor_model_file, dem_image_file
 
 
 def calculate_sca(sca_image_file, imugps_file, igm_image_file, sun_angles):
-    """ Create a scan angle (SCA) image.
-    Arguments:
-        sca_image_file: str
-            Scan angle filename.
-        imugps_file: str
-            IMU/GPS filename.
-        igm_image_file: str
-            IGM image filename.
-        sun_angles: list
-            Sun angles [sun zenith, sun azimuth], in degrees.
+    """Create a scan angle (SCA) image.
+    
+    Parameters
+    ----------
+    sca_image_file : str
+        Scan angle filename.
+    imugps_file : str
+        IMU/GPS filename.
+    igm_image_file : str
+        IGM image filename.
+    sun_angles : list
+        Sun angles [sun zenith, sun azimuth], in degrees.
     """
     
     if os.path.exists(sca_image_file):
@@ -235,29 +239,33 @@ def calculate_sca(sca_image_file, imugps_file, igm_image_file, sun_angles):
 
 
 def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
-    """ Create a geographic lookup table (GLT) image.
-    Notes:
-        (1) This code is adapted from Adam Chlus' (chlus@wisc.edu) script.
-        (2) The GLT image consists of two bands:
-                Band 0: Sample Lookup:
-                    Pixel values indicate the column number of the pixel
-                    in the input geometry file that belongs at the given Y
-                    location in the output image.
-                Band 1: Line Lookup:
-                    Pixel values indicate the row number of the pixel
-                    in the input geometry file that belongs at the given X
-                    location in the output image.
-        (3) For more details about GLT, refer to https://www.harrisgeospatial.com/
-            docs/GeoreferenceFromInputGeometry.html.
-    Arguments:
-        glt_image_file: str
-            Geographic lookup table filename.
-        igm_image_file: str
-            Input geometry filename.
-        pixel_size: float
-            Output image pixel size.
-        map_crs: osr object
-            GLT image map coordinate system.
+    """Create a geographic lookup table (GLT) image.
+    
+    Parameters
+    ----------
+    glt_image_file : str
+        Geographic lookup table filename.
+    igm_image_file : str
+        Input geometry filename.
+    pixel_size : float
+        Output image pixel size.
+    map_crs : osr object
+        GLT image map coordinate system.
+    
+    Notes
+    -----
+    (1) This code is adapted from Adam Chlus' (chlus@wisc.edu) script.
+    (2) The GLT image consists of two bands:
+            Band 0: Sample Lookup:
+                Pixel values indicate the column number of the pixel
+                in the input geometry file that belongs at the given Y
+                location in the output image.
+            Band 1: Line Lookup:
+                Pixel values indicate the row number of the pixel
+                in the input geometry file that belongs at the given X
+                location in the output image.
+    (3) For more details about GLT, refer to https://www.harrisgeospatial.com/
+        docs/GeoreferenceFromInputGeometry.html.
     """
     
     if os.path.exists(glt_image_file):
@@ -426,33 +434,39 @@ def build_glt(glt_image_file, igm_image_file, pixel_size, map_crs):
 
 
 def get_scan_vectors(imu, sensor_model):
-    """ Get scan vectors.
-    References:
-        (1) Meyer P. (1994). A parametric approach for the geocoding of airborne
-            visible/infrared imaging spectrometer (AVIRIS) data in rugged terrain.
-            Remote Sensing of Environment, 49, 118-130.
-    Arguments:
-        imu: 2D array
-            Flight IMU data, dimension: [n_lines, 3].
+    """Get scan vectors.
+    
+    Parameters
+    ----------
+    imu : 2D array
+        Flight IMU data, dimension: [n_lines, 3].
+        Notes:
+            Roll, pitch and heading are defined according to navigational standards.
+            Column 0: Roll
+                Range: -90~90
+                    Right wing up: positive
+            Column 1: Pitch
+                Range: -90~90
+                    Aircraft nose up: positive
+            Column 2: Heading
+                Range: -180~180 or 0~360
+                    North: 0; East: 90; West: -90 or 270
+    sensor_model : 2D array
+        Sensor model data, dimension: [n_detectors, 2].
             Notes:
-                Roll, pitch and heading are defined according to navigational standards.
-                Column 0: Roll
-                    Range: -90~90
-                        Right wing up: positive
-                Column 1: Pitch
-                    Range: -90~90
-                        Aircraft nose up: positive
-                Column 2: Heading
-                    Range: -180~180 or 0~360
-                        North: 0; East: 90; West: -90 or 270
-        sensor_model: 2D array
-            Sensor model data, dimension: [n_detectors, 2].
-                Notes:
-                    Column 0: across-track angle component.
-                    Column 1: along-track angle component.
-    Returns:
-        L0: 3D array
-            Sensor scan vectors, dimension: [3, n_detectors, n_lines].
+                Column 0: across-track angle component.
+                Column 1: along-track angle component.
+    
+    Returns
+    -------
+    L0 : 3D array
+        Sensor scan vectors, dimension: [3, n_detectors, n_lines].
+    
+    References
+    ----------
+    (1) Meyer P. (1994). A parametric approach for the geocoding of airborne
+        visible/infrared imaging spectrometer (AVIRIS) data in rugged terrain.
+        Remote Sensing of Environment, 49, 118-130.
     """
     
     roll, pitch, heading = imu[:, 0], imu[:, 1], imu[:, 2]
@@ -507,19 +521,25 @@ def get_scan_vectors(imu, sensor_model):
 
 
 def get_xyz0_xyz1(xyz, L0, h_min, h_max):
-    """ Get the starting and ending locations of ray tracing.
-    References:
-        (1) Schläpfer D. (2016). PARGE User Manual, Version 3.3.
-    Arguments:
-        xyz: 2D array
-            Flight map x, y, z map coordinates, dimension: [N_lines, 3].
-        L0: 3D array
-            Scan vectors, dimension: [3, N_Detectors, N_Lines].
-        h_min, h_max: float
-            Vertical bounds for ray tracing.
-    Returns:
-        xyz0, xyz1: 3D array
-            Starting and ending points, dimension: [3, N_Detectors, N_Lines].
+    """Get the starting and ending locations of ray tracing.
+    
+    Parameters
+    ----------
+    xyz : 2D array
+        Flight map x, y, z map coordinates, dimension: [N_lines, 3].
+    L0 : 3D array
+        Scan vectors, dimension: [3, N_Detectors, N_Lines].
+    h_min, h_max : float
+        Vertical bounds for ray tracing.
+    
+    Returns
+    -------
+    xyz0, xyz1 : 3D array
+        Starting and ending points, dimension: [3, N_Detectors, N_Lines].
+    
+    References
+    ----------
+    (1) Schläpfer D. (2016). PARGE User Manual, Version 3.3.
     """
     
     n_lines = xyz.shape[0]
@@ -547,30 +567,36 @@ def get_xyz0_xyz1(xyz, L0, h_min, h_max):
 @guvectorize(['void(f8[:,:,:], f8[:,:,:], f8[:,:,:], f8[:,:], f8[:], f8[:,:,:])'],
              '(b,n,m), (b,n,m), (b,n,m), (u,v), (c) -> (b,m,n)', cache=True)
 def ray_tracer_ufunc(xyz0, xyz1, L0, dem, dem_gt, output):
-    """ Vectorized ray tracing operator (numpy-style universal function).
-    Arguments:
-        xyz0: 3D array, shape=(3, scanlines, detectors)
-            Ray tracing starting positions for each map grid cell.
-        xyz1: 3D array, shape=(3, scanlines, detectors)
-            Ray tracing ending positions for each map grid cell.
-        L0: 3D array, shape=(3, scanlines, detectors)
-            Scan vectors.
-        dem: 2D array, shape=(scanlines, detectors)
-            Digital elevation model.
-        dem_gt: tuple, 6 elements
-            Geotransform array containing DEM geographic parameters
-            in GDAL format, i.e. as (ulx, x_res, 0, uly, 0, y_res)
-        output: optional, 3D array, shape=(3, detectors, scanlines)
-            Array to which outputs are written. If not passed, a new
-            array is created and returned. Otherwise, the array is
-            modified in place and the ufunc returns `None`.
-    Returns:
+    """Vectorized ray tracing operator (numpy-style universal function).
+    
+    Parameters
+    ----------
+    xyz0 : 3D array, shape=(3, scanlines, detectors)
+        Ray tracing starting positions for each map grid cell.
+    xyz1 : 3D array, shape=(3, scanlines, detectors)
+        Ray tracing ending positions for each map grid cell.
+    L0 : 3D array, shape=(3, scanlines, detectors)
+        Scan vectors.
+    dem : 2D array, shape=(scanlines, detectors)
+        Digital elevation model.
+    dem_gt : tuple, 6 elements
+        Geotransform array containing DEM geographic parameters
+        in GDAL format, i.e. as (ulx, x_res, 0, uly, 0, y_res)
+    output : optional, 3D array, shape=(3, detectors, scanlines)
+        Array to which outputs are written. If not passed, a new
+        array is created and returned. Otherwise, the array is
+        modified in place and the ufunc returns `None`.
+    
+    Returns
+    -------
         3D array if `output` is not specified, otherwise `None`.
-    Notes:
-        (1) Argument data types are constrained by numba signatures
-            supplied to `guvectorize`. If supplied types cannot be
-            coerced to required types by safe casting rules, the
-            function will raise an error.
+    
+    Notes
+    -----
+    (1) Argument data types are constrained by ``numba`` signatures
+        supplied to ``guvectorize``. If supplied types cannot be
+        coerced to required types by safe casting rules, the
+        function will raise an error.
     """
     
     # Geotransform: (ulx, x_res, 0, uly, 0, y_res)
@@ -585,30 +611,36 @@ def ray_tracer_ufunc(xyz0, xyz1, L0, dem, dem_gt, output):
 
 @jit
 def ray_tracing(XYZ0, XYZ1, V, DEM, DEM_X0Y0, DEM_Resolution):
-    """ Implement ray tracing to get the pixel's geolocation and elevation.
-    References:
-        (1) Meyer P. (1994). A parametric approach for the geocoding of airborne
-            visible/infrared imaging spectrometer (AVIRIS) data in rugged terrain.
-            Remote Sensing of Environment, 49, 118-130.
-        (2) Amanatides J. and Woo A. (1987). A fast voxel traversal algorithm
-            for ray tracing. Eurographics, 3-10.
-        (3) An online example from https://www.scratchapixel.com/lessons/
-            advanced-rendering/introduction-acceleration-structure/grid.
-    Arguments:
-        XYZ0: float list, 3 elements
-            Ray tracing starting point, [MapX0, MapY0, MapZ0].
-        XYZ1: float list, 3 elements
-            Ray tracing ending point, [MapX1, MapY1, MapZ1].
-        V: float list, 3 elements
-            Scan vector.
-        DEM: 2D array, float
-            DEM image data.
-        DEM_X0Y0: float list
-            The upper-left corner map coordinates of the DEM.
-        DEM_Resolution: float list
-            DEM resolution.
-    Returns:
+    """Implement ray tracing to get the pixel's geolocation and elevation.
+    
+    Parameters
+    ----------
+    XYZ0 : float list, 3 elements
+        Ray tracing starting point, [MapX0, MapY0, MapZ0].
+    XYZ1 : float list, 3 elements
+        Ray tracing ending point, [MapX1, MapY1, MapZ1].
+    V : float list, 3 elements
+        Scan vector.
+    DEM : 2D array, float
+        DEM image data.
+    DEM_X0Y0 : float list
+        The upper-left corner map coordinates of the DEM.
+    DEM_Resolution : float list
+        DEM resolution.
+    
+    Returns
+    -------
         A 3-element vector, [MapX, MapY, MapZ]: the pixel's geolocation and elevation.
+    
+    References
+    ----------
+    (1) Meyer P. (1994). A parametric approach for the geocoding of airborne
+        visible/infrared imaging spectrometer (AVIRIS) data in rugged terrain.
+        Remote Sensing of Environment, 49, 118-130.
+    (2) Amanatides J. and Woo A. (1987). A fast voxel traversal algorithm
+        for ray tracing. Eurographics, 3-10.
+    (3) An online example from https://www.scratchapixel.com/lessons/
+        advanced-rendering/introduction-acceleration-structure/grid.
     """
     
     if np.abs(XYZ0[0]-XYZ1[0]) < 1e-2 and np.abs(XYZ0[1]-XYZ1[1]) < 1e-2:

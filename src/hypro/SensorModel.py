@@ -12,7 +12,7 @@
 # Licensed under GNU GPLv3
 # See `./LICENSE.txt` for complete terms
 
-""" Functions to create a sensor model. """
+"""Functions to create a sensor model."""
 
 import logging
 import os
@@ -23,18 +23,20 @@ logger = logging.getLogger(__name__)
 
 
 def make_sensor_model(sensor_model_file, fov, ifov, samples, if_rotated):
-    """ Generate a sensor model.
-    Arguments:
-        sensor_model_file: str
-            The sensor model filename.
-        fov: float
-            Sensor fov [deg].
-        ifov: float
-            Sensor instantaneous fov [mrad].
-        samples: int
-            Image columns.
-        if_rotated: bool
-            If the sensor is 180 degree rotated.
+    """Generate a sensor model.
+    
+    Parameters
+    ----------
+    sensor_model_file : str
+        The sensor model filename.
+    fov : float
+        Sensor fov [deg].
+    ifov : float
+        Sensor instantaneous fov [mrad].
+    samples : int
+        Image columns.
+    if_rotated : bool
+        If the sensor is 180 degree rotated.
     """
     
     if os.path.exists(sensor_model_file):
@@ -62,13 +64,17 @@ def make_sensor_model(sensor_model_file, fov, ifov, samples, if_rotated):
 
 
 def determine_if_rotated(imu_gps_file):
-    """ Determine if the sensor is 180 degree rotated.
-    Arguments:
-        imu_gps_file: str
-            IMU & GPS file
-    Returns:
-        True or False: bool
-            Whether the sensor is 180 degree rotated.
+    """Determine if the sensor is 180 degree rotated.
+    
+    Parameters
+    ----------
+    imu_gps_file : str
+        IMU & GPS file
+    
+    Returns
+    -------
+    True or False : bool
+        Whether the sensor is 180 degree rotated.
     """
     
     imugps = np.loadtxt(imu_gps_file)
